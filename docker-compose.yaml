@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  front:
+    build:
+      context: ./front/
+      dockerfile: Dockerfile
+    volumes:
+      - ./front/app:/usr/src/app
+    command: sh -c 'npm install && yarn dev'
+    ports:
+      - "8001:3000"
