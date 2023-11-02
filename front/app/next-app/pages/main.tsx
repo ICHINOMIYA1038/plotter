@@ -24,7 +24,6 @@ export default function Home() {
       >
         テキストを入力...
       </div>
-      <div>{text}</div>
     </div>
   );
 }
