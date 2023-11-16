@@ -86,6 +86,35 @@ export default function Home() {
   テキストを入力...
 </div>
     </div>
+    <div className="flex  h-screen relative">
+      <div className="absolute bg-gray-100 w-full h-full">
+        <img src="/bg-01.jpg" alt="" className="object-contain" style={{ width: imageW, height: 'auto' }} />
+      </div>
+      {/* テキスト入力欄 */}
+      <div
+  ref={textAreaRef}
+  className="border border-gray-300 text-black relative"
+  style={{
+    paddingRight: '103px',
+    paddingTop: '98px',
+    paddingBottom: '75px',
+    writingMode: 'vertical-rl',
+    fontSize: '16px', // フォントサイズの指定
+    width: imageW,
+    height: imageH,
+    textAlign: 'justify',
+    letterSpacing: '20.2px',
+    lineHeight:'48px',
+    textJustify: 'inter-character',
+    overflow: 'hidden',
+    fontFamily: 'MS Gothic', // 例: 'Courier New', 'monospace'
+  }}
+  contentEditable={true}
+  onInput={handleContentChange}
+>
+  テキストを入力...
+</div>
+    </div>
     </div>
   );
 }
