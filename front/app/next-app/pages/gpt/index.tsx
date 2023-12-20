@@ -1,25 +1,26 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
 
 export default function Home() {
-  const [prompt, setPrompt] = useState('');
-  const [result, setResult] = useState('');
+  const [prompt, setPrompt] = useState("");
+  const [result, setResult] = useState("");
   const [tokensUsed, setTokensUsed] = useState(null);
 
   const handleGeneratePrompt = async () => {
     try {
-      const response = await axios.post('/api/gpt', { prompt });
+      const response = await axios.post("/api/gpt", { prompt });
       setResult(response.data.result);
       setTokensUsed(response.data.tokensUsed);
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-3xl font-semibold mb-4">GPT-3.5 Turbo Prompt Generator</h1>
+        <h1 className="text-3xl font-semibold mb-4">
+          GPT-3.5 Turbo Prompt Generator
+        </h1>
         <div className="mb-4">
           <textarea
             className="w-full p-2 border border-gray-300 rounded-lg"
@@ -47,7 +48,7 @@ export default function Home() {
           <div>
             <h2 className="text-xl font-semibold mb-2">Tokens Used:</h2>
             <p className="mb-2">Tokens: {tokensUsed}</p>
-            <p>Cost: ${(tokensUsed * 0.002 / 1000).toFixed(6)}</p>
+            <p>Cost: ${((tokensUsed * 0.002) / 1000).toFixed(6)}</p>
           </div>
         )}
       </div>

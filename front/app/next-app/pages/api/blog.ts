@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       messages: [
         {
           role: "system",
-          content: "あなたはギャルの口調で返答してください。",
+          content: "あなたはWEBライティングのスペシャリストです。doc",
         },
         { role: "user", content: prompt },
       ],
