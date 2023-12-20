@@ -127,7 +127,6 @@ body {
   }
 
   > * + * {
-    margin-top: 10px;
   }
 
   ul,
@@ -138,7 +137,6 @@ body {
   /* ブログ風の見出しスタイル */
   h1 {
     font-size: 2.5rem; /* h1 のフォントサイズを調整 */
-    margin-top: 2rem; /* 上部のマージンを追加 */
     margin-bottom: 1rem; /* 下部のマージンを調整 */
     font-weight: bold; /* 太字のフォント */
   }
@@ -150,21 +148,18 @@ body {
 
   h3 {
     font-size: 1.5rem; /* h3 のフォントサイズを調整 */
-    margin-top: 1.5rem; /* 上部のマージンを追加 */
     margin-bottom: 1rem; /* 下部のマージンを調整 */
     font-weight: bold; /* 太字のフォント */
   }
 
   h4 {
     font-size: 1.25rem; /* h4 のフォントサイズを調整 */
-    margin-top: 1rem; /* 上部のマージンを追加 */
     margin-bottom: 0.5rem; /* 下部のマージンを調整 */
     font-weight: bold; /* 太字のフォント */
   }
 
   h5 {
     font-size: 1.1rem; /* h5 のフォントサイズを調整 */
-    margin-top: 1rem; /* 上部のマージンを追加 */
     margin-bottom: 0.5rem; /* 下部のマージンを調整 */
     font-weight: bold; /* 太字のフォント */
   }
@@ -172,7 +167,6 @@ body {
   h6 {
     display: inline-block; /* または inline-block */
     font-size: 1rem; /* h6 のフォントサイズを調整 */
-    margin-top: 1rem; /* 上部のマージンを追加 */
     margin-bottom: 0.5rem; /* 下部のマージンを調整 */
     font-weight: bold; /* 太字のフォント */
   }
