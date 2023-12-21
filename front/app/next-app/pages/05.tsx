@@ -70,6 +70,7 @@ export default function Home() {
     paddingTop: '98px',
     paddingBottom: '75px',
     writingMode: 'vertical-rl',
+    textOrientation: "upright",
     fontSize: '16px', // フォントサイズの指定
     width: imageW,
     height: imageH,
@@ -98,6 +99,7 @@ export default function Home() {
     paddingRight: '103px',
     paddingTop: '98px',
     paddingBottom: '75px',
+    textOrientation: "upright",
     writingMode: 'vertical-rl',
     fontSize: '16px', // フォントサイズの指定
     width: imageW,
