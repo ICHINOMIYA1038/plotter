@@ -18,8 +18,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: 
-    rgb(var(--background-start-rgb));
+  background: rgb(var(--background-start-rgb));
 }
 
 .tiptap {
@@ -63,11 +62,9 @@ body {
     text-indent: 1em;
     -webkit-text-orientation: upright;
     text-orientation: upright;
-    margin-left: 40px;
   }
 
   > * + * {
-    margin-top: 10px;
   }
 
   ul,
@@ -75,12 +72,11 @@ body {
     padding: 0 1rem;
   }
 
-  /* ブログ風の見出しスタイル */
+  /* タイトル */
   h1 {
     font-size: 2.5rem; /* h1 のフォントサイズを調整 */
-    margin-top: 2rem; /* 上部のマージンを追加 */
-    margin-bottom: 1rem; /* 下部のマージンを調整 */
-    font-weight: bold; /* 太字のフォント */
+
+    margin-top: 5rem;
   }
 
   h2 {
@@ -88,47 +84,32 @@ body {
     font-weight: bold; /* 太字のフォント */
   }
 
+  /* */
   h3 {
     font-size: 1.5rem; /* h3 のフォントサイズを調整 */
-    margin-top: 1.5rem; /* 上部のマージンを追加 */
-    margin-bottom: 1rem; /* 下部のマージンを調整 */
     font-weight: bold; /* 太字のフォント */
   }
 
   h4 {
     font-size: 1.25rem; /* h4 のフォントサイズを調整 */
-    margin-top: 1rem; /* 上部のマージンを追加 */
-    margin-bottom: 0.5rem; /* 下部のマージンを調整 */
     font-weight: bold; /* 太字のフォント */
   }
 
   h5 {
     font-size: 1.1rem; /* h5 のフォントサイズを調整 */
-    margin-top: 1rem; /* 上部のマージンを追加 */
-    margin-bottom: 0.5rem; /* 下部のマージンを調整 */
     font-weight: bold; /* 太字のフォント */
   }
 
+  /* 作者*/
   h6 {
-    display: inline-block; /* または inline-block */
+    text-align: right;
     font-size: 1rem; /* h6 のフォントサイズを調整 */
-    margin-top: 1rem; /* 上部のマージンを追加 */
-    margin-bottom: 0.5rem; /* 下部のマージンを調整 */
-    font-weight: bold; /* 太字のフォント */
+    margin-bottom: 5rem;
   }
 
   code {
     background-color: rgba(#616161, 0.1);
     color: #616161;
-  }
-
-  p {
-    display: inline; /* または inline-block */
-  }
-
-  p::after {
-    content: "";
-    display: block;
   }
 
   pre {
@@ -161,10 +142,6 @@ body {
     border-top: 2px solid rgba(#0d0d0d, 0.1);
     margin: 2rem 0;
   }
-
-  
-
-  
 }
 /* 基本的なボタンスタイル */
 .btn {
