@@ -39,7 +39,6 @@ body {
   font-feature-settings: "palt";
   color: #2c3e50;
   line-height: 2em;
-  text-indent: 1em;
   -webkit-text-orientation: upright;
   text-orientation: upright;
   border: 4px solid #000000;
@@ -60,7 +59,6 @@ body {
     font-feature-settings: "palt";
     color: #2c3e50;
     line-height: 2em;
-    text-indent: 1em;
     -webkit-text-orientation: upright;
     text-orientation: upright;
   }
@@ -86,7 +84,8 @@ body {
   }
 
   h2 {
-    font-size: 2rem; /* h2 のフォントサイズを調整 */
+    font-size: 1rem; /* h2 のフォントサイズを調整 */
+    margin-top: 8rem;
     font-weight: bold; /* 太字のフォント */
   }
 
