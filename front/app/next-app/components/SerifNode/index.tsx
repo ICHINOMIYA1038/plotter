@@ -1,4 +1,6 @@
 import { Node, mergeAttributes } from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import { SerifNodeView } from "../SerifNodeView";
 
 export const Serif = Node.create({
   name: "serif",
@@ -17,6 +19,10 @@ export const Serif = Node.create({
 
   renderHTML({ HTMLAttributes }) {
     return ["div", { class: "serif" }, 0];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(SerifNodeView);
   },
 });
 

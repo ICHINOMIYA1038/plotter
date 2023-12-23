@@ -5,25 +5,24 @@ import {
   NodeViewContent,
   NodeViewWrapper,
 } from "@tiptap/react";
-import { Box, HStack } from "@kuma-ui/core";
-import { FaGripVertical } from "react-icons/fa6";
+import { Box } from "@kuma-ui/core";
+
+import { FaGripHorizontal } from "react-icons/fa";
 
 function DraggableParagraphNode() {
   return (
     <NodeViewWrapper data-drag-handle>
-      <HStack p={4} mt={8} gap={4}>
-        <Box
-          draggable="true"
-          p={8}
-          pt={6}
-          display="flex"
-          alignItems="center"
-          cursor="pointer"
-        >
-          <FaGripVertical size="16" />
-        </Box>
+      <Box
+        draggable="true"
+        p={8}
+        pt={6}
+        display="flex"
+        alignItems="center"
+        cursor="pointer"
+      >
+        <FaGripHorizontal size="16" />
         <NodeViewContent className="content" />
-      </HStack>
+      </Box>
     </NodeViewWrapper>
   );
 }

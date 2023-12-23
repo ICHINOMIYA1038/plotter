@@ -44,7 +44,6 @@ export default function TipTap({ setData, data, setContent }: any) {
       DraggableParagraph,
       Speaker,
       Link,
-      CustomNode,
       Highlight,
       Underline,
       Placeholder.configure({
