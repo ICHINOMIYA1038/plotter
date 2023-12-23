@@ -15,7 +15,7 @@ export const Serif = Node.create({
     ];
   },
 
-  renderHTML() {
+  renderHTML({ HTMLAttributes }) {
     return ["div", { class: "serif" }, 0];
   },
 });

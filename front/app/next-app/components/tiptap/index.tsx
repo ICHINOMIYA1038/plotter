@@ -19,6 +19,7 @@ import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
 import CustomNode from "../CustomNode";
 import { Serif, Speaker, SpeechContent } from "../SerifNode";
+import { DraggableParagraph } from "../DraggableParagraph";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [showSlashMenu, setShowSlashMenu] = useState(false);
@@ -40,6 +41,7 @@ export default function TipTap({ setData, data, setContent }: any) {
       Color,
       Serif,
       SpeechContent,
+      DraggableParagraph,
       Speaker,
       Link,
       CustomNode,
