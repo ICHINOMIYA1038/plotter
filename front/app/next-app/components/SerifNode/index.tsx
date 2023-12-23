@@ -21,8 +21,28 @@ export const Serif = Node.create({
     return ["div", { class: "serif" }, 0];
   },
 
-  addNodeView() {
-    return ReactNodeViewRenderer(SerifNodeView);
+  addKeyboardShortcuts() {
+    return {
+      "Shift-Enter": () => {
+        // ここにShift + Enterが押されたときの動作を記述します
+        // 例: 現在のカーに改行を挿入
+        this.editor.commands.insertContent("<br>");
+        return true;
+      },
+      Enter: () => {
+        if (
+          this.editor.state.selection.$head.parent.type.name === "speechContent"
+        ) {
+          this.editor.commands.insertContent("<p></p>");
+          return true;
+        } else if (
+          this.editor.state.selection.$head.parent.type.name === "speaker"
+        ) {
+          // 次のdivタグにカーソルを移動する
+        }
+        return false;
+      },
+    };
   },
 });
 
