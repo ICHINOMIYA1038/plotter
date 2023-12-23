@@ -18,6 +18,7 @@ import { Underline } from "@tiptap/extension-underline";
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
 import CustomNode from "../CustomNode";
+import { Serif, Speaker, SpeechContent } from "../SerifNode";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [showSlashMenu, setShowSlashMenu] = useState(false);
@@ -37,6 +38,9 @@ export default function TipTap({ setData, data, setContent }: any) {
       }),
       TextStyle,
       Color,
+      Serif,
+      SpeechContent,
+      Speaker,
       Link,
       CustomNode,
       Highlight,
@@ -69,7 +73,7 @@ export default function TipTap({ setData, data, setContent }: any) {
           type: "serif",
           content: [
             {
-              type: "paragraph",
+              type: "speaker",
               content: [
                 {
                   type: "text",
@@ -78,7 +82,7 @@ export default function TipTap({ setData, data, setContent }: any) {
               ],
             },
             {
-              type: "paragraph",
+              type: "speechContent",
               content: [
                 {
                   type: "text",

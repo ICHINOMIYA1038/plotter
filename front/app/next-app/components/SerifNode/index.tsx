@@ -1,29 +1,12 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 
-export const SerifNode = Node.create({
-  name: "serifNode",
+export const Serif = Node.create({
+  name: "serif",
 
-  // スキーマの定義
-  content: "inline*",
   group: "block",
 
-  addOptions() {
-    return {
-      HTMLAttributes: {},
-    };
-  },
+  content: "speaker speechContent",
 
-  addCommands() {
-    return {
-      setParagraph:
-        () =>
-        ({ commands }) => {
-          return commands.setNode(this.name);
-        },
-    };
-  },
-
-  // HTMLへのレンダリング方法
   parseHTML() {
     return [
       {
@@ -32,18 +15,35 @@ export const SerifNode = Node.create({
     ];
   },
 
-  // ProseMirrorノードへの変換方法
-  renderHTML({ HTMLAttributes }) {
-    return [
-      "div",
-      { class: "serif" },
-      ["div", { class: "speaker" }, "話者名"],
-      ["div", { class: "speechContent" }, "発言"],
-    ];
+  renderHTML() {
+    return ["div", { class: "serif" }, 0];
   },
-  addKeyboardShortcuts() {
-    return {
-      "Mod-Alt-0": () => this.editor.commands.setParagraph(),
-    };
+});
+
+export const Speaker = Node.create({
+  name: "speaker",
+
+  content: "text*",
+
+  parseHTML() {
+    return [{ tag: "div", class: "speaker" }];
+  },
+
+  renderHTML() {
+    return ["div", { class: "speaker" }, 0];
+  },
+});
+
+export const SpeechContent = Node.create({
+  name: "speechContent",
+
+  content: "text*",
+
+  parseHTML() {
+    return [{ tag: "div", class: "speechContent" }];
+  },
+
+  renderHTML() {
+    return ["div", { class: "speechContent" }, 0];
   },
 });
