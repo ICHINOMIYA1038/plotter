@@ -17,9 +17,11 @@ import { FaBold, FaItalic, FaUnderline } from "react-icons/fa";
 import { Underline } from "@tiptap/extension-underline";
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
-import CustomNode from "../CustomNode";
 import { Serif, Speaker, SpeechContent } from "../SerifNode";
 import { DraggableParagraph } from "../DraggableParagraph";
+import { DisableShiftEnterExtension } from "../DisableShiftEnterExtension";
+import HardBreak from "@tiptap/extension-hard-break";
+import EditorToJSON from "../EditorToJson";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [showSlashMenu, setShowSlashMenu] = useState(false);
@@ -45,7 +47,11 @@ export default function TipTap({ setData, data, setContent }: any) {
       Speaker,
       Link,
       Highlight,
+      DisableShiftEnterExtension,
       Underline,
+      HardBreak.configure({
+        keepMarks: true,
+      }),
       Placeholder.configure({
         placeholder: "Write something …",
       }),
@@ -100,6 +106,12 @@ export default function TipTap({ setData, data, setContent }: any) {
   return (
     <div>
       <Toolbar editor={editor} />
+      <button
+        onClick={() => EditorToJSON(editor)}
+        className="bg-blue-500 text-white p-2 rounded"
+      >
+        JSON として出力
+      </button>
       <EditorContent
         editor={editor}
         className="p-4 min-w-xl min-h-xl mx-auto"
@@ -252,7 +264,7 @@ export default function TipTap({ setData, data, setContent }: any) {
 const content = `
 <h2>ページ1</h2><p>おはようございます。</p><p>テスト</p>
 <h2>ページ2</h2><p>おはようございます。</p>
-<div class="serif"><div class="speaker">話者名</div><div class="speechcontent">発言内容</div></div>
+<div class="serif"><div class="speaker"><p>話者<br>名</p></div><div class="speechcontent"><p>会話内容</p></div></div>
 `;
 
 const Toolbar = ({ editor }) => {

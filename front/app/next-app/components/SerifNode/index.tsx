@@ -7,7 +7,7 @@ export const Serif = Node.create({
 
   group: "block",
 
-  content: "speaker speechContent",
+  content: "speaker speechContent ",
 
   parseHTML() {
     return [
@@ -20,36 +20,12 @@ export const Serif = Node.create({
   renderHTML({ HTMLAttributes }) {
     return ["div", { class: "serif" }, 0];
   },
-
-  addKeyboardShortcuts() {
-    return {
-      "Shift-Enter": () => {
-        // ここにShift + Enterが押されたときの動作を記述します
-        // 例: 現在のカーに改行を挿入
-        this.editor.commands.insertContent("<br>");
-        return true;
-      },
-      Enter: () => {
-        if (
-          this.editor.state.selection.$head.parent.type.name === "speechContent"
-        ) {
-          this.editor.commands.insertContent("<p></p>");
-          return true;
-        } else if (
-          this.editor.state.selection.$head.parent.type.name === "speaker"
-        ) {
-          // 次のdivタグにカーソルを移動する
-        }
-        return false;
-      },
-    };
-  },
 });
 
 export const Speaker = Node.create({
   name: "speaker",
 
-  content: "text*",
+  content: "paragraph",
 
   parseHTML() {
     return [{ tag: "div", class: "speaker" }];
@@ -63,7 +39,7 @@ export const Speaker = Node.create({
 export const SpeechContent = Node.create({
   name: "speechContent",
 
-  content: "text*",
+  content: "paragraph",
 
   parseHTML() {
     return [{ tag: "div", class: "speechContent" }];
