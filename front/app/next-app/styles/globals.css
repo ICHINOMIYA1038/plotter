@@ -158,3 +158,15 @@ body {
   cursor: pointer;
   text-decoration: underline;
 }
+
+.tiptap p.is-empty::before {
+  writing-mode: vertical-rl;
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+
+.has-focus {
+  border-radius: 3px;
+  box-shadow: 0 0 0 3px #68cef8;
+}

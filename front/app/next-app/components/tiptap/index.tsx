@@ -1,4 +1,9 @@
-import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
+import {
+  BubbleMenu,
+  EditorContent,
+  FloatingMenu,
+  useEditor,
+} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Highlight from "@tiptap/extension-highlight";
@@ -6,44 +11,13 @@ import TextAlign from "@tiptap/extension-text-align";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "@tiptap/extension-link";
 import { Color } from "@tiptap/extension-color";
-import { Node } from "@tiptap/core";
 import { SketchPicker } from "react-color";
 import TextStyle from "@tiptap/extension-text-style";
 import { FaBold, FaItalic, FaUnderline } from "react-icons/fa";
 import { Underline } from "@tiptap/extension-underline";
-
-const PageNode = Node.create({
-  name: "page",
-
-  group: "block",
-  content: "block+",
-
-  defining: true,
-
-  addAttributes() {
-    return {
-      // カスタム属性をここに追加できます（必要に応じて）
-    };
-  },
-
-  addKeyboardShortcuts() {
-    return {
-      Enter: () => this.editor.commands.splitBlock(), // カスタム挙動を追加
-    };
-  },
-
-  parseHTML() {
-    return [
-      {
-        tag: "div.page",
-      },
-    ];
-  },
-
-  renderHTML({ HTMLAttributes }) {
-    return ["div", { class: "page", ...HTMLAttributes }, 0];
-  },
-});
+import Focus from "@tiptap/extension-focus";
+import Placeholder from "@tiptap/extension-placeholder";
+import CustomNode from "../CustomNode";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [showSlashMenu, setShowSlashMenu] = useState(false);
@@ -57,12 +31,19 @@ export default function TipTap({ setData, data, setContent }: any) {
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
+      Focus.configure({
+        className: "has-focus",
+        mode: "all",
+      }),
       TextStyle,
       Color,
       Link,
+      CustomNode,
       Highlight,
-      PageNode,
       Underline,
+      Placeholder.configure({
+        placeholder: "Write something …",
+      }),
     ],
     onUpdate: ({ editor }) => {},
     content: content,
@@ -78,6 +59,38 @@ export default function TipTap({ setData, data, setContent }: any) {
   if (!editor) {
     return null;
   }
+
+  const insertSerifNode = () => {
+    if (editor) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "serif",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: "話者名",
+                },
+              ],
+            },
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: "発言内容",
+                },
+              ],
+            },
+          ],
+        })
+        .run();
+    }
+  };
 
   return (
     <div>
@@ -181,6 +194,52 @@ export default function TipTap({ setData, data, setContent }: any) {
           </div>
         )}
       </BubbleMenu>
+      {editor && (
+        <FloatingMenu
+          editor={editor}
+          tippyOptions={{
+            duration: 100,
+            offset: [0, 50],
+          }}
+        >
+          <div className="flex flex-col">
+            <button
+              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 1 }).run()
+              }
+            >
+              タイトル
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+              }
+            >
+              ト書き
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+            >
+              セリフ
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+            >
+              作者
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+              onClick={insertSerifNode}
+            >
+              セリフノード追加
+            </button>
+          </div>
+        </FloatingMenu>
+      )}
     </div>
   );
 }
@@ -188,6 +247,7 @@ export default function TipTap({ setData, data, setContent }: any) {
 const content = `
 <h2>ページ1</h2><p>おはようございます。</p><p>テスト</p>
 <h2>ページ2</h2><p>おはようございます。</p>
+<div class="serif"><div class="speaker">話者名</div><div class="speechcontent">発言内容</div></div>
 `;
 
 const Toolbar = ({ editor }) => {
