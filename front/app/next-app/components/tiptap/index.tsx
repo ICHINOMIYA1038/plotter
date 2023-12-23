@@ -22,9 +22,12 @@ import { DraggableParagraph } from "../DraggableParagraph";
 import { DisableShiftEnterExtension } from "../DisableShiftEnterExtension";
 import HardBreak from "@tiptap/extension-hard-break";
 import EditorToJSON from "../EditorToJson";
+import JSONToEditor from "../JSONtoEditor";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [showSlashMenu, setShowSlashMenu] = useState(false);
+  const [jsonContent, setJsonContent] = useState(null); // JSON データを一時的に保持するための状態
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -103,6 +106,25 @@ export default function TipTap({ setData, data, setContent }: any) {
     }
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setJsonContent(JSON.parse(e.target.result));
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const handleLoadContent = () => {
+    if (jsonContent) {
+      JSONToEditor(editor, jsonContent);
+    } else {
+      alert("JSON ファイルを選択してください。");
+    }
+  };
+
   return (
     <div>
       <Toolbar editor={editor} />
@@ -112,6 +134,14 @@ export default function TipTap({ setData, data, setContent }: any) {
       >
         JSON として出力
       </button>
+      <input type="file" onChange={handleFileChange} />
+      <button
+        onClick={handleLoadContent}
+        className="bg-blue-500 text-white p-2 rounded"
+      >
+        入力
+      </button>
+
       <EditorContent
         editor={editor}
         className="p-4 min-w-xl min-h-xl mx-auto"
@@ -238,7 +268,7 @@ export default function TipTap({ setData, data, setContent }: any) {
             </button>
             <button
               className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
+              onClick={insertSerifNode}
             >
               セリフ
             </button>
@@ -250,9 +280,9 @@ export default function TipTap({ setData, data, setContent }: any) {
             </button>
             <button
               className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={insertSerifNode}
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
             >
-              セリフノード追加
+              登場人物
             </button>
           </div>
         </FloatingMenu>
@@ -262,7 +292,12 @@ export default function TipTap({ setData, data, setContent }: any) {
 }
 
 const content = `
-<h2>ページ1</h2><p>おはようございます。</p><p>テスト</p>
+<h2>ページ1</h2>
+<ul>
+<li>A list item</li>
+<li>And another one</li>
+</ul>
+<p>おはようございます。</p><p>テスト</p>
 <h2>ページ2</h2><p>おはようございます。</p>
 <div class="serif"><div class="speaker"><p>話者<br>名</p></div><div class="speechcontent"><p>会話内容</p></div></div>
 `;
