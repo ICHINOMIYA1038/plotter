@@ -63,9 +63,6 @@ body {
     text-orientation: upright;
   }
 
-  > * + * {
-  }
-
   ul {
     list-style-type: disc; /* 通常の点（円盤）スタイルを追加 */
     padding: 0 1rem;

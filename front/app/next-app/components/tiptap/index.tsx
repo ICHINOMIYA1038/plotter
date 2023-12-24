@@ -25,7 +25,6 @@ import EditorToJSON from "../EditorToJson";
 import JSONToEditor from "../JSONtoEditor";
 
 export default function TipTap({ setData, data, setContent }: any) {
-  const [showSlashMenu, setShowSlashMenu] = useState(false);
   const [jsonContent, setJsonContent] = useState(null); // JSON データを一時的に保持するための状態
 
   const editor = useEditor({
@@ -86,8 +85,8 @@ export default function TipTap({ setData, data, setContent }: any) {
               type: "speaker",
               content: [
                 {
-                  type: "text",
-                  text: "話者名",
+                  type: "paragraph",
+                  content: [{ type: "text", text: "話者名" }],
                 },
               ],
             },
@@ -95,8 +94,8 @@ export default function TipTap({ setData, data, setContent }: any) {
               type: "speechContent",
               content: [
                 {
-                  type: "text",
-                  text: "発言内容",
+                  type: "paragraph",
+                  content: [{ type: "text", text: "会話内容" }],
                 },
               ],
             },
@@ -146,13 +145,6 @@ export default function TipTap({ setData, data, setContent }: any) {
         editor={editor}
         className="p-4 min-w-xl min-h-xl mx-auto"
       />
-      {showSlashMenu && (
-        <div className="slash-menu">
-          {" "}
-          <button>見出し1</button>
-          <button>見出し2</button>
-        </div>
-      )}
       <BubbleMenu editor={editor} tippyOptions={{ placement: "right" }}>
         {menu === "main" && (
           <div className="flex flex-col">
@@ -245,7 +237,6 @@ export default function TipTap({ setData, data, setContent }: any) {
         <FloatingMenu
           editor={editor}
           tippyOptions={{
-            duration: 100,
             offset: [0, 50],
           }}
         >
@@ -274,7 +265,9 @@ export default function TipTap({ setData, data, setContent }: any) {
             </button>
             <button
               className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 6 }).run()
+              }
             >
               作者
             </button>
@@ -299,7 +292,7 @@ const content = `
 </ul>
 <p>おはようございます。</p><p>テスト</p>
 <h2>ページ2</h2><p>おはようございます。</p>
-<div class="serif"><div class="speaker"><p>話者<br>名</p></div><div class="speechcontent"><p>会話内容</p></div></div>
+<div class="serif"><div class="speaker"><p>話者名</p></div><div class="speechcontent"><p>会話内容</p></div></div>
 `;
 
 const Toolbar = ({ editor }) => {
