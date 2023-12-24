@@ -1,5 +1,4 @@
 const Sidebar = ({ node }) => {
-  console.log(node);
   //nodeがnullの場合は空のdivを返す
   if (!node) {
     return <div></div>;

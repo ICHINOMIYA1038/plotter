@@ -60,14 +60,12 @@ export const DisableShiftEnterExtension = Extension.create({
           $head.parent.textContent.trim() === "" &&
           speakerNode.textContent.trim() === ""
         ) {
-          console.log("contentが空の場合");
           return true;
         } else if (
           $head.parent.type.name === "speaker" &&
           $head.parent.textContent.trim() === "" &&
           speakerNode.textContent.trim() !== ""
         ) {
-          console.log("contentが空でない場合");
           return true;
         }
         // 他の条件の場合は、Backspaceのデフォルトの動作を行う

@@ -15,7 +15,6 @@ function DraggableParagraphNode(props: any) {
   const { node, editor } = props;
 
   const handleFocus = () => {
-    console.log(editor.state);
     setMenuVisible(true);
   };
 
