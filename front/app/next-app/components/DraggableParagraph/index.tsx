@@ -36,9 +36,6 @@ function DraggableParagraphNode(props: any) {
       if (editor.state.selection.empty) {
         currentNode = props.editor.state.doc.nodeAt(to - 1);
       }
-      //console.log(props.node);
-      console.log(currentNode);
-      console.log(props.node.content.content[0]);
       if (currentNode === props.node.content.content[0]) setMenuVisible(true);
       else setMenuVisible(false);
     };

@@ -23,10 +23,20 @@ import { DisableShiftEnterExtension } from "../DisableShiftEnterExtension";
 import HardBreak from "@tiptap/extension-hard-break";
 import EditorToJSON from "../EditorToJson";
 import JSONToEditor from "../JSONtoEditor";
+import Sidebar from "../Sidebar";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [jsonContent, setJsonContent] = useState(null); // JSON データを一時的に保持するための状態
-
+  const [selectionNode, setSelectionNode] = useState(null); // 選択中のノードを一時的に保持するための状態
+  function getTopLevelParent(node, doc) {
+    let parent = node;
+    doc.descendants((childNode, pos, parentNode) => {
+      if (childNode === node && parentNode && parentNode.type.name !== "doc") {
+        parent = parentNode;
+      }
+    });
+    return parent;
+  }
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -58,6 +68,24 @@ export default function TipTap({ setData, data, setContent }: any) {
         placeholder: "Write something …",
       }),
     ],
+    onSelectionUpdate(props) {
+      const { selection } = props.editor.state;
+      const { from, to } = selection;
+      let node = props.editor.state.doc.nodeAt(from);
+      console.log(selection);
+
+      if (props.editor.state.selection.empty) {
+        node = props.editor.state.doc.nodeAt(to - 1);
+      }
+
+      if (node) {
+        // 最上位の親ノードを取得
+        const topLevelParent = getTopLevelParent(node, props.editor.state.doc);
+        setSelectionNode(topLevelParent);
+      } else {
+        setSelectionNode(null);
+      }
+    },
     onUpdate: ({ editor }) => {},
     content: content,
     onBlur: ({ editor }: any) => {
@@ -126,6 +154,7 @@ export default function TipTap({ setData, data, setContent }: any) {
 
   return (
     <div>
+      <Sidebar node={selectionNode} />
       <Toolbar editor={editor} />
       <button
         onClick={() => EditorToJSON(editor)}
