@@ -48,7 +48,7 @@ function DraggableParagraphNode(props: any) {
 
   return (
     <NodeViewWrapper data-drag-handle>
-      {menuVisible && (
+      {false && (
         <div className="node-menu">
           <button onClick={() => handleChangeType("heading", 6)}>作者名</button>
           <button onClick={() => handleChangeType("heading", 2)}>

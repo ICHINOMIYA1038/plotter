@@ -72,6 +72,7 @@ export default function TipTap({ setData, data, setContent }: any) {
       const { selection } = props.editor.state;
       const { from, to } = selection;
       let node = selection.$from.node(1);
+      console.log(node);
 
       if (node) {
         // 最上位の親ノードを取得
@@ -148,7 +149,7 @@ export default function TipTap({ setData, data, setContent }: any) {
 
   return (
     <div>
-      <Sidebar node={selectionNode} />
+      <Sidebar node={selectionNode} editor={editor} />
       <Toolbar editor={editor} />
       <button
         onClick={() => EditorToJSON(editor)}
