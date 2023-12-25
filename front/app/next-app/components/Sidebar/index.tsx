@@ -1,4 +1,6 @@
+import { TextSelection } from "@tiptap/pm/state";
 import { findNodePosition } from "../FindNodePosition";
+import { Fragment } from "prosemirror-model";
 
 const Sidebar = ({ node, editor }) => {
   if (!node) {
@@ -12,13 +14,24 @@ const Sidebar = ({ node, editor }) => {
     const value = event.target.value;
     const [newNodeType, level] = value.split("-");
 
-    changeNodeType(
-      editor,
-      nodePos,
-      newNodeType,
-      node,
-      level ? parseInt(level, 10) : null
-    );
+    if (node.type.name === "serif") {
+      // Serifノード自体を変更
+      changeNodeType(
+        editor,
+        nodePos,
+        newNodeType,
+        node,
+        level ? parseInt(level, 10) : null
+      );
+    } else {
+      changeNodeType(
+        editor,
+        nodePos,
+        newNodeType,
+        node,
+        level ? parseInt(level, 10) : null
+      );
+    }
   };
 
   const changeNodeType = (
@@ -32,13 +45,35 @@ const Sidebar = ({ node, editor }) => {
     if (newNodeType === "heading" && level) {
       attrs.level = level;
     }
+
     const nodeType = editor.schema.nodes[newNodeType];
-    const newNode = nodeType.create(attrs, oldNode.content, oldNode.marks);
-    const transaction = editor.state.tr.replaceWith(
+
+    // 子ノードのテキストを結合
+    const combinedText = oldNode.content.content
+      .map((node) => node.textContent)
+      .join("");
+
+    // 新しいノードの作成
+    const textNode = editor.schema.text(combinedText);
+    const newNode = nodeType.create(
+      attrs,
+      Fragment.from(textNode),
+      oldNode.marks
+    );
+
+    let transaction = editor.state.tr.replaceWith(
       nodePos,
       nodePos + oldNode.nodeSize,
       newNode
     );
+
+    // 新しいノードの後ろに選択範囲を設定
+    const newSelection = TextSelection.create(
+      transaction.doc,
+      nodePos + newNode.nodeSize
+    );
+    transaction = transaction.setSelection(newSelection);
+
     editor.view.dispatch(transaction);
   };
 
