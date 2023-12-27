@@ -34,6 +34,7 @@ const Sidebar = ({ node, editor }) => {
     }
   };
 
+  // changeNodeType 関数の更新
   const changeNodeType = (
     editor,
     nodePos,
@@ -42,39 +43,78 @@ const Sidebar = ({ node, editor }) => {
     level = null
   ) => {
     const attrs = { ...oldNode.attrs };
-    if (newNodeType === "heading" && level) {
-      attrs.level = level;
+
+    // Serifノードの特別な扱い
+    if (newNodeType === "serif") {
+      // 既存のテキストを結合
+      const combinedText = oldNode.content.content
+        .map((node) => node.textContent)
+        .join("");
+
+      // Serifノード構造の作成
+      const speechContentNode = editor.schema.nodes.paragraph.create(
+        { textAlign: "left" },
+        editor.schema.text(combinedText)
+      );
+      const speechContent = editor.schema.nodes.speechContent.create(
+        null,
+        Fragment.from(speechContentNode)
+      );
+
+      // speakerノードは空の状態で作成
+      const speakerNode = editor.schema.nodes.speaker.create(
+        null,
+        Fragment.from(editor.schema.nodes.paragraph.create())
+      );
+
+      // Serifノードの作成
+      const serifNode = editor.schema.nodes.serif.create(
+        null,
+        Fragment.from([speakerNode, speechContent])
+      );
+
+      // ノードの置換
+      let transaction = editor.state.tr.replaceWith(
+        nodePos,
+        nodePos + oldNode.nodeSize,
+        serifNode
+      );
+
+      // 選択範囲の更新
+      const newSelection = TextSelection.create(
+        transaction.doc,
+        nodePos + serifNode.nodeSize
+      );
+      transaction = transaction.setSelection(newSelection);
+
+      editor.view.dispatch(transaction);
+    } else {
+      // 他のノードタイプへの変換処理
+      if (newNodeType === "heading" && level) {
+        attrs.level = level;
+      }
+      const nodeType = editor.schema.nodes[newNodeType];
+      const combinedText = oldNode.content.content
+        .map((node) => node.textContent)
+        .join("");
+      const textNode = editor.schema.text(combinedText);
+      const newNode = nodeType.create(
+        attrs,
+        Fragment.from(textNode),
+        oldNode.marks
+      );
+      let transaction = editor.state.tr.replaceWith(
+        nodePos,
+        nodePos + oldNode.nodeSize,
+        newNode
+      );
+      const newSelection = TextSelection.create(
+        transaction.doc,
+        nodePos + newNode.nodeSize
+      );
+      transaction = transaction.setSelection(newSelection);
+      editor.view.dispatch(transaction);
     }
-
-    const nodeType = editor.schema.nodes[newNodeType];
-
-    // 子ノードのテキストを結合
-    const combinedText = oldNode.content.content
-      .map((node) => node.textContent)
-      .join("");
-
-    // 新しいノードの作成
-    const textNode = editor.schema.text(combinedText);
-    const newNode = nodeType.create(
-      attrs,
-      Fragment.from(textNode),
-      oldNode.marks
-    );
-
-    let transaction = editor.state.tr.replaceWith(
-      nodePos,
-      nodePos + oldNode.nodeSize,
-      newNode
-    );
-
-    // 新しいノードの後ろに選択範囲を設定
-    const newSelection = TextSelection.create(
-      transaction.doc,
-      nodePos + newNode.nodeSize
-    );
-    transaction = transaction.setSelection(newSelection);
-
-    editor.view.dispatch(transaction);
   };
 
   const renderChildNodes = (childNodes, startPos) => {
@@ -107,6 +147,7 @@ const Sidebar = ({ node, editor }) => {
             value={`heading-${level}`}
           >{`Heading Level ${level}`}</option>
         ))}
+        <option value="serif">Serif</option>
         {/* 他のノードタイプのオプションも追加 */}
       </select>
       <div>

@@ -24,10 +24,40 @@ import HardBreak from "@tiptap/extension-hard-break";
 import EditorToJSON from "../EditorToJson";
 import JSONToEditor from "../JSONtoEditor";
 import Sidebar from "../Sidebar";
+import { TOC } from "../Toc";
+import { TextSelection } from "@tiptap/pm/state";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [jsonContent, setJsonContent] = useState(null); // JSON データを一時的に保持するための状態
   const [selectionNode, setSelectionNode] = useState(null); // 選択中のノードを一時的に保持するための状態
+  const [toc, setToc] = useState([]);
+  const [initialContent, setInitialContent] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("editor-content") || content;
+    } else {
+      return content;
+    }
+  });
+
+  const updateToc = () => {
+    if (!editor || !editor.state) return;
+
+    const newToc = [];
+    const { doc } = editor.state;
+
+    doc.descendants((node, pos) => {
+      if (node.type.name === "heading") {
+        const level = node.attrs.level;
+        const id = `heading-${pos}`; // 一意のIDを生成
+        const text = node.textContent;
+
+        newToc.push({ id, level, text });
+      }
+    });
+
+    setToc(newToc);
+  };
+
   function getTopLevelParent(node, doc) {
     let parent = node;
     doc.descendants((childNode, pos, parentNode) => {
@@ -55,7 +85,6 @@ export default function TipTap({ setData, data, setContent }: any) {
       Color,
       Serif,
       SpeechContent,
-      DraggableParagraph,
       Speaker,
       Link,
       Highlight,
@@ -72,7 +101,6 @@ export default function TipTap({ setData, data, setContent }: any) {
       const { selection } = props.editor.state;
       const { from, to } = selection;
       let node = selection.$from.node(1);
-      console.log(node);
 
       if (node) {
         // 最上位の親ノードを取得
@@ -81,8 +109,13 @@ export default function TipTap({ setData, data, setContent }: any) {
         setSelectionNode(null);
       }
     },
-    onUpdate: ({ editor }) => {},
-    content: content,
+    onUpdate: ({ editor }) => {
+      updateToc();
+      if (typeof window !== "undefined") {
+        localStorage.setItem("editor-content", editor.getHTML());
+      }
+    },
+    content: initialContent,
     onBlur: ({ editor }: any) => {
       setContent({
         content: editor.getHTML(),
@@ -128,6 +161,34 @@ export default function TipTap({ setData, data, setContent }: any) {
     }
   };
 
+  const handleHeadingClick = (headingId) => {
+    if (!editor || !editor.state) return;
+
+    const { doc } = editor.state;
+    let targetPos = null;
+
+    // ドキュメントを走査して、クリックされた見出しの位置を見つける
+    doc.descendants((node, pos) => {
+      if (node.type.name === "heading") {
+        const id = `heading-${pos}`;
+        if (id === headingId) {
+          targetPos = pos;
+          return false; // 見つけたら走査を中止
+        }
+      }
+    });
+
+    if (targetPos !== null) {
+      // エディタのカーソルを見出しの位置に設定
+      editor.view.dispatch(
+        editor.state.tr.setSelection(
+          TextSelection.near(editor.state.doc.resolve(targetPos))
+        )
+      );
+      editor.view.focus();
+    }
+  };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -149,6 +210,7 @@ export default function TipTap({ setData, data, setContent }: any) {
 
   return (
     <div>
+      {editor && <TOC editor={editor} />}
       <Sidebar node={selectionNode} editor={editor} />
       <Toolbar editor={editor} />
       <button
