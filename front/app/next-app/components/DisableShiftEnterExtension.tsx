@@ -40,7 +40,7 @@ export const DisableShiftEnterExtension = Extension.create({
         const selection = this.editor.state.selection;
         const { $head } = selection;
         const grandparentNode = $head.node(-2);
-        let speakerNode = null;
+        let speakerNode: any = null;
         if (grandparentNode != null) {
           grandparentNode.content.forEach((childNode) => {
             if (childNode.type.name === "speechContent") {
@@ -58,13 +58,17 @@ export const DisableShiftEnterExtension = Extension.create({
         } else if (
           $head.parent.type.name === "speaker" &&
           $head.parent.textContent.trim() === "" &&
+          speakerNode &&
+          typeof speakerNode.textContent !== "undefined" &&
           speakerNode.textContent.trim() === ""
         ) {
           return true;
         } else if (
           $head.parent.type.name === "speaker" &&
           $head.parent.textContent.trim() === "" &&
-          speakerNode.textContent.trim() !== ""
+          speakerNode &&
+          typeof speakerNode.textContent !== "undefined" &&
+          speakerNode.textContent.trim() === ""
         ) {
           return true;
         }
@@ -75,7 +79,7 @@ export const DisableShiftEnterExtension = Extension.create({
   },
 });
 
-const insertSerifNode = (editor) => {
+const insertSerifNode = (editor: any) => {
   if (editor) {
     editor
       .chain()
