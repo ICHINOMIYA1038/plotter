@@ -1,7 +1,12 @@
-import Tiptap from '@/components/Tiptap'
+import Tiptap from "@/components/tiptap";
+import { useState } from "react";
 
 export default function Home() {
-    return (
-         <Tiptap />
-    )
+  const [content, setContent] = useState("");
+  const [data, setData] = useState("");
+  return (
+    <div className="">
+      <Tiptap setContent={setContent} />
+    </div>
+  );
 }
