@@ -133,7 +133,7 @@ const Sidebar = ({ node, editor }: any) => {
   };
 
   return (
-    <div className="sidebar fixed top-0 right-0 w-64 h-screen bg-white p-4 shadow-lg overflow-y-auto">
+    <div className="sidebar bg-white p-4 shadow-lg overflow-y-auto">
       {/* ノードタイプの変更セレクトボックス */}
       <select
         value={

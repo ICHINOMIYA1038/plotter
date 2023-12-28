@@ -27,6 +27,7 @@ import JSONToEditor from "../JSONtoEditor";
 import Sidebar from "../Sidebar";
 import { TOC } from "../Toc";
 import { TextSelection } from "@tiptap/pm/state";
+import { SettingSidebar } from "../SettingSideBar";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [jsonContent, setJsonContent] = useState<any>(null); // JSON データを一時的に保持するための状態
@@ -185,8 +186,6 @@ export default function TipTap({ setData, data, setContent }: any) {
 
   return (
     <div>
-      {editor && <TOC editor={editor} />}
-      <Sidebar node={selectionNode} editor={editor} />
       <Toolbar editor={editor} />
       <button
         onClick={() => EditorToJSON(editor)}
@@ -201,11 +200,28 @@ export default function TipTap({ setData, data, setContent }: any) {
       >
         入力
       </button>
-
-      <EditorContent
-        editor={editor}
-        className="p-4 min-w-full max-w-full min-h-full max-h-full mx-auto"
-      />
+      <div className="grid grid-cols-12 min-h-screen">
+        <div className="col-span-2 p-4 h-full overflow-auto bg-gray-100">
+          {" "}
+          {/* 新しいSettingSidebar */}
+          <SettingSidebar />
+        </div>
+        <div className="col-span-8 p-4 min-w-full max-w-full h-full mx-auto overflow-auto">
+          <EditorContent editor={editor} />
+        </div>
+        <div className="col-span-2 flex flex-col h-full">
+          <div className="overflow-auto">
+            {" "}
+            {/* TOCのセクション */}
+            {editor && <TOC editor={editor} />}
+          </div>
+          <div className="overflow-auto">
+            {" "}
+            {/* 右側のサイドバーのセクション */}
+            <Sidebar node={selectionNode} editor={editor} />
+          </div>
+        </div>
+      </div>
       <BubbleMenu editor={editor} tippyOptions={{ placement: "right" }}>
         {menu === "main" && (
           <div className="flex flex-col">
