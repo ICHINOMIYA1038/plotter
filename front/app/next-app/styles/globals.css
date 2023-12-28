@@ -185,3 +185,110 @@ body {
 .speaker {
   flex: 1;
 }
+
+
+
+
+/* CSS スタイルを適用するコンテナ内で */
+.custom-button {
+  padding: 8px 16px; /* 上下左右のパディングを設定（調整が必要かもしれません） */
+  border: 1px solid #ccc; /* ボーダーを追加し、ボーダーカラーを設定 */
+  border-radius: 4px; /* 角を少しだけ丸める */
+  cursor: pointer; /* マウスオーバー時にカーソルをポインターに変更 */
+}
+
+/* アクティブ状態のボタンにスタイルを追加（オプション） */
+.custom-button.is-active {
+  background-color: #007bff; /* アクティブ状態の背景色を設定 */
+  color: #fff; /* アクティブ状態のテキストカラーを設定 */
+}
+
+.tiptap {
+  > * + * {
+    margin-top: 0.75em;
+  }
+
+  ul,
+  ol {
+    padding: 0 1rem;
+  }
+
+/* ブログ風の見出しスタイル */
+h1 {
+  font-size: 2.5rem; /* h1 のフォントサイズを調整 */
+  margin-top: 2rem; /* 上部のマージンを追加 */
+  margin-bottom: 1rem; /* 下部のマージンを調整 */
+  font-weight: bold; /* 太字のフォント */
+}
+
+h2 {
+  font-size: 2rem; /* h2 のフォントサイズを調整 */
+  margin-top: 1.5rem; /* 上部のマージンを追加 */
+  margin-bottom: 1rem; /* 下部のマージンを調整 */
+  font-weight: bold; /* 太字のフォント */
+}
+
+h3 {
+  font-size: 1.5rem; /* h3 のフォントサイズを調整 */
+  margin-top: 1.5rem; /* 上部のマージンを追加 */
+  margin-bottom: 1rem; /* 下部のマージンを調整 */
+  font-weight: bold; /* 太字のフォント */
+}
+
+h4 {
+  font-size: 1.25rem; /* h4 のフォントサイズを調整 */
+  margin-top: 1rem; /* 上部のマージンを追加 */
+  margin-bottom: 0.5rem; /* 下部のマージンを調整 */
+  font-weight: bold; /* 太字のフォント */
+}
+
+h5 {
+  font-size: 1.1rem; /* h5 のフォントサイズを調整 */
+  margin-top: 1rem; /* 上部のマージンを追加 */
+  margin-bottom: 0.5rem; /* 下部のマージンを調整 */
+  font-weight: bold; /* 太字のフォント */
+}
+
+h6 {
+  font-size: 1rem; /* h6 のフォントサイズを調整 */
+  margin-top: 1rem; /* 上部のマージンを追加 */
+  margin-bottom: 0.5rem; /* 下部のマージンを調整 */
+  font-weight: bold; /* 太字のフォント */
+}
+
+  code {
+    background-color: rgba(#616161, 0.1);
+    color: #616161;
+  }
+
+  pre {
+    background: #0D0D0D;
+    color: #FFF;
+    font-family: 'JetBrainsMono', monospace;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+
+    code {
+      color: inherit;
+      padding: 0;
+      background: none;
+      font-size: 0.8rem;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid rgba(#0D0D0D, 0.1);
+  }
+
+  hr {
+    border: none;
+    border-top: 2px solid rgba(#0D0D0D, 0.1);
+    margin: 2rem 0;
+  }
+}
