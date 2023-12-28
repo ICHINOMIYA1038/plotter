@@ -2,6 +2,26 @@ import { Editor } from "@tiptap/react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
+function splitContentForPrint(content: any, pageWidth: any) {
+  const container = document.createElement("div");
+  container.innerHTML = content;
+
+  let accumulatedWidth = 0;
+  let currentPage = document.createElement("div");
+
+  Array.from(container.childNodes).forEach((node: any) => {
+    currentPage.appendChild(node.cloneNode(true));
+    accumulatedWidth += node.offsetWidth;
+
+    if (accumulatedWidth >= pageWidth) {
+      currentPage.classList.add("page-break");
+      accumulatedWidth = 0;
+    }
+  });
+
+  return currentPage.innerHTML;
+}
+
 export const exportToPDF = (editor: Editor) => {
   if (!editor) {
     console.error("Editor instance is not available");
@@ -194,26 +214,6 @@ export const exportToPDF = (editor: Editor) => {
         page-break-after: always;
       }
     `;
-
-    function splitContentForPrint(content, pageWidth) {
-      const container = document.createElement("div");
-      container.innerHTML = content;
-
-      let accumulatedWidth = 0;
-      let currentPage = document.createElement("div");
-
-      Array.from(container.childNodes).forEach((node) => {
-        currentPage.appendChild(node.cloneNode(true));
-        accumulatedWidth += node.offsetWidth;
-
-        if (accumulatedWidth >= pageWidth) {
-          currentPage.classList.add("page-break");
-          accumulatedWidth = 0;
-        }
-      });
-
-      return currentPage.innerHTML;
-    }
 
     const pageWidth = 800; // ここでページの幅を指定します
     const splitContent = splitContentForPrint(editorContent, pageWidth);

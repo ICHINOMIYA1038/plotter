@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent, Node } from "@tiptap/react";
 import { exportToPDF } from "../htmlToPdf";
 
-export const TOC = ({ editor }) => {
+export const TOC = ({ editor }: any) => {
   const [headings, setHeadings] = useState([]);
 
   useEffect(() => {
@@ -10,8 +10,8 @@ export const TOC = ({ editor }) => {
 
     const updateHeadings = () => {
       const doc = editor.state.doc;
-      let headingNodes = [];
-      doc.forEach((node, pos) => {
+      let headingNodes: any = [];
+      doc.forEach((node: any, pos: any) => {
         if (node.type.name === "heading") {
           headingNodes.push({
             id: pos,
@@ -38,7 +38,7 @@ export const TOC = ({ editor }) => {
   return (
     <div className="toc max-h-64 overflow-y-auto bg-white shadow-lg border border-gray-200 p-4 mb-6">
       <ul className="list-none">
-        {headings.map((heading) => (
+        {headings.map((heading: any) => (
           <li
             key={heading.id}
             className={`mb-2 ${

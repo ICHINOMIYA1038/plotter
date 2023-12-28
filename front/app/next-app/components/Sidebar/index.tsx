@@ -1,8 +1,9 @@
 import { TextSelection } from "@tiptap/pm/state";
 import { findNodePosition } from "../FindNodePosition";
 import { Fragment } from "prosemirror-model";
+import { Editor } from "@tiptap/react";
 
-const Sidebar = ({ node, editor }) => {
+const Sidebar = ({ node, editor }: any) => {
   if (!node) {
     return <div></div>;
   }
@@ -10,7 +11,7 @@ const Sidebar = ({ node, editor }) => {
   const doc = editor.state.doc;
   const nodePos = findNodePosition(doc, node);
 
-  const handleNodeTypeAndLevelChange = (event) => {
+  const handleNodeTypeAndLevelChange = (event: any) => {
     const value = event.target.value;
     const [newNodeType, level] = value.split("-");
 
@@ -36,11 +37,11 @@ const Sidebar = ({ node, editor }) => {
 
   // changeNodeType 関数の更新
   const changeNodeType = (
-    editor,
-    nodePos,
-    newNodeType,
-    oldNode,
-    level = null
+    editor: Editor,
+    nodePos: any,
+    newNodeType: any,
+    oldNode: any,
+    level: any = null
   ) => {
     const attrs = { ...oldNode.attrs };
 
@@ -48,7 +49,7 @@ const Sidebar = ({ node, editor }) => {
     if (newNodeType === "serif") {
       // 既存のテキストを結合
       const combinedText = oldNode.content.content
-        .map((node) => node.textContent)
+        .map((node: any) => node.textContent)
         .join("");
 
       // Serifノード構造の作成
@@ -95,7 +96,7 @@ const Sidebar = ({ node, editor }) => {
       }
       const nodeType = editor.schema.nodes[newNodeType];
       const combinedText = oldNode.content.content
-        .map((node) => node.textContent)
+        .map((node: any) => node.textContent)
         .join("");
       const textNode = editor.schema.text(combinedText);
       const newNode = nodeType.create(
@@ -117,10 +118,10 @@ const Sidebar = ({ node, editor }) => {
     }
   };
 
-  const renderChildNodes = (childNodes, startPos) => {
+  const renderChildNodes = (childNodes: any, startPos: any) => {
     return childNodes
-      .filter((child) => child.type.name !== "text")
-      .map((child, index) => (
+      .filter((child: any) => child.type.name !== "text")
+      .map((child: any, index: any) => (
         <div
           key={index}
           className="child-node mb-4 p-2 bg-gray-100 rounded-lg shadow-sm"

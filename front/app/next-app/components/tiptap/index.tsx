@@ -1,5 +1,6 @@
 import {
   BubbleMenu,
+  Editor,
   EditorContent,
   FloatingMenu,
   useEditor,
@@ -28,8 +29,8 @@ import { TOC } from "../Toc";
 import { TextSelection } from "@tiptap/pm/state";
 
 export default function TipTap({ setData, data, setContent }: any) {
-  const [jsonContent, setJsonContent] = useState(null); // JSON データを一時的に保持するための状態
-  const [selectionNode, setSelectionNode] = useState(null); // 選択中のノードを一時的に保持するための状態
+  const [jsonContent, setJsonContent] = useState<any>(null); // JSON データを一時的に保持するための状態
+  const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
   const [toc, setToc] = useState([]);
   const [initialContent, setInitialContent] = useState(() => {
     if (typeof window !== "undefined") {
@@ -42,7 +43,7 @@ export default function TipTap({ setData, data, setContent }: any) {
   const updateToc = () => {
     if (!editor || !editor.state) return;
 
-    const newToc = [];
+    const newToc: any = [];
     const { doc } = editor.state;
 
     doc.descendants((node, pos) => {
@@ -58,9 +59,9 @@ export default function TipTap({ setData, data, setContent }: any) {
     setToc(newToc);
   };
 
-  function getTopLevelParent(node, doc) {
+  function getTopLevelParent(node: any, doc: any) {
     let parent = node;
-    doc.descendants((childNode, pos, parentNode) => {
+    doc.descendants((childNode: any, pos: any, parentNode: any) => {
       if (childNode === node && parentNode && parentNode.type.name !== "doc") {
         parent = parentNode;
       }
@@ -161,40 +162,14 @@ export default function TipTap({ setData, data, setContent }: any) {
     }
   };
 
-  const handleHeadingClick = (headingId) => {
-    if (!editor || !editor.state) return;
-
-    const { doc } = editor.state;
-    let targetPos = null;
-
-    // ドキュメントを走査して、クリックされた見出しの位置を見つける
-    doc.descendants((node, pos) => {
-      if (node.type.name === "heading") {
-        const id = `heading-${pos}`;
-        if (id === headingId) {
-          targetPos = pos;
-          return false; // 見つけたら走査を中止
-        }
-      }
-    });
-
-    if (targetPos !== null) {
-      // エディタのカーソルを見出しの位置に設定
-      editor.view.dispatch(
-        editor.state.tr.setSelection(
-          TextSelection.near(editor.state.doc.resolve(targetPos))
-        )
-      );
-      editor.view.focus();
-    }
-  };
-
-  const handleFileChange = (event) => {
+  const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setJsonContent(JSON.parse(e.target.result));
+        if (e.target) {
+          setJsonContent(JSON.parse(e.target.result?.toString() || ""));
+        }
       };
       reader.readAsText(file);
     }
@@ -229,7 +204,7 @@ export default function TipTap({ setData, data, setContent }: any) {
 
       <EditorContent
         editor={editor}
-        className="p-4 min-w-xl min-h-xl mx-auto"
+        className="p-4 min-w-full max-w-full min-h-full max-h-full mx-auto"
       />
       <BubbleMenu editor={editor} tippyOptions={{ placement: "right" }}>
         {menu === "main" && (
@@ -293,7 +268,7 @@ export default function TipTap({ setData, data, setContent }: any) {
         {/* 見出し・段落サブメニュー */}
         {menu === "heading" && (
           <div className="flex flex-col">
-            {[1, 2, 3, 4, 5, 6].map((level) => (
+            {[1, 2, 3, 4, 5, 6].map((level: any) => (
               <button
                 className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
                 key={level}
@@ -381,23 +356,13 @@ const content = `
 <div class="serif"><div class="speaker"><p>話者名</p></div><div class="speechcontent"><p>会話内容</p></div></div>
 `;
 
-const Toolbar = ({ editor }) => {
+const Toolbar = ({ editor }: { editor: Editor }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [color, setColor] = useState("#000000");
-  const pickerRef = useRef();
 
   if (!editor) {
     return null;
   }
-
-  const handleColorChange = (color) => {
-    setColor(color.hex);
-    editor.chain().focus().setMark("textStyle", { color: color.hex }).run();
-  };
-
-  const isActive = (format) => {
-    return editor.isActive(format);
-  };
 
   return (
     <div className="flex gap-2 p-2 border-b border-gray-300">
@@ -423,7 +388,7 @@ const Toolbar = ({ editor }) => {
           if (editor.isActive("link")) {
             editor.chain().focus().unsetLink().run();
           } else {
-            const url = window.prompt("URL");
+            const url: any = window.prompt("URL");
             editor.chain().focus().setLink({ href: url }).run();
           }
         }}
