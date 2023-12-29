@@ -27,6 +27,7 @@ import Sidebar from "../Sidebar";
 import { TOC } from "../Toc";
 import { Toolbar } from "../Toolbar";
 import { SettingSidebar } from "../SettingSideBar";
+import { CustomKeyBoardShortcuts } from "../CustomKeyBoardShortcuts";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
@@ -88,8 +89,8 @@ export default function TipTap({ setData, data, setContent }: any) {
       Speaker,
       Link,
       Highlight,
-      DisableShiftEnterExtension,
       Underline,
+      CustomKeyBoardShortcuts,
       HardBreak.configure({
         keepMarks: true,
       }),
@@ -139,21 +140,11 @@ export default function TipTap({ setData, data, setContent }: any) {
           content: [
             {
               type: "speaker",
-              content: [
-                {
-                  type: "paragraph",
-                  content: [{ type: "text", text: "話者名" }],
-                },
-              ],
+              text: "話者名",
             },
             {
               type: "speechContent",
-              content: [
-                {
-                  type: "paragraph",
-                  content: [{ type: "text", text: "会話内容" }],
-                },
-              ],
+              text: "会話内容",
             },
           ],
         })

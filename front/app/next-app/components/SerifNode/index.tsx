@@ -23,27 +23,40 @@ export const Serif = Node.create({
 export const Speaker = Node.create({
   name: "speaker",
 
-  content: "paragraph",
+  content: 'inline*',
+
+  group: 'block',
+
 
   parseHTML() {
-    return [{ tag: "div", class: "speaker" }];
+    return [
+      {
+        tag: 'p.speaker', // `p` タグに `customClass` クラスが適用されているものを対象とします
+      },
+    ];
   },
 
-  renderHTML() {
-    return ["div", { class: "speaker" }, 0];
+  renderHTML({ HTMLAttributes }) {
+    return ['p', { ...HTMLAttributes, class: 'speaker' }, 0];
   },
 });
 
 export const SpeechContent = Node.create({
   name: "speechContent",
 
-  content: "paragraph",
+  content: 'inline*',
+
+  group: 'block',
 
   parseHTML() {
-    return [{ tag: "div", class: "speechContent" }];
+    return [
+      {
+        tag: 'p.speechContent', // `p` タグに `customClass` クラスが適用されているものを対象とします
+      },
+    ];
   },
 
-  renderHTML() {
-    return ["div", { class: "speechContent" }, 0];
+  renderHTML({ HTMLAttributes }) {
+    return ['p', { ...HTMLAttributes, class: 'speechContent' }, 0];
   },
 });

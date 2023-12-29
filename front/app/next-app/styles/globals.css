@@ -206,10 +206,6 @@ body {
   box-shadow: none;
 }
 
-.serif.has-focus {
-  border-radius: 3px;
-  box-shadow: none;
-}
 
 .speechContent.has-focus {
   border-radius: 3px;
