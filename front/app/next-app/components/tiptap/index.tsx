@@ -19,7 +19,6 @@ import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Serif, Speaker, SpeechContent } from "../SerifNode";
 import { DraggableParagraph } from "../DraggableParagraph";
-import { DisableShiftEnterExtension } from "../DisableShiftEnterExtension";
 import HardBreak from "@tiptap/extension-hard-break";
 import EditorToJSON from "../EditorToJson";
 import JSONToEditor from "../JSONtoEditor";
@@ -278,6 +277,14 @@ export default function TipTap({ setData, data, setContent }: any) {
             <button
               className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
               onClick={() =>
+                editor.chain().focus().setParagraph().unsetAllMarks().run()
+              }
+            >
+              標準
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+              onClick={() =>
                 editor.chain().focus().toggleHeading({ level: 1 }).run()
               }
             >
@@ -315,7 +322,16 @@ export default function TipTap({ setData, data, setContent }: any) {
             </button>
             <button
               className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
+              onClick={() => {
+                // エディタの現在の選択を取得
+                const { from } = editor.state.selection;
+
+                // カーソル位置を行の始まりに移動
+                editor.chain().focus().setTextSelection(from - 1).run();
+
+                // '登場人物'と3つのリストアイテムを挿入
+                editor.chain().insertContent('<h5>登場人物</h5><ul><li>名前1</li><li>名前2</li><li>名前3</li></ul>').run();
+              }}
             >
               登場人物
             </button>

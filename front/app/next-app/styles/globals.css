@@ -193,22 +193,48 @@ body {
   box-shadow: 0 0 0 3px #68cef8;
 }
 
+li.has-focus {
+  border-radius: 3px;
+  border: none;
+  box-shadow: none;
+}
+
+
+li>p.has-focus {
+  border-radius: 3px;
+  border: dashed;
+  box-shadow: none;
+}
+
 .serif {
   display: flex;
 }
 
 .speechContent {
-  height: 70%;
-  margin-top: 5%;
+  height: 75%;
+  padding-top: 5%;
 }
 
 .serif.has-focus {
   border-radius: 3px;
+  box-shadow: 0 0 0 3px #68cef8;
+  border: none;
+}
+
+.speaker.has-focus {
+  border-radius: 3px;
   box-shadow: none;
+  border: dashed;
+}
+
+.speechContent.has-focus {
+  border-radius: 3px;
+  box-shadow: none;
+  border: dashed;
 }
 
 
 .speaker {
-  height: 24%;
-  margin-top: 1%;
+  height: 25%;
+  padding-top: 5%;
 }

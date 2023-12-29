@@ -3,6 +3,21 @@ import { NodeSelection, TextSelection } from "@tiptap/pm/state";
 
 const navigableNodeTypes = ['heading', 'paragraph', 'speaker', 'speechContent']
 
+function findNextNodePos(doc: any, $head: any) {
+    let nextNodePos: any = null;
+
+    // $head の位置から走査を開始して次のノードを探す
+    doc.nodesBetween($head.pos, doc.content.size, (node: any, pos: any) => {
+        if (nextNodePos === null && pos > $head.pos) {
+            // 次のノードの位置を記録
+            nextNodePos = pos;
+            return false; // 走査を停止
+        }
+    });
+
+    return nextNodePos;
+}
+
 
 export const CustomKeyBoardShortcuts = Extension.create({
     name: "disableShiftEnter",
@@ -27,21 +42,39 @@ export const CustomKeyBoardShortcuts = Extension.create({
 
                 return found
             }).run(),
-            Enter: () => {
-                const selection = this.editor.state.selection;
-                const { $head } = selection;
-                const parentNodeType = $head.parent.type.name;
-                const grandparentNodeType = $head.node(-1).type.name; // 親の親ノードのタイプ
-                if (
-                    grandparentNodeType === "speaker" ||
-                    grandparentNodeType === "speechContent"
-                ) {
-                    insertSerifNode(this.editor);
-                    console.log("serif insert");
-                    return true;
+            Enter: () => this.editor.chain().command(({ tr, dispatch }) => {
+                // speakerノードの場合、speechContentノードにカーソルを移動
+                const { selection } = tr;
+                const { $head, from, to } = selection;
+
+                // 現在のノードとその位置を取得
+                const node = $head.node(-1);
+                if (!node) {
+                    return false;
                 }
-                return false; // Enterのデフォルトの動作を防止
-            },
+
+                if (!node.type) {
+                    return false;
+                }
+
+                // serifノードであることを確認
+                if (node.type.name !== "serif") {
+                    return false;
+                }
+
+                if ($head.node(2).type.name === "speaker") {
+                    dispatch(tr.setSelection(TextSelection.create(tr.doc, findNextNodePos(this.editor.state.doc, $head) + 1)))
+                    return true;
+                } else if ($head.node(2).type.name === "speechContent") {
+                    dispatch(tr.insert($head.end(0), this.editor.state.schema.nodes.paragraph.create()));
+                    dispatch(tr.setSelection(TextSelection.create(tr.doc, $head.end(1) + 1)));
+                    return true;
+                } else {
+                    return false
+                }
+
+                //speechContentノードの場合、次のノードにカーソルを移動。次のノードがない場合、新しいノードを挿入
+            }).run(),
             Backspace: () => this.editor.chain().command(({ tr, dispatch }) => {
                 const { state, view } = this.editor;
                 const { selection } = tr;
@@ -49,7 +82,13 @@ export const CustomKeyBoardShortcuts = Extension.create({
 
                 // 現在のノードとその位置を取得
                 const node = $head.node(-1);
-                console.log(node.type.name)
+                if (!node) {
+                    return false;
+                }
+
+                if (!node.type) {
+                    return false;
+                }
 
 
                 // serifノードであることを確認
