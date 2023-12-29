@@ -1,5 +1,9 @@
 import { Extension } from "@tiptap/core";
+import { NodeSelection, TextSelection } from "@tiptap/pm/state";
 import { Editor } from "@tiptap/react";
+
+const navigableNodeTypes = ['heading', 'paragraph', 'speaker', 'speechContent']
+
 
 export const DisableShiftEnterExtension = Extension.create({
   name: "disableShiftEnter",
@@ -75,6 +79,24 @@ export const DisableShiftEnterExtension = Extension.create({
         // 他の条件の場合は、Backspaceのデフォルトの動作を行う
         return false;
       },
+      Tab: () => this.editor.chain().command(({ tr, dispatch }) => {
+        const { selection } = tr
+        const { $from } = selection
+
+        let found = false
+        tr.doc.nodesBetween($from.pos, tr.doc.content.size, (node, pos) => {
+          if (!found && pos > $from.pos) {
+            if (navigableNodeTypes.includes(node.type.name)) {
+              // 移動可能なノードを見つけた場合
+              dispatch(tr.setSelection(TextSelection.create(tr.doc, pos)))
+              found = true
+              return false // ループを停止
+            }
+          }
+        })
+
+        return found
+      }).run(),
     };
   },
 });

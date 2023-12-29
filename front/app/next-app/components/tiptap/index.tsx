@@ -12,7 +12,6 @@ import TextAlign from "@tiptap/extension-text-align";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "@tiptap/extension-link";
 import { Color } from "@tiptap/extension-color";
-import { SketchPicker } from "react-color";
 import TextStyle from "@tiptap/extension-text-style";
 import { FaBold, FaItalic, FaUnderline } from "react-icons/fa";
 import { Underline } from "@tiptap/extension-underline";
@@ -26,11 +25,10 @@ import EditorToJSON from "../EditorToJson";
 import JSONToEditor from "../JSONtoEditor";
 import Sidebar from "../Sidebar";
 import { TOC } from "../Toc";
-import { TextSelection } from "@tiptap/pm/state";
+import { Toolbar } from "../Toolbar";
 import { SettingSidebar } from "../SettingSideBar";
 
 export default function TipTap({ setData, data, setContent }: any) {
-  const [jsonContent, setJsonContent] = useState<any>(null); // JSON データを一時的に保持するための状態
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
   const [toc, setToc] = useState([]);
   const [initialContent, setInitialContent] = useState(() => {
@@ -96,7 +94,7 @@ export default function TipTap({ setData, data, setContent }: any) {
         keepMarks: true,
       }),
       Placeholder.configure({
-        placeholder: "Write something …",
+        placeholder: "",
       }),
     ],
     onSelectionUpdate(props) {
@@ -163,59 +161,27 @@ export default function TipTap({ setData, data, setContent }: any) {
     }
   };
 
-  const handleFileChange = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target) {
-          setJsonContent(JSON.parse(e.target.result?.toString() || ""));
-        }
-      };
-      reader.readAsText(file);
-    }
-  };
-
-  const handleLoadContent = () => {
-    if (jsonContent) {
-      JSONToEditor(editor, jsonContent);
-    } else {
-      alert("JSON ファイルを選択してください。");
-    }
-  };
 
   return (
     <div>
-      <Toolbar editor={editor} />
-      <button
-        onClick={() => EditorToJSON(editor)}
-        className="bg-blue-500 text-white p-2 rounded"
-      >
-        JSON として出力
-      </button>
-      <input type="file" onChange={handleFileChange} />
-      <button
-        onClick={handleLoadContent}
-        className="bg-blue-500 text-white p-2 rounded"
-      >
-        入力
-      </button>
-      <div className="grid grid-cols-12 min-h-screen">
-        <div className="col-span-2 p-4 h-full overflow-auto bg-gray-100">
+
+      <div className="grid grid-cols-12 h-screen w-screen">
+        <div className="overflow-y-auto col-span-2">
           {" "}
           {/* 新しいSettingSidebar */}
-          <SettingSidebar />
+          <SettingSidebar editor={editor} />
         </div>
         <div className="col-span-8 p-4 min-w-full max-w-full h-full mx-auto overflow-auto">
-          <EditorContent editor={editor} />
+          <Toolbar editor={editor} />
+          <EditorContent editor={editor} className="w-full h-85vh" />
         </div>
-        <div className="col-span-2 flex flex-col h-full">
-          <div className="overflow-auto">
+        <div className="col-span-2 flex flex-col h-full ">
+          <div className="flex-1 overflow-y-scroll">
             {" "}
             {/* TOCのセクション */}
             {editor && <TOC editor={editor} />}
           </div>
-          <div className="overflow-auto">
+          <div className="flex-1 overflow-y-scroll">
             {" "}
             {/* 右側のサイドバーのセクション */}
             <Sidebar node={selectionNode} editor={editor} />
@@ -332,7 +298,7 @@ export default function TipTap({ setData, data, setContent }: any) {
                 editor.chain().focus().toggleHeading({ level: 2 }).run()
               }
             >
-              ト書き
+              シーン
             </button>
             <button
               className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
@@ -343,7 +309,15 @@ export default function TipTap({ setData, data, setContent }: any) {
             <button
               className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
               onClick={() =>
-                editor.chain().focus().toggleHeading({ level: 6 }).run()
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
+              }
+            >
+              ト書き
+            </button>
+            <button
+              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 4 }).run()
               }
             >
               作者
@@ -372,91 +346,3 @@ const content = `
 <div class="serif"><div class="speaker"><p>話者名</p></div><div class="speechcontent"><p>会話内容</p></div></div>
 `;
 
-const Toolbar = ({ editor }: { editor: Editor }) => {
-  const [showColorPicker, setShowColorPicker] = useState(false);
-  const [color, setColor] = useState("#000000");
-
-  if (!editor) {
-    return null;
-  }
-
-  return (
-    <div className="flex gap-2 p-2 border-b border-gray-300">
-      {/* Bold Button */}
-      <button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`btn ${editor.isActive("bold") ? "btn-active" : ""}`}
-      >
-        Bold
-      </button>
-
-      {/* Strike Button */}
-      <button
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        className={`btn ${editor.isActive("strike") ? "btn-active" : ""}`}
-      >
-        Strike
-      </button>
-
-      {/* Link Button */}
-      <button
-        onClick={() => {
-          if (editor.isActive("link")) {
-            editor.chain().focus().unsetLink().run();
-          } else {
-            const url: any = window.prompt("URL");
-            editor.chain().focus().setLink({ href: url }).run();
-          }
-        }}
-        className={`btn ${editor.isActive("link") ? "btn-active" : ""}`}
-      >
-        Link
-      </button>
-
-      {/* Undo Button */}
-      <button
-        onClick={() => editor.chain().focus().undo().run()}
-        className={`btn ${editor.can().undo() ? "btn-active" : ""}`}
-      >
-        Undo
-      </button>
-
-      {/* Redo Button */}
-      <button
-        onClick={() => editor.chain().focus().redo().run()}
-        className={`btn ${editor.can().redo() ? "btn-active" : ""}`}
-      >
-        Redo
-      </button>
-
-      {/* カラーピッカートリガーボタン */}
-      <div className="relative">
-        <button
-          onClick={() => setShowColorPicker(!showColorPicker)}
-          className={`btn ${showColorPicker ? "btn-active" : ""}`}
-        >
-          Color
-        </button>
-        {/* カラーピッカー */}
-        {showColorPicker && (
-          <div className="absolute right-0 z-10">
-            <SketchPicker
-              color={color}
-              onChangeComplete={(color) => {
-                setColor(color.hex);
-                editor
-                  .chain()
-                  .focus()
-                  .setMark("textStyle", { color: color.hex })
-                  .run();
-              }}
-            />
-            <button onClick={() => setShowColorPicker(false)} className="btn">
-              Close
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};

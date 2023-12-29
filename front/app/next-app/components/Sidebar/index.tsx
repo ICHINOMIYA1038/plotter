@@ -2,6 +2,15 @@ import { TextSelection } from "@tiptap/pm/state";
 import { findNodePosition } from "../FindNodePosition";
 import { Fragment } from "prosemirror-model";
 import { Editor } from "@tiptap/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { typeToIcon, typeToJapanese } from "../TypeToJapanese";
+import {
+  faParagraph,
+  faHeading,
+  faBook,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = ({ node, editor }: any) => {
   if (!node) {
@@ -126,14 +135,14 @@ const Sidebar = ({ node, editor }: any) => {
           key={index}
           className="child-node mb-4 p-2 bg-gray-100 rounded-lg shadow-sm"
         >
-          <p className="font-semibold text-gray-700">Type: {child.type.name}</p>
+          <p className="font-semibold text-gray-700">
+            {typeToJapanese[child.type.name]}</p>
           <p className="text-gray-600">{child.textContent}</p>
         </div>
       ));
   };
-
   return (
-    <div className="sidebar bg-white p-4 shadow-lg overflow-y-auto">
+    <div className="bg-white shadow-lg rounded-lg border border-gray-200 p-4 mx-2 my-4">
       {/* ノードタイプの変更セレクトボックス */}
       <select
         value={
@@ -141,33 +150,31 @@ const Sidebar = ({ node, editor }: any) => {
         }
         onChange={(event) => handleNodeTypeAndLevelChange(event)}
       >
-        <option value="paragraph">Paragraph</option>
-        {[1, 2, 3, 4, 5, 6].map((level) => (
-          <option
-            key={level}
-            value={`heading-${level}`}
-          >{`Heading Level ${level}`}</option>
-        ))}
-        <option value="serif">Serif</option>
+        <option value="paragraph">標準</option>
+        <option value="heading-1">タイトル</option>
+        <option value="heading-2">シーン</option>
+        <option value="heading-3">ト書き</option>
+        <option value="heading-4">作者名</option>
+        <option value="serif">セリフ</option>
         {/* 他のノードタイプのオプションも追加 */}
       </select>
       <div>
         <h3 className="font-bold text-xl mb-4 text-gray-800">
-          Node Information
+          <FontAwesomeIcon
+            icon={typeToIcon[node.type.name + (node.attrs.level ? `-${node.attrs.level}` : "")]}
+            className="mr-2"
+          />
+          {typeToJapanese[node.type.name + (node.attrs.level ? `-${node.attrs.level}` : "")]}
         </h3>
-        <p className="font-semibold text-gray-700">Type: {node.type.name}</p>
         <p className="text-gray-600 mb-6">{node.textContent}</p>
 
         {node.content && node.content.size > 0 && (
           <div>
-            <h4 className="font-bold text-lg mb-3 text-gray-800">
-              Child Nodes
-            </h4>
             {renderChildNodes(node.content.content, node.pos + 1)}
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -22,11 +22,9 @@ body {
 }
 
 .tiptap {
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
-  min-width: 1528px;
-  min-height: 1080px;
-  max-width: 1528px;
-  max-height: 1080px;
   overflow-x: scroll;
   -webkit-writing-mode: vertical-rl;
   -ms-writing-mode: tb-rl;
@@ -45,10 +43,13 @@ body {
   border-radius: 12px;
   box-shadow: inset 0 0 0 2px #000000;
   background-color: #ffffff;
+  align-items: center;
 
-  padding-top: 100px;
-  padding-right: 30px;
-  > * {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 20px;
+
+  >* {
     -webkit-writing-mode: vertical-rl;
     -ms-writing-mode: tb-rl;
     writing-mode: vertical-rl;
@@ -65,7 +66,8 @@ body {
   }
 
   ul {
-    list-style-type: disc; /* 通常の点（円盤）スタイルを追加 */
+    list-style-type: disc;
+    /* 通常の点（円盤）スタイルを追加 */
     padding: 0 1rem;
   }
 
@@ -76,38 +78,53 @@ body {
 
   /* タイトル */
   h1 {
-    font-size: 2.5rem; /* h1 のフォントサイズを調整 */
-
-    margin-top: 5rem;
+    font-size: 1.8rem;
+    /* h1 のフォントサイズを調整 */
+    font-weight: bold;
+    padding-top: 5rem;
   }
 
   h2 {
-    font-size: 1rem; /* h2 のフォントサイズを調整 */
-    margin-top: 8rem;
-    font-weight: bold; /* 太字のフォント */
+    font-size: 1.3rem;
+    /* h2 のフォントサイズを調整 */
+    font-weight: bold;
+    padding-top: 2rem;
+    /* 太字のフォント */
   }
 
   /* */
   h3 {
-    font-size: 1.5rem; /* h3 のフォントサイズを調整 */
-    font-weight: bold; /* 太字のフォント */
+    font-size: 1rem;
+    /* h3 のフォントサイズを調整 */
+    font-weight: bold;
+    /* 太字のフォント */
+    padding-top: 8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   h4 {
-    font-size: 1.25rem; /* h4 のフォントサイズを調整 */
-    font-weight: bold; /* 太字のフォント */
+    font-size: 0.8rem;
+    /* h4 のフォントサイズを調整 */
+    padding-bottom: 5rem;
+    text-align: right;
+    font-weight: bold;
+    /* 太字のフォント */
   }
 
   h5 {
-    font-size: 1.1rem; /* h5 のフォントサイズを調整 */
-    font-weight: bold; /* 太字のフォント */
+    font-size: 1.1rem;
+    /* h5 のフォントサイズを調整 */
+    font-weight: bold;
+    /* 太字のフォント */
   }
 
   /* 作者*/
   h6 {
     text-align: right;
-    font-size: 1rem; /* h6 のフォントサイズを調整 */
-    margin-bottom: 5rem;
+    font-size: 1rem;
+    /* h6 のフォントサイズを調整 */
+    padding-bottom: 5rem;
   }
 
   code {
@@ -146,6 +163,7 @@ body {
     margin: 2rem 0;
   }
 }
+
 /* 基本的なボタンスタイル */
 .btn {
   @apply bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300;
@@ -180,8 +198,25 @@ body {
 
 .speechContent {
   flex: 3;
+  margin-top: 1rem;
+}
+
+.speaker.has-focus {
+  border-radius: 3px;
+  box-shadow: none;
+}
+
+.serif.has-focus {
+  border-radius: 3px;
+  box-shadow: none;
+}
+
+.speechContent.has-focus {
+  border-radius: 3px;
+  box-shadow: none;
 }
 
 .speaker {
   flex: 1;
+  margin-top: 3rem;
 }

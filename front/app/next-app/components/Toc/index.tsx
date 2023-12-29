@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useEditor, EditorContent, Node } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 import { exportToPDF } from "../htmlToPdf";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilePdf, faList } from "@fortawesome/free-solid-svg-icons";
 
 export const TOC = ({ editor }: any) => {
   const [headings, setHeadings] = useState([]);
@@ -36,14 +38,17 @@ export const TOC = ({ editor }: any) => {
   }
 
   return (
-    <div className="toc max-h-64 overflow-y-auto bg-white shadow-lg border border-gray-200 p-4 mb-6">
+    <div className="bg-white shadow-lg rounded-lg border border-gray-200 p-4 my-4 mx-2">
+      <div className="flex items-center mb-4">
+        <span className="text-lg font-semibold ">目次</span>
+        <FontAwesomeIcon icon={faList} />
+      </div>
       <ul className="list-none">
         {headings.map((heading: any) => (
           <li
             key={heading.id}
-            className={`mb-2 ${
-              heading.level === 1 ? "text-lg font-bold" : "text-base"
-            }`}
+            className={`mb-2 ${heading.level === 1 ? "text-lg font-bold" : "text-base"
+              }`}
           >
             <a
               href={`#heading-${heading.id}`}
@@ -57,13 +62,7 @@ export const TOC = ({ editor }: any) => {
           </li>
         ))}
       </ul>
-      <button
-        onClick={() => {
-          exportToPDF(editor);
-        }}
-      >
-        PDFをダウンロード
-      </button>
+
     </div>
   );
 };
