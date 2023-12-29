@@ -9,6 +9,24 @@ export const CustomKeyBoardShortcuts = Extension.create({
 
     addKeyboardShortcuts() {
         return {
+            Tab: () => this.editor.chain().command(({ tr, dispatch }) => {
+                const { selection } = tr
+                const { $from } = selection
+
+                let found = false
+                tr.doc.nodesBetween($from.pos, tr.doc.content.size, (node, pos) => {
+                    if (!found && pos > $from.pos) {
+                        if (navigableNodeTypes.includes(node.type.name)) {
+                            // 移動可能なノードを見つけた場合
+                            dispatch(tr.setSelection(TextSelection.create(tr.doc, pos)))
+                            found = true
+                            return false // ループを停止
+                        }
+                    }
+                })
+
+                return found
+            }).run(),
             Enter: () => {
                 const selection = this.editor.state.selection;
                 const { $head } = selection;
@@ -24,14 +42,14 @@ export const CustomKeyBoardShortcuts = Extension.create({
                 }
                 return false; // Enterのデフォルトの動作を防止
             },
-            Backspace: () => {
+            Backspace: () => this.editor.chain().command(({ tr, dispatch }) => {
                 const { state, view } = this.editor;
-                const { selection, tr } = state;
+                const { selection } = tr;
                 const { $head, from, to } = selection;
 
                 // 現在のノードとその位置を取得
                 const node = $head.node(-1);
-
+                console.log(node.type.name)
 
 
                 // serifノードであることを確認
@@ -42,23 +60,20 @@ export const CustomKeyBoardShortcuts = Extension.create({
                 const speakerNode = node.child(0);
                 const speechContentNode = node.child(1);
 
-                console.log(speakerNode)
-                console.log($head.node(1).type.name)
                 // speechContentノードにカーソルがあり、かつ、ノードが空の場合、speakerノードにカーソルが移動。
-                if ($head.node(-2).type.name === "speakerNode" && speechContentNode.content.size === 0) {
-                    const transaction = state.tr.setSelection(TextSelection.create(tr.doc, from - 1));
-                    view.dispatch(transaction);
+                if ($head.node(2).type.name === "speechContent" && speechContentNode.content.size === 0) {
+                    dispatch(tr.setSelection(TextSelection.create(tr.doc, $head.pos - 2)))
                     return true;
-                }
-
-                if (speakerNode.content.size === 0 && speechContentNode.content.size === 0) {
+                } else if (speakerNode.content.size === 0 && speechContentNode.content.size === 0) {
                     const startPos = $head.before(-1);
                     const endPos = startPos + node.nodeSize;
-                    const transaction = state.tr.delete(startPos, endPos);
-                    view.dispatch(transaction);
+                    const transaction = tr.delete(startPos, endPos);
+                    dispatch(transaction);
+                    return true;
+                } else {
+                    return false
                 }
-                return false;
-            },
+            }).run(),
 
         };
     },

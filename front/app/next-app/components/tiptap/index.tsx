@@ -102,7 +102,7 @@ export default function TipTap({ setData, data, setContent }: any) {
       const { selection } = props.editor.state;
       const { from, to } = selection;
       let node = selection.$from.node(1);
-
+      console.log(selection.$head)
       if (node) {
         // 最上位の親ノードを取得
         setSelectionNode(node);
