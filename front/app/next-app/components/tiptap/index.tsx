@@ -27,6 +27,7 @@ import { TOC } from "../Toc";
 import { Toolbar } from "../Toolbar";
 import { SettingSidebar } from "../SettingSideBar";
 import { CustomKeyBoardShortcuts } from "../CustomKeyBoardShortcuts";
+import { CustomBubbleMenu } from '../CustomBubbleMenu';
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
@@ -123,8 +124,6 @@ export default function TipTap({ setData, data, setContent }: any) {
     },
   });
 
-  const [menu, setMenu] = useState("main"); // 'main', 'decoration', 'heading', 'pageBreak'
-
   if (!editor) {
     return null;
   }
@@ -178,94 +177,7 @@ export default function TipTap({ setData, data, setContent }: any) {
           </div>
         </div>
       </div>
-      <BubbleMenu editor={editor} tippyOptions={{ placement: "right" }}>
-        {menu === "main" && (
-          <div className="flex flex-col">
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => setMenu("decoration")}
-            >
-              装飾
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => setMenu("heading")}
-            >
-              見出し・段落
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => editor.commands.insertContent("<hr>")}
-            >
-              改ページ
-            </button>
-          </div>
-        )}
-        {/* 装飾サブメニュー */}
-        {menu === "decoration" && (
-          <div className="flex flex-col">
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => editor.chain().focus().toggleBold().run()}
-            >
-              Bold
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => editor.chain().focus().toggleItalic().run()}
-            >
-              Italic
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => editor.chain().focus().toggleUnderline().run()}
-            >
-              Underline
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => editor.chain().focus().toggleStrike().run()}
-            >
-              Strikethrough
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => setMenu("main")}
-            >
-              戻る
-            </button>
-          </div>
-        )}
-
-        {/* 見出し・段落サブメニュー */}
-        {menu === "heading" && (
-          <div className="flex flex-col">
-            {[1, 2, 3, 4, 5, 6].map((level: any) => (
-              <button
-                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                key={level}
-                onClick={() =>
-                  editor.chain().focus().setHeading({ level }).run()
-                }
-              >
-                見出し{level}
-              </button>
-            ))}
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => editor.chain().focus().setParagraph().run()}
-            >
-              段落
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => setMenu("main")}
-            >
-              戻る
-            </button>
-          </div>
-        )}
-      </BubbleMenu>
+      <CustomBubbleMenu editor={editor} />
       {editor && (
         <FloatingMenu
           editor={editor}
