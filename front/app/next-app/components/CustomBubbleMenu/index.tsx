@@ -8,6 +8,29 @@ import Tippy from '@tippyjs/react';
 export const CustomBubbleMenu = ({ editor }: any) => {
 
 
+    const insertSerifNode = () => {
+        if (editor) {
+            editor
+                .chain()
+                .focus()
+                .insertContent({
+                    type: "serif",
+                    content: [
+                        {
+                            type: "speaker",
+                            text: "話者名",
+                        },
+                        {
+                            type: "speechContent",
+                            text: "会話内容",
+                        },
+                    ],
+                })
+                .run();
+        }
+    };
+
+
 
     const [menu, setMenu] = useState("main"); // 'main', 'decoration', 'heading', 'pageBreak'
     const isTextSelected = () => {
@@ -31,7 +54,7 @@ export const CustomBubbleMenu = ({ editor }: any) => {
         );
     };
 
-    const isSpeakerNodeSelected = (editor) => {
+    const isSpeakerNodeSelected = () => {
         // 選択範囲のノードタイプを取得して、それがSpeakerノードかどうかチェック
         const { selection } = editor.state;
         let node;
@@ -40,6 +63,47 @@ export const CustomBubbleMenu = ({ editor }: any) => {
         }
         return node && node.type.name === 'speaker'; // 'speaker'はノードのタイプ名に応じて変更
     };
+
+    const isSpaeachContentSelected = () => {
+        // 選択範囲のノードタイプを取得して、それがSpeechContentノードかどうかチェック
+        const { selection } = editor.state;
+        let node;
+        if (selection.$anchor) {
+            node = selection.$anchor.parent;
+        }
+        return node && node.type.name === 'speechContent'; // 'speechContent'はノードのタイプ名に応じて変更
+    }
+
+
+    const isParagrahSelectedAndNotBlank = () => {
+        // 選択範囲のノードタイプを取得して、それがSpeakerノードかどうかチェック
+        const { selection } = editor.state;
+        let node;
+        if (selection.$anchor) {
+            node = selection.$anchor.parent;
+        }
+        return node && node.type.name === 'paragraph' && node.content.size !== 0;
+    }
+
+    // パラグラフノードかつ内容が空の場合
+    const isParagraphAndContentBlank = () => {
+        const { selection } = editor.state;
+        let node;
+        if (selection.$anchor) {
+            node = selection.$anchor.parent;
+        }
+        return node && node.type.name === 'paragraph' && node.content.size === 0;
+    }
+
+    const isHeading = () => {
+        const { selection } = editor.state;
+        let node;
+        if (selection.$anchor) {
+            node = selection.$anchor.parent;
+        }
+        return node && node.type.name === 'heading';
+    }
+
 
     const speakerOptions = [
         { label: "Option 1", value: "option1" },
@@ -50,7 +114,84 @@ export const CustomBubbleMenu = ({ editor }: any) => {
 
 
     const renderMenuItems = () => {
-        if (!isSpeakerNodeSelected(editor)) {
+        if (isSpeakerNodeSelected()) {
+            return (<></>)
+        }
+
+        if (isSpaeachContentSelected()) {
+            return (<></>)
+        }
+
+
+        if (isParagraphAndContentBlank()) {
+            return (
+                <div className="flex flex-col">
+                    <button
+                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={() =>
+                            editor.chain().focus().setParagraph().unsetAllMarks().run()
+                        }
+                    >
+                        標準
+                    </button>
+                    <button
+                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={() =>
+                            editor.chain().focus().toggleHeading({ level: 1 }).run()
+                        }
+                    >
+                        タイトル
+                    </button>
+                    <button
+                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={() =>
+                            editor.chain().focus().toggleHeading({ level: 2 }).run()
+                        }
+                    >
+                        シーン
+                    </button>
+                    <button
+                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={insertSerifNode}
+                    >
+                        セリフ
+                    </button>
+                    <button
+                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={() =>
+                            editor.chain().focus().toggleHeading({ level: 3 }).run()
+                        }
+                    >
+                        ト書き
+                    </button>
+                    <button
+                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={() =>
+                            editor.chain().focus().toggleHeading({ level: 4 }).run()
+                        }
+                    >
+                        作者
+                    </button>
+                    <button
+                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={() => {
+                            // エディタの現在の選択を取得
+                            const { from } = editor.state.selection;
+
+                            // カーソル位置を行の始まりに移動
+                            editor.chain().focus().setTextSelection(from - 1).run();
+
+                            // '登場人物'と3つのリストアイテムを挿入
+                            editor.chain().insertContent('<h5>登場人物</h5><ul><li>名前1</li><li>名前2</li><li>名前3</li></ul>').run();
+                        }}
+                    >
+                        登場人物
+                    </button>
+                </div>
+            )
+        }
+
+        if (isParagrahSelectedAndNotBlank() || isHeading()) {
             console.log("speaker node selected")
             return (
                 <>
@@ -58,21 +199,15 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                         <div className="flex flex-col">
                             <button
                                 className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                                onClick={() => setMenu("decoration")}
+                                onClick={() => { editor.chain().focus(); setMenu("decoration") }}
                             >
                                 装飾
                             </button>
                             <button
                                 className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                                onClick={() => setMenu("heading")}
+                                onClick={() => { editor.chain().focus(); setMenu("heading") }}
                             >
-                                見出し・段落
-                            </button>
-                            <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                                onClick={() => editor.commands.insertContent("<hr>")}
-                            >
-                                改ページ
+                                ブロック
                             </button>
                         </div>
                     )}
@@ -115,30 +250,74 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                     {/* 見出し・段落サブメニュー */}
                     {menu === "heading" && (
                         <div className="flex flex-col">
-                            {[1, 2, 3, 4, 5, 6].map((level: any) => (
-                                <button
-                                    className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                                    key={level}
-                                    onClick={() =>
-                                        editor.chain().focus().setHeading({ level }).run()
-                                    }
-                                >
-                                    見出し{level}
-                                </button>
-                            ))}
                             <button
                                 className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                                onClick={() => editor.chain().focus().setParagraph().run()}
+                                onClick={() =>
+                                    editor.chain().focus().setParagraph().unsetAllMarks().run()
+                                }
                             >
-                                段落
+                                標準
                             </button>
                             <button
                                 className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                                onClick={() => setMenu("main")}
+                                onClick={() =>
+                                    editor.chain().focus().toggleHeading({ level: 1 }).run()
+                                }
+                            >
+                                タイトル
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                onClick={() =>
+                                    editor.chain().focus().toggleHeading({ level: 2 }).run()
+                                }
+                            >
+                                シーン
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                onClick={insertSerifNode}
+                            >
+                                セリフ
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                onClick={() =>
+                                    editor.chain().focus().toggleHeading({ level: 3 }).run()
+                                }
+                            >
+                                ト書き
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                onClick={() =>
+                                    editor.chain().focus().toggleHeading({ level: 4 }).run()
+                                }
+                            >
+                                作者
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                onClick={() => {
+                                    // エディタの現在の選択を取得
+                                    const { from } = editor.state.selection;
+
+                                    // カーソル位置を行の始まりに移動
+                                    editor.chain().focus().setTextSelection(from - 1).run();
+
+                                    // '登場人物'と3つのリストアイテムを挿入
+                                    editor.chain().insertContent('<h5>登場人物</h5><ul><li>名前1</li><li>名前2</li><li>名前3</li></ul>').run();
+                                }}
+                            >
+                                登場人物
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                onClick={() => { editor.chain().focus(); setMenu("main") }}
                             >
                                 戻る
                             </button>
-                        </div>
+                        </div >
                     )}</>)
         }
         // 他の条件に応じたメニューアイテムをここに追加
@@ -149,6 +328,7 @@ export const CustomBubbleMenu = ({ editor }: any) => {
             visible={editor.isFocused} // ここを変更
             content={renderMenuItems()}
             placement="right"
+            offset={[0, 50]}
             getReferenceClientRect={getReferenceClientRect}
             interactive={true} // Tippyがインタラクティブであることを設定
             appendTo={() => document.body} // Tippyのポップアップをbody要素に追加

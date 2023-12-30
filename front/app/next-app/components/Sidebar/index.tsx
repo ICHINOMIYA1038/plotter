@@ -61,20 +61,15 @@ const Sidebar = ({ node, editor }: any) => {
         .map((node: any) => node.textContent)
         .join("");
 
-      // Serifノード構造の作成
-      const speechContentNode = editor.schema.nodes.paragraph.create(
-        { textAlign: "left" },
-        editor.schema.text(combinedText)
-      );
+
       const speechContent = editor.schema.nodes.speechContent.create(
         null,
-        Fragment.from(speechContentNode)
+        Fragment.from(editor.schema.text(combinedText))
       );
 
       // speakerノードは空の状態で作成
       const speakerNode = editor.schema.nodes.speaker.create(
-        null,
-        Fragment.from(editor.schema.nodes.paragraph.create())
+        null
       );
 
       // Serifノードの作成

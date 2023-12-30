@@ -128,28 +128,6 @@ export default function TipTap({ setData, data, setContent }: any) {
     return null;
   }
 
-  const insertSerifNode = () => {
-    if (editor) {
-      editor
-        .chain()
-        .focus()
-        .insertContent({
-          type: "serif",
-          content: [
-            {
-              type: "speaker",
-              text: "話者名",
-            },
-            {
-              type: "speechContent",
-              text: "会話内容",
-            },
-          ],
-        })
-        .run();
-    }
-  };
-
 
   return (
     <div>
@@ -178,7 +156,7 @@ export default function TipTap({ setData, data, setContent }: any) {
         </div>
       </div>
       <CustomBubbleMenu editor={editor} />
-      {editor && (
+      {false && (
         <FloatingMenu
           editor={editor}
           tippyOptions={{
