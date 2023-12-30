@@ -3,14 +3,7 @@ import { findNodePosition } from "../FindNodePosition";
 import { Fragment } from "prosemirror-model";
 import { Editor } from "@tiptap/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { typeToIcon, typeToJapanese } from "../TypeToJapanese";
-import {
-  faParagraph,
-  faHeading,
-  faBook,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = ({ node, editor }: any) => {
   if (!node) {

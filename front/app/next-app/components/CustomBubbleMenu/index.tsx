@@ -7,6 +7,7 @@ import Tippy from '@tippyjs/react';
 
 export const CustomBubbleMenu = ({ editor }: any) => {
 
+
     const insertCharactersNode = () => {
         if (editor) {
             // エディタの選択位置を取得
@@ -157,10 +158,19 @@ export const CustomBubbleMenu = ({ editor }: any) => {
     const isParagraphAndContentBlank = () => {
         const { selection } = editor.state;
         let node;
-        if (selection.$anchor) {
-            node = selection.$anchor.parent;
+        if (selection.$head) {
+            node = selection.$head.parent;
         }
         return node && node.type.name === 'paragraph' && node.content.size === 0;
+    }
+
+    const isCharactersNodeSelected = () => {
+        const { selection } = editor.state;
+        let node;
+        if (selection.$anchor) {
+            node = selection.$anchor.node(1);
+        }
+        return node && node.type.name === 'characters';
     }
 
     const isHeading = () => {
@@ -188,6 +198,44 @@ export const CustomBubbleMenu = ({ editor }: any) => {
 
         if (isSpaeachContentSelected()) {
             return (<></>)
+        }
+
+        if (isCharactersNodeSelected()) {
+            return (
+                <div className="flex flex-col">
+                    <button className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={() =>
+                            editor.chain().focus().insertContentAt(editor.state.selection.$head.end(2), {
+                                type: "characterItem",
+                                content: [
+                                    {
+                                        type: "characterName",
+                                        content: [{
+                                            type: "text",
+                                            text: "人物名"
+                                        }]
+                                    },
+                                    {
+                                        type: "characterDetail",
+                                        content: [{
+                                            type: "text",
+                                            text: "人物詳細"
+                                        }]
+                                    },
+                                ],
+                            }).run()
+                        }
+                    >
+                        人物を追加
+                    </button >
+                    <button
+                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={() => {
+                            editor.chain().focus().deleteNode("characterItem").run()
+                        }}
+                    >
+                        人物を削除
+                    </button ></div >)
         }
 
 

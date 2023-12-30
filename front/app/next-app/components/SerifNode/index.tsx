@@ -1,11 +1,11 @@
-import { Node, mergeAttributes } from "@tiptap/core";
+import { Node } from "@tiptap/core";
 
 export const Serif = Node.create({
   name: "serif",
 
   group: "block",
 
-  content: "speaker speechContent ",
+  content: "speaker speechContent",
 
   parseHTML() {
     return [

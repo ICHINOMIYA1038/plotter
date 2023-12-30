@@ -31,16 +31,28 @@ import { CustomBubbleMenu } from '../CustomBubbleMenu';
 import { getCharacterList } from "../getCharacterList";
 import { CharacterDetail, CharacterItem, CharacterName, Characters } from "../CharactersNode";
 
+const saveContentAsJSON = (editor) => {
+  const content = editor.getJSON();
+  localStorage.setItem("editor-json-content", JSON.stringify(content));
+};
+
+// JSON形式での読み込み
+const loadContentFromJSON = () => {
+  const content = localStorage.getItem("editor-json-content");
+  return content ? JSON.parse(content) : null;
+};
+
 export default function TipTap({ setData, data, setContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
   const [toc, setToc] = useState([]);
   const [initialContent, setInitialContent] = useState(() => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem("editor-content") || content;
+      return loadContentFromJSON();
     } else {
       return content;
     }
   });
+
 
   const updateToc = () => {
     if (!editor || !editor.state) return;
@@ -117,7 +129,9 @@ export default function TipTap({ setData, data, setContent }: any) {
       }
     },
     onUpdate: ({ editor }) => {
+      console.log(editor.getHTML());
       updateToc();
+      saveContentAsJSON(editor);
       if (typeof window !== "undefined") {
         localStorage.setItem("editor-content", editor.getHTML());
       }
@@ -240,13 +254,6 @@ export default function TipTap({ setData, data, setContent }: any) {
 }
 
 const content = `
-<h2>ページ1</h2>
-<ul>
-<li>A list item</li>
-<li>And another one</li>
-</ul>
-<p>おはようございます。</p><p>テスト</p>
-<h2>ページ2</h2><p>おはようございます。</p>
-<div class="serif"><div class="speaker"><p>話者名</p></div><div class="speechcontent"><p>会話内容</p></div></div>
+<h1>嗚呼あああ</h1><h2>嗚呼あああ嗚呼</h2><div class="serif"><p class="speaker">話者会話内容あaaaaaae</p><p class="speechContent">h</p></div><h3>a嗚呼嗚呼</h3><div class="characters"><h5>登場人物</h5><div class="characterItem"><p class="characterName">人物名1人物詳細1aaaaaaaaaddddddddddd</p><p class="characterDetail"></p></div></div><h2><strong><em>あaa</em></strong></h2><h1>aaaaa</h1>
 `;
 

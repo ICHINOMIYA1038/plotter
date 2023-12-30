@@ -13,8 +13,8 @@ export const TOC = ({ editor }: any) => {
     const updateHeadings = () => {
       const doc = editor.state.doc;
       let headingNodes: any = [];
-      doc.forEach((node: any, pos: any) => {
-        if (node.type.name === "heading") {
+      doc.descendants((node: any, pos: any) => {
+        if (node.type.name === "heading" && [1, 2, 5].includes(node.attrs.level)) {
           headingNodes.push({
             id: pos,
             text: node.textContent,
