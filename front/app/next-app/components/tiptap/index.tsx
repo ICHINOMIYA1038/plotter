@@ -28,6 +28,8 @@ import { Toolbar } from "../Toolbar";
 import { SettingSidebar } from "../SettingSideBar";
 import { CustomKeyBoardShortcuts } from "../CustomKeyBoardShortcuts";
 import { CustomBubbleMenu } from '../CustomBubbleMenu';
+import { getCharacterList } from "../getCharacterList";
+import { CharacterDetail, CharacterItem, CharacterName, Characters } from "../CharactersNode";
 
 export default function TipTap({ setData, data, setContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
@@ -82,6 +84,10 @@ export default function TipTap({ setData, data, setContent }: any) {
         className: "has-focus",
         mode: "all",
       }),
+      Characters,
+      CharacterItem,
+      CharacterName,
+      CharacterDetail,
       TextStyle,
       Color,
       Serif,
@@ -102,7 +108,7 @@ export default function TipTap({ setData, data, setContent }: any) {
       const { selection } = props.editor.state;
       const { from, to } = selection;
       let node = selection.$from.node(1);
-      console.log(selection.$head)
+      console.log(from);
       if (node) {
         // 最上位の親ノードを取得
         setSelectionNode(node);
@@ -127,6 +133,7 @@ export default function TipTap({ setData, data, setContent }: any) {
   if (!editor) {
     return null;
   }
+
 
 
   return (

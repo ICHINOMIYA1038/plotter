@@ -124,7 +124,7 @@ const Sidebar = ({ node, editor }: any) => {
 
   const renderChildNodes = (childNodes: any, startPos: any) => {
     return childNodes
-      .filter((child: any) => child.type.name !== "text")
+      .filter((child: any) => child.type.name !== "text" && child.attrs.level != 5)
       .map((child: any, index: any) => (
         <div
           key={index}
@@ -145,7 +145,9 @@ const Sidebar = ({ node, editor }: any) => {
         }
         onChange={(event) => handleNodeTypeAndLevelChange(event)}
       >
+
         <option value="paragraph">標準</option>
+        <option value="characters">登場人物</option>
         <option value="heading-1">タイトル</option>
         <option value="heading-2">シーン</option>
         <option value="heading-3">ト書き</option>
@@ -161,8 +163,9 @@ const Sidebar = ({ node, editor }: any) => {
           />
           {typeToJapanese[node.type.name + (node.attrs.level ? `-${node.attrs.level}` : "")]}
         </h3>
-        <p className="text-gray-600 mb-6">{node.textContent}</p>
-
+        {node.type.name !== "serif" && node.type.name !== "characters" ? (
+          <p className="text-gray-600 mb-6">{node.textContent}</p>) : (<></>)
+        }
         {node.content && node.content.size > 0 && (
           <div>
             {renderChildNodes(node.content.content, node.pos + 1)}

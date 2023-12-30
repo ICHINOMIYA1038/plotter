@@ -238,3 +238,41 @@ li>p.has-focus {
   height: 25%;
   padding-top: 5%;
 }
+
+.characterItem {
+  display: flex;
+}
+
+.characterDetail {
+  height: 75%;
+  padding-top: 5%;
+}
+
+.characterName {
+  height: 25%;
+  padding-top: 1%;
+}
+
+.characters {}
+
+.characterDetail.has-focus {
+  border-radius: 3px;
+  box-shadow: none;
+  border: dashed;
+}
+
+.characterName.has-focus {
+  border-radius: 3px;
+  box-shadow: none;
+  border: dashed;
+}
+
+.characterItem.has-focus {
+  box-shadow: none;
+}
+
+h5.has-focus {
+  border-radius: 3px;
+  box-shadow: none;
+  border: dashed;
+}

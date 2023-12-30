@@ -7,6 +7,68 @@ import Tippy from '@tippyjs/react';
 
 export const CustomBubbleMenu = ({ editor }: any) => {
 
+    const insertCharactersNode = () => {
+        if (editor) {
+            // エディタの選択位置を取得
+            const { selection } = editor.state;
+            const position = selection.anchor;
+
+            // トランザクションを使用して新しいノードを挿入
+            editor.chain().focus().insertContent({
+                type: "characters",
+                content: [
+                    // h5 タグ（登場人物タイトル）
+                    {
+                        type: "heading",
+                        attrs: { level: 5 },
+                        content: [{
+                            type: "text",
+                            text: "登場人物"
+                        }]
+                    },
+                    // characterItem ノード
+                    {
+                        type: "characterItem",
+                        content: [
+                            {
+                                type: "characterName",
+                                content: [{
+                                    type: "text",
+                                    text: "人物名1"
+                                }]
+                            },
+                            {
+                                type: "characterDetail",
+                                content: [{
+                                    type: "text",
+                                    text: "人物詳細1"
+                                }]
+                            },
+                        ],
+                    },
+                    {
+                        type: "characterItem",
+                        content: [
+                            {
+                                type: "characterName",
+                                content: [{
+                                    type: "text",
+                                    text: "人物名2"
+                                }]
+                            },
+                            {
+                                type: "characterDetail",
+                                content: [{
+                                    type: "text",
+                                    text: "人物詳細2"
+                                }]
+                            },
+                        ],
+                    }
+                ]
+            }).run();
+        }
+    };
 
     const insertSerifNode = () => {
         if (editor) {
@@ -18,11 +80,17 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                     content: [
                         {
                             type: "speaker",
-                            text: "話者名",
+                            content: [{
+                                type: "text",
+                                text: "話者"
+                            }]
                         },
                         {
                             type: "speechContent",
-                            text: "会話内容",
+                            content: [{
+                                type: "text",
+                                text: "会話内容"
+                            }]
                         },
                     ],
                 })
@@ -174,17 +242,7 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                     </button>
                     <button
                         className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                        onClick={() => {
-                            // エディタの現在の選択を取得
-                            const { from } = editor.state.selection;
-
-                            // カーソル位置を行の始まりに移動
-                            editor.chain().focus().setTextSelection(from - 1).run();
-
-                            // '登場人物'と3つのリストアイテムを挿入
-                            editor.chain().insertContent('<h5>登場人物</h5><ul><li>名前1</li><li>名前2</li><li>名前3</li></ul>').run();
-                        }}
-                    >
+                        onClick={insertCharactersNode}>
                         登場人物
                     </button>
                 </div>
