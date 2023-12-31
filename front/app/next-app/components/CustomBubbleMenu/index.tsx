@@ -1,85 +1,12 @@
 import React, { useState } from 'react';
 import { useEditor, BubbleMenu } from '@tiptap/react';
 import Tippy from '@tippyjs/react';
+import { insertCharactersNode, insertSerifNode } from '../InsertCustomNode';
 
 
 
 
 export const CustomBubbleMenu = ({ editor }: any) => {
-
-
-    const insertCharactersNode = () => {
-        if (editor) {
-            // エディタの選択位置を取得
-            const { selection } = editor.state;
-            const position = selection.anchor;
-
-            // トランザクションを使用して新しいノードを挿入
-            editor.chain().focus().insertContent({
-                type: "characters",
-                content: [
-                    // h5 タグ（登場人物タイトル）
-                    {
-                        type: "heading",
-                        attrs: { level: 5 },
-                        content: [{
-                            type: "text",
-                            text: "登場人物"
-                        }]
-                    },
-                    // characterItem ノード
-                    {
-                        type: "characterItem",
-                        content: [
-                            {
-                                type: "characterName",
-
-                            },
-                            {
-                                type: "characterDetail",
-
-                            },
-                        ],
-                    },
-                    {
-                        type: "characterItem",
-                        content: [
-                            {
-                                type: "characterName",
-
-                            },
-                            {
-                                type: "characterDetail",
-
-                            },
-                        ],
-                    }
-                ]
-            }).run();
-        }
-    };
-
-    const insertSerifNode = () => {
-        if (editor) {
-            editor
-                .chain()
-                .focus()
-                .insertContent({
-                    type: "serif",
-                    content: [
-                        {
-                            type: "speaker",
-                        },
-                        {
-                            type: "speechContent",
-                        },
-                    ],
-                })
-                .run();
-        }
-    };
-
-
 
     const [menu, setMenu] = useState("main"); // 'main', 'decoration', 'heading', 'pageBreak'
     const isTextSelected = () => {
@@ -248,7 +175,7 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                     </button>
                     <button
                         className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                        onClick={insertSerifNode}
+                        onClick={() => { insertSerifNode(editor) }}
                     >
                         セリフ
                     </button>
@@ -270,7 +197,7 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                     </button>
                     <button
                         className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                        onClick={insertCharactersNode}>
+                        onClick={() => { insertCharactersNode(editor) }}>
                         登場人物
                     </button>
                 </div>

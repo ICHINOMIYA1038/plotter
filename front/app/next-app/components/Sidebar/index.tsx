@@ -115,20 +115,39 @@ const Sidebar = ({ node, editor }: any) => {
     }
   };
 
-  const renderChildNodes = (childNodes: any, startPos: any) => {
+  const renderChildNodes = (childNodes, startPos) => {
     return childNodes
-      .filter((child: any) => child.type.name !== "text" && child.attrs.level != 5 && child.type.name !== "hardBreak")
-      .map((child: any, index: any) => (
-        <div
-          key={index}
-          className="child-node mb-4 p-2 bg-gray-100 rounded-lg shadow-sm"
-        >
-          <p className="font-semibold text-gray-700">
-            {typeToJapanese[child.type.name]}</p>
-          <p className="text-gray-600">{child.textContent}</p>
-        </div>
-      ));
+      .filter(child => child.type.name !== "text" && child.attrs.level != 5 && child.type.name !== "hardBreak")
+      .map((child, index) => {
+        // 孫ノードの存在を確認
+        const hasGrandchildren = child.content.content && child.content.content.length >= 2;
+        console.log(hasGrandchildren)
+        console.log(child)
+
+        return (
+          hasGrandchildren ? (
+            // 孫ノードがある場合、それらのみを表示
+            <div key={index} className="child-node mb-4 p-2 bg-gray-100 rounded-lg shadow-sm">
+              {child.content.content.map((grandchild, gIndex) => (
+
+                grandchild.content.content[0] && < div key={gIndex} >
+                  {grandchild.content.content[0].text}
+                </div>
+
+              ))
+              }
+            </div >
+          ) : (
+            // 孫ノードがない場合、子ノードを表示
+            <div key={index} className="child-node mb-4 p-2 bg-gray-100 rounded-lg shadow-sm">
+              <p className="font-semibold text-gray-700">{typeToJapanese[child.type.name]}</p>
+              <p className="text-gray-600">{child.textContent}</p>
+            </div>
+          )
+        );
+      });
   };
+
   return (
     <div className="bg-white shadow-lg rounded-lg border border-gray-200 p-4 mx-2 my-4">
       {/* ノードタイプの変更セレクトボックス */}

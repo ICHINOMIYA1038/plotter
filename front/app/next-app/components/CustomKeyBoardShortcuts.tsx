@@ -1,7 +1,8 @@
 import { Extension } from "@tiptap/core";
 import { NodeSelection, TextSelection } from "@tiptap/pm/state";
+import { insertSerifNode } from "./InsertCustomNode";
 
-const navigableNodeTypes = ['heading', 'paragraph', 'speaker', 'speechContent', 'characterName', 'characterDetail']
+const navigableNodeTypes = ['text', 'hardBreak']
 
 function findNextNodePos(doc: any, $head: any) {
     let nextNodePos: any = null;
@@ -64,8 +65,14 @@ export const CustomKeyBoardShortcuts = Extension.create({
                         dispatch(tr.setSelection(TextSelection.create(tr.doc, findNextNodePos(this.editor.state.doc, $head) + 1)))
                         return true;
                     } else if ($head.node(2).type.name === "speechContent") {
-                        dispatch(tr.insert($head.end(1), this.editor.state.schema.nodes.paragraph.create()));
-                        dispatch(tr.setSelection(TextSelection.create(tr.doc, $head.end(1) + 1)));
+                        const serifNode = this.editor.state.schema.nodes.serif.create({}, [
+                            this.editor.state.schema.nodes.speaker.create({}),
+                            this.editor.state.schema.nodes.speechContent.create({})
+                        ]);
+
+                        dispatch(tr.insert($head.end(2), serifNode));
+                        //dispatch(tr.insert($head.end(1), this.editor.state.schema.nodes.paragraph.create()));
+                        dispatch(tr.setSelection(TextSelection.create(tr.doc, $head.end(2) + 3)));
                         return true;
                     } else {
                         return false
@@ -77,7 +84,7 @@ export const CustomKeyBoardShortcuts = Extension.create({
                         return true;
                     } else if ($head.node(3).type.name === "characterDetail" && !tr.doc.nodeAt($head.end(3) + 2)) {
                         //characterDetailであり、次のノードがcharacterItemでない場合、空行を挿入
-                        console.log("末尾")
+
                         dispatch(tr.insert($head.end(0), this.editor.state.schema.nodes.paragraph.create()));
                         dispatch(tr.setSelection(TextSelection.create(tr.doc, $head.end(1) + 1)));
                     }
@@ -164,3 +171,4 @@ export const CustomKeyBoardShortcuts = Extension.create({
         };
     },
 });
+
