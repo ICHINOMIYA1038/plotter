@@ -188,6 +188,55 @@ body {
   pointer-events: none;
 }
 
+.tiptap h1.is-empty::before {
+  writing-mode: vertical-rl;
+  color: #adb5bd;
+  content: "タイトル";
+  pointer-events: none;
+}
+
+.tiptap h2.is-empty::before {
+  writing-mode: vertical-rl;
+  color: #adb5bd;
+  content: "第一章";
+  pointer-events: none;
+}
+
+p.speaker.is-empty::before {
+  writing-mode: vertical-rl;
+  color: #adb5bd;
+  content: "話者";
+  /* ここに必要なテキストを設定 */
+  pointer-events: none;
+}
+
+p.speechContent.is-empty::before {
+  writing-mode: vertical-rl;
+  color: #adb5bd;
+  content: "セリフ";
+  /* ここに必要なテキストを設定 */
+  pointer-events: none;
+}
+
+p.characterName.is-empty::before {
+  writing-mode: vertical-rl;
+  color: #adb5bd;
+  content: "人物名";
+  /* ここに必要なテキストを設定 */
+  pointer-events: none;
+}
+
+
+p.characterDetail.is-empty::before {
+  writing-mode: vertical-rl;
+  color: #adb5bd;
+  content: "人物詳細";
+  /* ここに必要なテキストを設定 */
+  pointer-events: none;
+}
+
+
+
 .has-focus {
   border-radius: 3px;
   box-shadow: 0 0 0 3px #68cef8;
@@ -253,7 +302,12 @@ li>p.has-focus {
   padding-top: 1%;
 }
 
-.characters {}
+.characters {
+  padding-top: 5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  font-size: 0.9rem;
+}
 
 .characterDetail.has-focus {
   border-radius: 3px;

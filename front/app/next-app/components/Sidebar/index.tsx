@@ -117,7 +117,7 @@ const Sidebar = ({ node, editor }: any) => {
 
   const renderChildNodes = (childNodes: any, startPos: any) => {
     return childNodes
-      .filter((child: any) => child.type.name !== "text" && child.attrs.level != 5)
+      .filter((child: any) => child.type.name !== "text" && child.attrs.level != 5 && child.type.name !== "hardBreak")
       .map((child: any, index: any) => (
         <div
           key={index}

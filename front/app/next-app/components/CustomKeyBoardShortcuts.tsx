@@ -164,35 +164,3 @@ export const CustomKeyBoardShortcuts = Extension.create({
         };
     },
 });
-
-const insertSerifNode = (editor: any) => {
-    if (editor) {
-        editor
-            .chain()
-            .focus()
-            .insertContent({
-                type: "serif",
-                content: [
-                    {
-                        type: "speaker",
-                        content: [
-                            {
-                                type: "paragraph",
-                                content: [{ type: "text", text: "話者名" }],
-                            },
-                        ],
-                    },
-                    {
-                        type: "speechContent",
-                        content: [
-                            {
-                                type: "paragraph",
-                                content: [{ type: "text", text: "会話内容" }],
-                            },
-                        ],
-                    },
-                ],
-            })
-            .run();
-    }
-};

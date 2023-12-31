@@ -59,4 +59,6 @@ export const SpeechContent = Node.create({
   renderHTML({ HTMLAttributes }) {
     return ['p', { ...HTMLAttributes, class: 'speechContent' }, 0];
   },
+
+
 });

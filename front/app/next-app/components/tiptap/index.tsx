@@ -30,6 +30,7 @@ import { CustomKeyBoardShortcuts } from "../CustomKeyBoardShortcuts";
 import { CustomBubbleMenu } from '../CustomBubbleMenu';
 import { getCharacterList } from "../getCharacterList";
 import { CharacterDetail, CharacterItem, CharacterName, Characters } from "../CharactersNode";
+import { customPlaceholder } from "../CustomPlaceholder";
 
 const saveContentAsJSON = (editor) => {
   const content = editor.getJSON();
@@ -113,8 +114,10 @@ export default function TipTap({ setData, data, setContent }: any) {
         keepMarks: true,
       }),
       Placeholder.configure({
-        placeholder: "",
-      }),
+        placeholder: "ブロックを選択するかテキストを入力",
+        showOnlyCurrent: false,
+        includeChildren: true
+      })
     ],
     onSelectionUpdate(props) {
       const { selection } = props.editor.state;

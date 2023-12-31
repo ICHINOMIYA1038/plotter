@@ -33,17 +33,11 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                         content: [
                             {
                                 type: "characterName",
-                                content: [{
-                                    type: "text",
-                                    text: "人物名1"
-                                }]
+
                             },
                             {
                                 type: "characterDetail",
-                                content: [{
-                                    type: "text",
-                                    text: "人物詳細1"
-                                }]
+
                             },
                         ],
                     },
@@ -52,17 +46,11 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                         content: [
                             {
                                 type: "characterName",
-                                content: [{
-                                    type: "text",
-                                    text: "人物名2"
-                                }]
+
                             },
                             {
                                 type: "characterDetail",
-                                content: [{
-                                    type: "text",
-                                    text: "人物詳細2"
-                                }]
+
                             },
                         ],
                     }
@@ -81,17 +69,9 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                     content: [
                         {
                             type: "speaker",
-                            content: [{
-                                type: "text",
-                                text: "話者"
-                            }]
                         },
                         {
                             type: "speechContent",
-                            content: [{
-                                type: "text",
-                                text: "会話内容"
-                            }]
                         },
                     ],
                 })
@@ -210,17 +190,9 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                                 content: [
                                     {
                                         type: "characterName",
-                                        content: [{
-                                            type: "text",
-                                            text: "人物名"
-                                        }]
                                     },
                                     {
                                         type: "characterDetail",
-                                        content: [{
-                                            type: "text",
-                                            text: "人物詳細"
-                                        }]
                                     },
                                 ],
                             }).run()
@@ -235,6 +207,14 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                         }}
                     >
                         人物を削除
+                    </button >
+                    <button
+                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        onClick={() => {
+                            editor.chain().focus().deleteNode("characters").run()
+                        }}
+                    >
+                        ブロック削除
                     </button ></div >)
         }
 
@@ -315,6 +295,15 @@ export const CustomBubbleMenu = ({ editor }: any) => {
                             >
                                 ブロック
                             </button>
+                            <button
+                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                onClick={() => {
+                                    editor.chain().focus().deleteNode("paragraph").run()
+                                    editor.chain().focus().deleteNode("heading").run()
+                                }}
+                            >
+                                ブロック削除
+                            </button >
                         </div>
                     )}
                     {/* 装飾サブメニュー */}
