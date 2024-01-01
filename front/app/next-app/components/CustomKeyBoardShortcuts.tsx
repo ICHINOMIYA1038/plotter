@@ -72,7 +72,7 @@ export const CustomKeyBoardShortcuts = Extension.create({
 
                         dispatch(tr.insert($head.end(2), serifNode));
                         //dispatch(tr.insert($head.end(1), this.editor.state.schema.nodes.paragraph.create()));
-                        dispatch(tr.setSelection(TextSelection.create(tr.doc, $head.end(2) + 3)));
+                        dispatch(tr.setSelection(TextSelection.create(tr.doc, $head.end(1) + 3)));
                         return true;
                     } else {
                         return false
@@ -89,7 +89,6 @@ export const CustomKeyBoardShortcuts = Extension.create({
                         dispatch(tr.setSelection(TextSelection.create(tr.doc, $head.end(1) + 1)));
                     }
                     else if ($head.node(3).type.name === "characterDetail") {
-                        console.log("末尾でない")
                         dispatch(tr.setSelection(TextSelection.create(tr.doc, findNextNodePos(this.editor.state.doc, $head) + 2)))
                         return true;
                     }
@@ -105,8 +104,6 @@ export const CustomKeyBoardShortcuts = Extension.create({
                 const { state, view } = this.editor;
                 const { selection } = tr;
                 const { $head, from, to } = selection;
-
-                console.log($head.node(1))
 
                 // 現在のノードとその位置を取得
                 const node = $head.node(-1);

@@ -4,6 +4,7 @@ import { Fragment } from "prosemirror-model";
 import { Editor } from "@tiptap/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { typeToIcon, typeToJapanese } from "../TypeToJapanese";
+import { changeNodeType } from "../ChangeNodeType";
 
 const Sidebar = ({ node, editor }: any) => {
   if (!node) {
@@ -12,6 +13,7 @@ const Sidebar = ({ node, editor }: any) => {
 
   const doc = editor.state.doc;
   const nodePos = findNodePosition(doc, node);
+  const isNotCharacter = node.type.name !== "characters";
 
   const handleNodeTypeAndLevelChange = (event: any) => {
     const value = event.target.value;
@@ -37,92 +39,12 @@ const Sidebar = ({ node, editor }: any) => {
     }
   };
 
-  // changeNodeType 関数の更新
-  const changeNodeType = (
-    editor: Editor,
-    nodePos: any,
-    newNodeType: any,
-    oldNode: any,
-    level: any = null
-  ) => {
-    const attrs = { ...oldNode.attrs };
-
-    // Serifノードの特別な扱い
-    if (newNodeType === "serif") {
-      // 既存のテキストを結合
-      const combinedText = oldNode.content.content
-        .map((node: any) => node.textContent)
-        .join("");
-
-
-      const speechContent = editor.schema.nodes.speechContent.create(
-        null,
-        Fragment.from(editor.schema.text(combinedText))
-      );
-
-      // speakerノードは空の状態で作成
-      const speakerNode = editor.schema.nodes.speaker.create(
-        null
-      );
-
-      // Serifノードの作成
-      const serifNode = editor.schema.nodes.serif.create(
-        null,
-        Fragment.from([speakerNode, speechContent])
-      );
-
-      // ノードの置換
-      let transaction = editor.state.tr.replaceWith(
-        nodePos,
-        nodePos + oldNode.nodeSize,
-        serifNode
-      );
-
-      // 選択範囲の更新
-      const newSelection = TextSelection.create(
-        transaction.doc,
-        nodePos + serifNode.nodeSize
-      );
-      transaction = transaction.setSelection(newSelection);
-
-      editor.view.dispatch(transaction);
-    } else {
-      // 他のノードタイプへの変換処理
-      if (newNodeType === "heading" && level) {
-        attrs.level = level;
-      }
-      const nodeType = editor.schema.nodes[newNodeType];
-      const combinedText = oldNode.content.content
-        .map((node: any) => node.textContent)
-        .join("");
-      const textNode = editor.schema.text(combinedText);
-      const newNode = nodeType.create(
-        attrs,
-        Fragment.from(textNode),
-        oldNode.marks
-      );
-      let transaction = editor.state.tr.replaceWith(
-        nodePos,
-        nodePos + oldNode.nodeSize,
-        newNode
-      );
-      const newSelection = TextSelection.create(
-        transaction.doc,
-        nodePos + newNode.nodeSize
-      );
-      transaction = transaction.setSelection(newSelection);
-      editor.view.dispatch(transaction);
-    }
-  };
-
   const renderChildNodes = (childNodes, startPos) => {
     return childNodes
       .filter(child => child.type.name !== "text" && child.attrs.level != 5 && child.type.name !== "hardBreak")
       .map((child, index) => {
         // 孫ノードの存在を確認
         const hasGrandchildren = child.content.content && child.content.content.length >= 2;
-        console.log(hasGrandchildren)
-        console.log(child)
 
         return (
           hasGrandchildren ? (
@@ -151,15 +73,13 @@ const Sidebar = ({ node, editor }: any) => {
   return (
     <div className="bg-white shadow-lg rounded-lg border border-gray-200 p-4 mx-2 my-4">
       {/* ノードタイプの変更セレクトボックス */}
-      <select
+      {isNotCharacter && <select
         value={
           node.type.name + (node.attrs.level ? `-${node.attrs.level}` : "")
         }
         onChange={(event) => handleNodeTypeAndLevelChange(event)}
       >
-
         <option value="paragraph">標準</option>
-        <option value="characters">登場人物</option>
         <option value="heading-1">タイトル</option>
         <option value="heading-2">シーン</option>
         <option value="heading-3">ト書き</option>
@@ -167,6 +87,7 @@ const Sidebar = ({ node, editor }: any) => {
         <option value="serif">セリフ</option>
         {/* 他のノードタイプのオプションも追加 */}
       </select>
+      }
       <div>
         <h3 className="font-bold text-xl mb-4 text-gray-800">
           <FontAwesomeIcon

@@ -46,6 +46,8 @@ const loadContentFromJSON = () => {
 export default function TipTap({ setData, data, setContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
   const [toc, setToc] = useState([]);
+  const [characterList, setCharacterList] = useState([]);
+  const [speakerinput, setSpeakerInput] = useState("");
   const [initialContent, setInitialContent] = useState(() => {
     if (typeof window !== "undefined") {
       return loadContentFromJSON();
@@ -120,24 +122,28 @@ export default function TipTap({ setData, data, setContent }: any) {
       })
     ],
     onSelectionUpdate(props) {
+      console.log("selection update")
       const { selection } = props.editor.state;
       const { from, to } = selection;
       let node = selection.$from.node(1);
-      console.log(from);
       if (node) {
         // 最上位の親ノードを取得
         setSelectionNode(node);
+        if (selection.$anchor.parent.type.name === 'speaker') {
+          setSpeakerInput(node.textContent)
+
+        }
       } else {
         setSelectionNode(null);
       }
     },
     onUpdate: ({ editor }) => {
-      console.log(editor.getHTML());
       updateToc();
       saveContentAsJSON(editor);
       if (typeof window !== "undefined") {
         localStorage.setItem("editor-content", editor.getHTML());
       }
+      setCharacterList(getCharacterList(editor));
     },
     content: initialContent,
     onBlur: ({ editor }: any) => {
@@ -179,7 +185,7 @@ export default function TipTap({ setData, data, setContent }: any) {
           </div>
         </div>
       </div>
-      <CustomBubbleMenu editor={editor} />
+      <CustomBubbleMenu editor={editor} characterList={characterList} speakerinput={speakerinput} />
       {false && (
         <FloatingMenu
           editor={editor}
