@@ -5,49 +5,59 @@ import JSONToEditor from "../JSONtoEditor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { exportToPDF } from "../htmlToPdf";
 import { faFile, faFileLines, faFilePdf, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { set } from "react-hook-form";
 
 export const SettingSidebar = ({ editor }: any) => {
   const [projectName, setProjectName] = useState("無題のドキュメント");
   const [showFileInput, setShowFileInput] = useState(false);
   const [showFileOutput, setShowFileOutput] = useState(false);
   const [showCharacters, setShowCharacters] = useState(false);
+  const [fileName, setFileName] = useState('');
   const [jsonContent, setJsonContent] = useState<any>(null); // JSON データを一時的に保持するための状態
-  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [fileAcordionisOpen, setFileAcordionIsOpen] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
 
-
-  const handleJSONFileChange = (file) => {
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onloadstart = () => setLoadingProgress(0);
-      reader.onprogress = (event) => {
-        if (event.lengthComputable) {
-          const percentLoaded = Math.round((event.loaded / event.total) * 100);
-          setLoadingProgress(percentLoaded);
-        }
-      };
-      reader.onload = (e) => {
-        if (e.target) {
-          setJsonContent(JSON.parse(e.target.result));
-          setLoadingProgress(100); // Complete
-        }
-      };
-      reader.onerror = () => {
-        // Handle errors here
-        alert("ファイルの読み込みに失敗しました。");
-        setLoadingProgress(0);
-      };
-      reader.readAsText(file);
-    }
-  };
 
   const handleLoadContent = () => {
     if (jsonContent) {
-      JSONToEditor(editor, jsonContent);
+      if (editor) {
+        editor.commands.setContent(jsonContent);
+      }
     } else {
       alert("JSON ファイルを選択してください。");
     }
   };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    if (event.dataTransfer.files && event.dataTransfer.files[0]) {
+      handleFileChange(event.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileChange = (file) => {
+    if (file && file.type === "application/json") {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = JSON.parse(e.target.result);
+        setJsonContent(content);
+        setFileName(file.name);
+      };
+      reader.readAsText(file);
+
+    }
+  };
+
 
   // Add states for display options if needed
 
@@ -67,48 +77,27 @@ export const SettingSidebar = ({ editor }: any) => {
 
 
   const FileInputAccordion = () => {
-    const [isOpen, setIsOpen] = useState(false);
     const [isFileSelected, setIsFileSelected] = useState(false);
-    const [fileName, setFileName] = useState('');
 
-    const handleDragOver = (e) => {
-      e.preventDefault();
-    };
 
-    const handleDrop = (e) => {
-      e.preventDefault();
-      const file = e.dataTransfer.files[0];
-      updateFile(file);
-    };
-
-    const handleFileChange = (event) => {
-      const file = event.target.files[0];
-      updateFile(file);
-    };
-
-    const updateFile = (file) => {
-      if (file && file.type === 'application/json') {
-        setFileName(file.name);
-      } else {
-        alert('JSONファイルを選択してください。');
-        setFileName('');
-      }
-    };
 
     const handleDelete = () => {
       setFileName('');
+      setJsonContent(null);
     };
+
+    console.log(fileName)
 
     return (
       <div>
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setFileAcordionIsOpen(!fileAcordionisOpen)}
           className="text-sm font-medium text-gray-600"
         >
           ファイル入力
         </button>
 
-        {isOpen && (
+        {true && (
           <>
             {fileName && (
               <div className="mb-4 text-sm font-medium text-gray-800 flex items-center">
@@ -122,8 +111,11 @@ export const SettingSidebar = ({ editor }: any) => {
               </div>
             )}
             <label
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
               htmlFor="file-upload"
-              className="flex flex-col items-center justify-center w-full h-32 bg-white rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-gray-50"
+              className={`${isDragOver ? 'border-blue-600' : 'border-gray-300'} flex flex-col items-center justify-center w-full h-32 bg-white rounded-lg border-2  border-dashed cursor-pointer hover:bg-gray-50`}
             >
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <i className="fas fa-cloud-upload-alt fa-3x text-gray-300"></i>
@@ -136,16 +128,10 @@ export const SettingSidebar = ({ editor }: any) => {
                 id="file-upload"
                 type="file"
                 className="hidden"
-                onChange={handleFileChange}
+                onChange={(e) => handleFileChange(e.target.files[0])}
                 accept="application/json"
               />
             </label>
-            {/* Display Progress Bar */}
-            {loadingProgress > 0 && loadingProgress < 100 && (
-              <div className="progress-bar">
-                Loading: {loadingProgress}%
-              </div>
-            )}
             {fileName && (
               <button
                 onClick={handleLoadContent}
@@ -156,15 +142,15 @@ export const SettingSidebar = ({ editor }: any) => {
               </button>
             )}
           </>
-        )}
+        )
+        }
 
-      </div>
+      </div >
     );
   };
 
   const FileOutputAccordion = () => {
     const [isOpen, setIsOpen] = useState(false);
-
     return (
       <div>
         <button
@@ -174,7 +160,7 @@ export const SettingSidebar = ({ editor }: any) => {
           ファイル出力
         </button>
 
-        {isOpen && (
+        {true && (
           <div className="flex flex-col space-y-2 mt-2">
             <button
               onClick={() => EditorToJSON(editor)}
@@ -284,7 +270,7 @@ export const SettingSidebar = ({ editor }: any) => {
           表示オプション
         </button>
 
-        {isOpen && (
+        {true && (
           <div className="flex flex-col space-y-2 mt-2">
             {/* Checkboxes for each display option */}
             <label>
@@ -323,10 +309,10 @@ export const SettingSidebar = ({ editor }: any) => {
       <FileOutputAccordion />
       {/* Characters Input */}
       {/* ... Implement functionality to add characters with name, photo, summary ... */}
-      <CharactersInput />
+      {false && <CharactersInput />}
       {/* Display Options Accordion */}
       {/* ... Implement accordion with checkboxes for display options ... */}
-      <DisplayOptionsAccordion />
+      {false && <DisplayOptionsAccordion />}
       {/* Existing Save and Cancel Buttons */}
     </div>
   );
