@@ -109,7 +109,7 @@ export default function TipTap({ setData, data, setContent }: any) {
       SpeechContent,
       Speaker,
       Link,
-      Highlight,
+      Highlight.configure({ multicolor: true }),
       Underline,
       CustomKeyBoardShortcuts,
       HardBreak.configure({

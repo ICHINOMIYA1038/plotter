@@ -2,11 +2,25 @@ import { Editor } from "@tiptap/react";
 import { useState } from "react";
 import { SketchPicker } from "react-color";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBold, faStrikethrough, faLink, faUndo, faRedo, faPalette, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faBold, faStrikethrough, faLink, faUndo, faRedo, faPalette, faTimes, faHighlighter, faFont } from "@fortawesome/free-solid-svg-icons";
 
 export const Toolbar = ({ editor }: { editor: Editor }) => {
-    const [showColorPicker, setShowColorPicker] = useState(false);
-    const [color, setColor] = useState("#000000");
+    const [showTextColorPicker, setShowTextColorPicker] = useState(false);
+    const [showHighlightColorPicker, setShowHighlightColorPicker] = useState(false);
+    const [textColor, setTextColor] = useState("#000000");
+    const [highlightColor, setHighlightColor] = useState("#FFFF00");
+
+    const toggleTextColorPicker = () => {
+        setShowTextColorPicker(!showTextColorPicker);
+        if (showHighlightColorPicker) setShowHighlightColorPicker(false);
+    };
+
+    const toggleHighlightColorPicker = () => {
+        setShowHighlightColorPicker(!showHighlightColorPicker);
+        if (showTextColorPicker) setShowTextColorPicker(false);
+    };
+
+
 
     if (!editor) {
         return null;
@@ -62,35 +76,63 @@ export const Toolbar = ({ editor }: { editor: Editor }) => {
                     <FontAwesomeIcon icon={faRedo} />
                 </button>
 
+                {/* Text Color Picker Trigger Button */}
+                <button
+                    onClick={toggleTextColorPicker}
+                    className={`btn ${showTextColorPicker ? "btn-active" : ""}`}
+                >
+                    <FontAwesomeIcon icon={faFont} />
+                </button>
 
-                <div className="relative">
-                    {/* カラーピッカートリガーボタン */}
-                    <button
-                        onClick={() => setShowColorPicker(!showColorPicker)}
-                        className={`btn ${showColorPicker ? "btn-active" : ""}`}
-                    >
-                        <FontAwesomeIcon icon={faPalette} />
-                    </button>
-                    {/* カラーピッカー */}
-                    {showColorPicker && (
-                        <div className="absolute top-10 right-0 z-10 bg-white shadow p-2 rounded">
-                            <SketchPicker
-                                color={color}
-                                onChangeComplete={(color) => {
-                                    setColor(color.hex);
-                                    editor
-                                        .chain()
-                                        .focus()
-                                        .setMark("textStyle", { color: color.hex })
-                                        .run();
-                                }}
-                            />
-                            <button onClick={() => setShowColorPicker(false)} className="btn">
-                                <FontAwesomeIcon icon={faTimes} />
-                            </button>
-                        </div>
-                    )}
-                </div>
+                {/* Text Color Picker */}
+                {showTextColorPicker && (
+                    <div className="absolute top-10 right-0 z-10 rounded">
+                        <SketchPicker
+                            color={textColor}
+                            onChangeComplete={(color) => {
+                                setTextColor(color.hex);
+                                editor
+                                    .chain()
+                                    .focus()
+                                    .setMark("textStyle", { color: color.hex })
+                                    .run();
+                            }}
+                        />
+                        <button onClick={() => setShowTextColorPicker(false)} className="btn">
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
+                    </div>
+                )}
+
+                {/* Highlight Color Picker Trigger Button */}
+                <button
+                    onClick={toggleHighlightColorPicker}
+                    className={`btn ${showHighlightColorPicker ? "btn-active" : ""}`}
+                >
+                    <FontAwesomeIcon icon={faHighlighter} />
+                </button>
+
+                {/* Highlight Color Picker */}
+                {showHighlightColorPicker && (
+                    <div className="absolute top-10 right-2 z-10 rounded">
+                        <SketchPicker
+                            color={highlightColor}
+                            onChangeComplete={(color) => {
+                                console.log(color.hex)
+                                setHighlightColor(color.hex);
+                                editor
+                                    .chain()
+                                    .focus()
+                                    .toggleHighlight({ color: color.hex })
+                                    .run();
+                            }}
+                        />
+                        <button onClick={() => setShowHighlightColorPicker(false)} className="btn">
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
+                    </div>
+                )}
+
             </div>
         </div>
     );

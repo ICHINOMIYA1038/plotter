@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import EditorToJSON from "../EditorToJson";
+import EditorToJSON, { EditorToTextFile } from "../EditorToJson";
 import { Editor } from "@tiptap/react";
 import JSONToEditor from "../JSONtoEditor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -164,7 +164,7 @@ export const SettingSidebar = ({ editor }: any) => {
             </button>
             <button
               onClick={() => {
-                exportToPDF(editor);
+                EditorToTextFile(editor);
               }}
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 mt-4 rounded-full flex items-center justify-center"
             >

@@ -173,11 +173,11 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
         if (isSpaeachContentSelected()) {
             return (<div className="flex flex-col">
 
-                {menu === "main" &&
+                {serifContentMenu === "main" &&
                     <>
                         <button
                             className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                            onClick={() => { editor.chain().focus(); setMenu("block") }}
+                            onClick={() => { editor.chain().focus(); setSerifContentMenu("block") }}
                         >
                             ブロック
                         </button>
@@ -193,7 +193,7 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
                         </button >
                     </>
                 }
-                {menu === "block" &&
+                {serifContentMenu === "block" &&
                     <>
                         <button
                             className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
@@ -237,7 +237,7 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
                         </button>
                         <button
                             className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                            onClick={() => { editor.chain().focus(); setMenu("main") }}
+                            onClick={() => { editor.chain().focus(); setSerifContentMenu("main") }}
                         >
                             戻る
                         </button>
@@ -287,7 +287,7 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
 
         if (isParagraphAndContentBlank()) {
             return (
-                <div className="flex flex-col">
+                <div className="flex flex-col overflow-y-auto" style={{ maxHeight: '250px' }}>
                     <button
                         className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
                         onClick={() =>
@@ -314,7 +314,7 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
                     </button>
                     <button
                         className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                        onClick={() => { insertSerifNode(editor) }}
+                        onClick={() => { changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$from.node(1)), "serif", editor.state.selection.$from.node(1)) }}
                     >
                         セリフ
                     </button>
@@ -437,7 +437,7 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
                             </button>
                             <button
                                 className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                                onClick={insertSerifNode}
+                                onClick={() => { changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$from.node(1)), "serif", editor.state.selection.$from.node(1)) }}
                             >
                                 セリフ
                             </button>

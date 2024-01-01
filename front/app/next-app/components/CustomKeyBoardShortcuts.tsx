@@ -85,8 +85,9 @@ export const CustomKeyBoardShortcuts = Extension.create({
                     } else if ($head.node(3).type.name === "characterDetail" && !tr.doc.nodeAt($head.end(3) + 2)) {
                         //characterDetailであり、次のノードがcharacterItemでない場合、空行を挿入
 
-                        dispatch(tr.insert($head.end(0), this.editor.state.schema.nodes.paragraph.create()));
+                        dispatch(tr.insert($head.end(2), this.editor.state.schema.nodes.paragraph.create()));
                         dispatch(tr.setSelection(TextSelection.create(tr.doc, $head.end(1) + 1)));
+                        return true;
                     }
                     else if ($head.node(3).type.name === "characterDetail") {
                         dispatch(tr.setSelection(TextSelection.create(tr.doc, findNextNodePos(this.editor.state.doc, $head) + 2)))
