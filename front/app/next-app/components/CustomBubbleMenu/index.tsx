@@ -114,6 +114,7 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
                 return regex.test(character.name);
             });
 
+
             // speakerNodeを更新する関数
             const updateSpeakerNode = (characterName: any) => {
                 if (!editor || !isSpeakerNodeSelected()) {
@@ -151,7 +152,7 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
                     <>
                         {
                             (character.name != "") &&
-                            < button key={index}
+                            <button key={index}
                                 className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
                                 onClick={() => updateSpeakerNode(character.name)}>
                                 {character.name}

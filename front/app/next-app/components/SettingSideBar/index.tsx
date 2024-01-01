@@ -12,15 +12,30 @@ export const SettingSidebar = ({ editor }: any) => {
   const [showFileOutput, setShowFileOutput] = useState(false);
   const [showCharacters, setShowCharacters] = useState(false);
   const [jsonContent, setJsonContent] = useState<any>(null); // JSON データを一時的に保持するための状態
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
-  const handleJSONFileChange = (event: any) => {
-    const file = event.target.files[0];
+
+  const handleJSONFileChange = (file) => {
     if (file) {
       const reader = new FileReader();
+
+      reader.onloadstart = () => setLoadingProgress(0);
+      reader.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percentLoaded = Math.round((event.loaded / event.total) * 100);
+          setLoadingProgress(percentLoaded);
+        }
+      };
       reader.onload = (e) => {
         if (e.target) {
-          setJsonContent(JSON.parse(e.target.result?.toString() || ""));
+          setJsonContent(JSON.parse(e.target.result));
+          setLoadingProgress(100); // Complete
         }
+      };
+      reader.onerror = () => {
+        // Handle errors here
+        alert("ファイルの読み込みに失敗しました。");
+        setLoadingProgress(0);
       };
       reader.readAsText(file);
     }
@@ -72,10 +87,10 @@ export const SettingSidebar = ({ editor }: any) => {
     };
 
     const updateFile = (file) => {
-      if (file && file.type === 'application/pdf') {
+      if (file && file.type === 'application/json') {
         setFileName(file.name);
       } else {
-        alert('PDFファイルを選択してください。');
+        alert('JSONファイルを選択してください。');
         setFileName('');
       }
     };
@@ -115,16 +130,31 @@ export const SettingSidebar = ({ editor }: any) => {
                 <p className="mb-2 text-sm text-gray-500">
                   <span className="font-semibold">クリックしてアップロード</span>
                 </p>
-                <p className="text-xs text-gray-500">PDFファイルのみ</p>
+                <p className="text-xs text-gray-500">現在、JSONファイルのみ</p>
               </div>
               <input
                 id="file-upload"
                 type="file"
                 className="hidden"
                 onChange={handleFileChange}
-                accept="application/pdf"
+                accept="application/json"
               />
             </label>
+            {/* Display Progress Bar */}
+            {loadingProgress > 0 && loadingProgress < 100 && (
+              <div className="progress-bar">
+                Loading: {loadingProgress}%
+              </div>
+            )}
+            {fileName && (
+              <button
+                onClick={handleLoadContent}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 mt-4 rounded-full flex items-center justify-center"
+              >
+                <FontAwesomeIcon icon={faFileLines} className="mr-2" />
+                JSONから入力
+              </button>
+            )}
           </>
         )}
 

@@ -40,30 +40,63 @@ export const EditorToTextFile = (editor: Editor) => {
   content.forEach((element) => {
     switch (element.type) {
       case "heading":
-        // Add the heading to the script
-        scriptText += `\n${element.content[0].text}\n`;
+        // Checking if content array is present and has elements
+        if (element.content && element.content.length > 0) {
+          scriptText += `\n${element.content[0].text}\n`;
+        }
         break;
       case "characters":
         scriptText += "\n登場人物:\n"; // Characters heading
         element.content.forEach((charItem) => {
+          // Handling characterItem
           if (charItem.type === "characterItem") {
-            const characterName = charItem.content.find(
+            const characterNameElement = charItem.content.find(
               (el) => el.type === "characterName"
-            ).content[0].text;
-            const characterDetail = charItem.content.find(
+            );
+            const characterDetailElement = charItem.content.find(
               (el) => el.type === "characterDetail"
-            ).content[0].text;
-            scriptText += `・${characterName}: ${characterDetail}\n`;
+            );
+            const characterName =
+              characterNameElement &&
+              characterNameElement.content &&
+              characterNameElement.content.length > 0
+                ? characterNameElement.content[0].text
+                : "";
+            const characterDetail =
+              characterDetailElement &&
+              characterDetailElement.content &&
+              characterDetailElement.content.length > 0
+                ? characterDetailElement.content[0].text
+                : "";
+            if (characterName || characterDetail) {
+              scriptText += `・${characterName}: ${characterDetail}\n`;
+            }
           }
         });
         break;
       case "serif":
-        // Format dialogues
-        const speaker = element.content.find((el) => el.type === "speaker")
-          .content[0].text;
-        const speech = element.content.find((el) => el.type === "speechContent")
-          .content[0].text;
-        scriptText += `\n${speaker}: ${speech}\n`;
+        // Safely accessing speakerElement and speechElement
+        const speakerElement = element.content.find(
+          (el) => el.type === "speaker"
+        );
+        const speechElement = element.content.find(
+          (el) => el.type === "speechContent"
+        );
+        const speaker =
+          speakerElement &&
+          speakerElement.content &&
+          speakerElement.content.length > 0
+            ? speakerElement.content[0].text
+            : "";
+        const speech =
+          speechElement &&
+          speechElement.content &&
+          speechElement.content.length > 0
+            ? speechElement.content[0].text
+            : "";
+        if (speaker || speech) {
+          scriptText += `\n${speaker}: ${speech}\n`;
+        }
         break;
       // Add other cases as needed
       // ...

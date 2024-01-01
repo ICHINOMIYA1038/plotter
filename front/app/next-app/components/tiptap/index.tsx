@@ -130,8 +130,7 @@ export default function TipTap({ setData, data, setContent }: any) {
         // 最上位の親ノードを取得
         setSelectionNode(node);
         if (selection.$anchor.parent.type.name === 'speaker') {
-          setSpeakerInput(node.textContent)
-
+          setSpeakerInput(selection.$anchor.parent.textContent)
         }
       } else {
         setSelectionNode(null);
