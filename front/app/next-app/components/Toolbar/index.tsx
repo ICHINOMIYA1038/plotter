@@ -27,7 +27,7 @@ export const Toolbar = ({ editor }: { editor: Editor }) => {
     }
 
     return (
-        <div className="flex h-15vh bg-white shadow-lg rounded-lg border border-gray-200 px-4 py-2 mx-2 my-2 items-center justify-end">
+        <div className="flex h-15vh bg-white shadow-lg rounded-lg border border-gray-200 px-4 py-2 mx-2 mb-2 items-center justify-end">
             <div className="flex gap-2">
                 {/* Bold Button */}
                 <button

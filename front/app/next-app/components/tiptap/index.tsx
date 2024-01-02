@@ -160,7 +160,6 @@ export default function TipTap({ setData, data, setContent }: any) {
 
   return (
     <div>
-      <div onClick={() => { scrollToLeftEndOfChild(parentDivRef) }}>スクロール</div>
       <div className="grid grid-cols-12 h-screen w-screen">
         <div className="overflow-y-auto col-span-2">
           {" "}
