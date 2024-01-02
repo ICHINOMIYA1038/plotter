@@ -31,6 +31,7 @@ import { CustomBubbleMenu } from '../CustomBubbleMenu';
 import { getCharacterList } from "../getCharacterList";
 import { CharacterDetail, CharacterItem, CharacterName, Characters } from "../CharactersNode";
 import { customPlaceholder } from "../CustomPlaceholder";
+import PDFTEST from "../PDFTEST";
 
 const saveContentAsJSON = (editor) => {
   const content = editor.getJSON();
@@ -46,6 +47,7 @@ const loadContentFromJSON = () => {
 export default function TipTap({ setData, data, setContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
   const [toc, setToc] = useState([]);
+  const parentDivRef = useRef(null);
   const [characterList, setCharacterList] = useState([]);
   const [speakerinput, setSpeakerInput] = useState("");
   const [initialContent, setInitialContent] = useState(() => {
@@ -160,7 +162,6 @@ export default function TipTap({ setData, data, setContent }: any) {
 
   return (
     <div>
-
       <div className="grid grid-cols-12 h-screen w-screen">
         <div className="overflow-y-auto col-span-2">
           {" "}
@@ -169,7 +170,7 @@ export default function TipTap({ setData, data, setContent }: any) {
         </div>
         <div className="col-span-8 p-4 min-w-full max-w-full h-full mx-auto overflow-auto">
           <Toolbar editor={editor} />
-          <EditorContent editor={editor} className="w-full h-85vh" />
+          <EditorContent editor={editor} ref={parentDivRef} className="w-full h-85vh" />
         </div>
         <div className="col-span-2 flex flex-col h-full ">
           <div className="flex-1 overflow-y-scroll">
