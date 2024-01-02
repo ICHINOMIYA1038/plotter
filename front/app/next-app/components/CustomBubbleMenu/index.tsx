@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
-import { useEditor, BubbleMenu } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/react';
 import Tippy from '@tippyjs/react';
 import { insertCharactersNode, insertSerifNode } from '../InsertCustomNode';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { set } from 'react-hook-form';
 import { changeNodeType } from '../ChangeNodeType';
 import { findNodePosition } from '../FindNodePosition';
 
-
-
-
-export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) => {
+export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinput }: any) => {
 
     const [menu, setMenu] = useState("main"); // 'main', 'decoration', 'heading', 'pageBreak'
     const [serifContentMenu, setSerifContentMenu] = useState("main"); // 'main', 'decoration', 'heading', 'pageBreak'
@@ -97,15 +93,6 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
         return node && node.type.name === 'heading';
     }
 
-
-    const speakerOptions = [
-        { label: "Option 1", value: "option1" },
-        { label: "Option 2", value: "option2" },
-        // 他のオプション
-    ];
-
-
-
     const renderMenuItems = () => {
 
         if (isSpeakerNodeSelected()) {
@@ -127,8 +114,8 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
                 const { from, to } = state.selection;
 
                 // 選択範囲内にある最初のテキストブロックを見つける
-                let blockPos = null;
-                state.doc.nodesBetween(from, to, (node, pos) => {
+                let blockPos: any = null;
+                state.doc.nodesBetween(from, to, (node: any, pos: any) => {
                     if (blockPos === null && node.isTextblock) {
                         blockPos = pos;
                     }
@@ -148,7 +135,7 @@ export const CustomBubbleMenu = ({ editor, characterList, speakerinput }: any) =
 
 
             return (<><div className='flex flex-col'>
-                {isSpeakerNodeSelected() && filteredCharacterList.map((character, index) => (
+                {isSpeakerNodeSelected() && filteredCharacterList.map((character: any, index: any) => (
                     <>
                         {
                             (character.name != "") &&
