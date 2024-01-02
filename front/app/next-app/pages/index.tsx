@@ -6,18 +6,17 @@ export default function Home() {
   const [data, setData] = useState("");
 
   useEffect(() => {
-    const handleWheel = (e) => {
+    const handleWheel = (e: any) => {
       if (e.deltaY === 0) return;
-      window.scrollBy({ left: e.deltaY, behavior: 'smooth' });
+      window.scrollBy({ left: e.deltaY, behavior: "smooth" });
     };
 
-    window.addEventListener('wheel', handleWheel);
+    window.addEventListener("wheel", handleWheel);
 
     return () => {
-      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener("wheel", handleWheel);
     };
   }, []);
-
 
   return (
     <div className="">

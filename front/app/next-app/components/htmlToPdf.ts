@@ -2,7 +2,7 @@ import { Editor } from "@tiptap/react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const handlePDF = async (html, css, pageWidth) => {
+const handlePDF = async (html: any, css: any, pageWidth: any) => {
   const newHtmlContent = splitPagesAndReconstruct(html, css, pageWidth);
 
   const printWindow = window.open("", "_blank"); // 新しいウィンドウを開く
@@ -145,7 +145,11 @@ export const exportToPDF = (editor: Editor) => {
   // エディタのHTMLコンテンツを取得
 };
 
-function splitPagesAndReconstruct(htmlContent, cssContent, pageWidth) {
+function splitPagesAndReconstruct(
+  htmlContent: any,
+  cssContent: any,
+  pageWidth: any
+) {
   // 新しいdiv要素を作成して、与えられたHTMLとCSSを適用
   const container = document.createElement("div");
   container.innerHTML = htmlContent;
@@ -157,7 +161,7 @@ function splitPagesAndReconstruct(htmlContent, cssContent, pageWidth) {
   let currentWidth = 0;
 
   // コンテナ内の要素を反復処理
-  Array.from(container.childNodes).forEach((node) => {
+  Array.from(container.childNodes).forEach((node: any) => {
     // 仮のdivを作成し、現在のノードを追加して幅を計算
     const tempDiv = document.createElement("div");
     tempDiv.style.display = "inline-block"; // ブロックレベル要素の幅を正確に計算

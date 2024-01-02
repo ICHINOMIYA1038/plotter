@@ -37,7 +37,7 @@ export const EditorToTextFile = (editor: Editor) => {
   const content = editor.getJSON().content;
   let scriptText = "";
 
-  content.forEach((element) => {
+  content!.forEach((element) => {
     switch (element.type) {
       case "heading":
         // Checking if content array is present and has elements
@@ -47,13 +47,13 @@ export const EditorToTextFile = (editor: Editor) => {
         break;
       case "characters":
         scriptText += "\n登場人物:\n"; // Characters heading
-        element.content.forEach((charItem) => {
+        element.content?.forEach((charItem) => {
           // Handling characterItem
           if (charItem.type === "characterItem") {
-            const characterNameElement = charItem.content.find(
+            const characterNameElement = charItem.content?.find(
               (el) => el.type === "characterName"
             );
-            const characterDetailElement = charItem.content.find(
+            const characterDetailElement = charItem.content?.find(
               (el) => el.type === "characterDetail"
             );
             const characterName =
@@ -76,10 +76,10 @@ export const EditorToTextFile = (editor: Editor) => {
         break;
       case "serif":
         // Safely accessing speakerElement and speechElement
-        const speakerElement = element.content.find(
+        const speakerElement = element.content?.find(
           (el) => el.type === "speaker"
         );
-        const speechElement = element.content.find(
+        const speechElement = element.content?.find(
           (el) => el.type === "speechContent"
         );
         const speaker =

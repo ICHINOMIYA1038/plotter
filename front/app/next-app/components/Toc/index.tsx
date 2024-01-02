@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useEditor } from "@tiptap/react";
-import { exportToPDF } from "../htmlToPdf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilePdf, faList } from "@fortawesome/free-solid-svg-icons";
+import { faList } from "@fortawesome/free-solid-svg-icons";
 
 export const TOC = ({ editor }: any) => {
   const [headings, setHeadings] = useState([]);
@@ -14,7 +12,10 @@ export const TOC = ({ editor }: any) => {
       const doc = editor.state.doc;
       let headingNodes: any = [];
       doc.descendants((node: any, pos: any) => {
-        if (node.type.name === "heading" && [1, 2, 5].includes(node.attrs.level)) {
+        if (
+          node.type.name === "heading" &&
+          [1, 2, 5].includes(node.attrs.level)
+        ) {
           headingNodes.push({
             id: pos,
             text: node.textContent,
@@ -47,8 +48,9 @@ export const TOC = ({ editor }: any) => {
         {headings.map((heading: any) => (
           <li
             key={heading.id}
-            className={`mb-2 ${heading.level === 1 ? "text-lg font-bold" : "text-base"
-              }`}
+            className={`mb-2 ${
+              heading.level === 1 ? "text-lg font-bold" : "text-base"
+            }`}
           >
             <a
               href={`#heading-${heading.id}`}
@@ -62,7 +64,6 @@ export const TOC = ({ editor }: any) => {
           </li>
         ))}
       </ul>
-
     </div>
   );
 };

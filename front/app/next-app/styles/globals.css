@@ -46,14 +46,16 @@ body {
   border-color: rgba(229, 231, 235, var(--tw-border-opacity));
   background-color: white;
   align-items: center;
-  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   padding-top: 10px;
   padding-bottom: 10px;
   padding-right: 20px;
   padding-left: 60px;
 
-  >* {
+  > * {
     -webkit-writing-mode: vertical-rl;
     -ms-writing-mode: tb-rl;
     writing-mode: vertical-rl;
@@ -229,7 +231,6 @@ p.characterName.is-empty::before {
   pointer-events: none;
 }
 
-
 p.characterDetail.is-empty::before {
   writing-mode: vertical-rl;
   color: #adb5bd;
@@ -237,8 +238,6 @@ p.characterDetail.is-empty::before {
   /* ここに必要なテキストを設定 */
   pointer-events: none;
 }
-
-
 
 .has-focus {
   border-radius: 3px;
@@ -251,8 +250,7 @@ li.has-focus {
   box-shadow: none;
 }
 
-
-li>p.has-focus {
+li > p.has-focus {
   border-radius: 3px;
   border: dashed;
   box-shadow: none;
@@ -263,7 +261,7 @@ li>p.has-focus {
 }
 
 .speechContent {
-  height: 75%;
+  height: 85%;
   padding-top: 5%;
 }
 
@@ -285,9 +283,8 @@ li>p.has-focus {
   border: dashed;
 }
 
-
 .speaker {
-  height: 25%;
+  height: 15%;
   padding-top: 5%;
 }
 
@@ -306,7 +303,7 @@ li>p.has-focus {
 }
 
 .characters {
-  padding-top: 5rem;
+  padding-top: 8rem;
   padding-left: 2rem;
   padding-right: 2rem;
   font-size: 0.9rem;

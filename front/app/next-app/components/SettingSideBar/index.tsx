@@ -4,19 +4,20 @@ import { Editor } from "@tiptap/react";
 import JSONToEditor from "../JSONtoEditor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { exportToPDF } from "../htmlToPdf";
-import { faFile, faFileLines, faFilePdf, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFile,
+  faFileLines,
+  faFilePdf,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 import { set } from "react-hook-form";
 
 export const SettingSidebar = ({ editor }: any) => {
   const [projectName, setProjectName] = useState("無題のドキュメント");
-  const [showFileInput, setShowFileInput] = useState(false);
-  const [showFileOutput, setShowFileOutput] = useState(false);
-  const [showCharacters, setShowCharacters] = useState(false);
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState("");
   const [jsonContent, setJsonContent] = useState<any>(null); // JSON データを一時的に保持するための状態
   const [fileAcordionisOpen, setFileAcordionIsOpen] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-
 
   const handleLoadContent = () => {
     if (jsonContent) {
@@ -28,7 +29,7 @@ export const SettingSidebar = ({ editor }: any) => {
     }
   };
 
-  const handleDragOver = (event) => {
+  const handleDragOver = (event: any) => {
     event.preventDefault();
     setIsDragOver(true);
   };
@@ -37,7 +38,7 @@ export const SettingSidebar = ({ editor }: any) => {
     setIsDragOver(false);
   };
 
-  const handleDrop = (event) => {
+  const handleDrop = (event: any) => {
     event.preventDefault();
     setIsDragOver(false);
     if (event.dataTransfer.files && event.dataTransfer.files[0]) {
@@ -45,19 +46,20 @@ export const SettingSidebar = ({ editor }: any) => {
     }
   };
 
-  const handleFileChange = (file) => {
+  const handleFileChange = (file: any) => {
     if (file && file.type === "application/json") {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const content = JSON.parse(e.target.result);
+        if (e.target == null) {
+          return;
+        }
+        const content: any = JSON.parse(e.target.result as string);
         setJsonContent(content);
         setFileName(file.name);
       };
       reader.readAsText(file);
-
     }
   };
-
 
   // Add states for display options if needed
 
@@ -75,18 +77,15 @@ export const SettingSidebar = ({ editor }: any) => {
     localStorage.setItem("projectName", e.target.value);
   };
 
-
   const FileInputAccordion = () => {
     const [isFileSelected, setIsFileSelected] = useState(false);
 
-
-
     const handleDelete = () => {
-      setFileName('');
+      setFileName("");
       setJsonContent(null);
     };
 
-    console.log(fileName)
+    console.log(fileName);
 
     return (
       <div>
@@ -115,12 +114,16 @@ export const SettingSidebar = ({ editor }: any) => {
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               htmlFor="file-upload"
-              className={`${isDragOver ? 'border-blue-600' : 'border-gray-300'} flex flex-col items-center justify-center w-full h-32 bg-white rounded-lg border-2  border-dashed cursor-pointer hover:bg-gray-50`}
+              className={`${
+                isDragOver ? "border-blue-600" : "border-gray-300"
+              } flex flex-col items-center justify-center w-full h-32 bg-white rounded-lg border-2  border-dashed cursor-pointer hover:bg-gray-50`}
             >
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <i className="fas fa-cloud-upload-alt fa-3x text-gray-300"></i>
                 <p className="mb-2 text-sm text-gray-500">
-                  <span className="font-semibold">クリックしてアップロード</span>
+                  <span className="font-semibold">
+                    クリックしてアップロード
+                  </span>
                 </p>
                 <p className="text-xs text-gray-500">現在、JSONファイルのみ</p>
               </div>
@@ -128,7 +131,11 @@ export const SettingSidebar = ({ editor }: any) => {
                 id="file-upload"
                 type="file"
                 className="hidden"
-                onChange={(e) => handleFileChange(e.target.files[0])}
+                onChange={(e) => {
+                  if (e.target.files) {
+                    handleFileChange(e.target.files[0]);
+                  }
+                }}
                 accept="application/json"
               />
             </label>
@@ -142,10 +149,8 @@ export const SettingSidebar = ({ editor }: any) => {
               </button>
             )}
           </>
-        )
-        }
-
-      </div >
+        )}
+      </div>
     );
   };
 
@@ -193,7 +198,7 @@ export const SettingSidebar = ({ editor }: any) => {
     );
   };
   const CharactersInput = () => {
-    const [characters, setCharacters] = useState([]);
+    const [characters, setCharacters] = useState<any>([]);
     const [newCharacter, setNewCharacter] = useState({ name: "", image: "" });
 
     const handleAddCharacter = () => {
@@ -201,13 +206,15 @@ export const SettingSidebar = ({ editor }: any) => {
       setNewCharacter({ name: "", image: "" }); // Reset input form
     };
 
-    const handleDeleteCharacter = (index) => {
-      const updatedCharacters = characters.filter((_, i) => i !== index);
+    const handleDeleteCharacter = (index: any) => {
+      const updatedCharacters: any = characters.filter(
+        (_: any, i: any) => i !== index
+      );
       setCharacters(updatedCharacters);
     };
 
-    const handleEditCharacter = (index, character) => {
-      const updatedCharacters = characters.map((c, i) =>
+    const handleEditCharacter = (index: any, character: any) => {
+      const updatedCharacters: any = characters.map((c: any, i: any) =>
         i === index ? character : c
       );
       setCharacters(updatedCharacters);
@@ -226,14 +233,24 @@ export const SettingSidebar = ({ editor }: any) => {
         />
         <input
           type="file"
-          onChange={(e) =>
-            setNewCharacter({ ...newCharacter, image: e.target.files[0] })
-          }
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                setNewCharacter({
+                  ...newCharacter,
+                  image: reader.result as string,
+                });
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
         />
         <button onClick={handleAddCharacter}>追加</button>
 
         {/* Character List */}
-        {characters.map((char, index) => (
+        {characters.map((char: any, index: any) => (
           <div key={index} className="flex items-center space-x-2">
             <img
               src={char.image}
@@ -282,7 +299,6 @@ export const SettingSidebar = ({ editor }: any) => {
       </div>
     );
   };
-
 
   return (
     <div className="flex flex-col space-y-4 bg-white shadow-lg rounded-lg border border-gray-200 p-4 mx-2 my-4">
