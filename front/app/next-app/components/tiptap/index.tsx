@@ -138,9 +138,7 @@ export default function TipTap({ setData, data, setContent }: any) {
     onUpdate: ({ editor }: any) => {
       updateToc();
       saveContentAsJSON(editor);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("editor-content", editor.getHTML());
-      }
+
       setCharacterList(getCharacterList(editor));
     },
     content: initialContent,

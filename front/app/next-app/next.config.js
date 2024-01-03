@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  assetPrefix: "/editor",
   webpack: (config, context) => {
     config.watchOptions = {
       poll: 5000,
