@@ -2,16 +2,21 @@ import { Editor } from "@tiptap/react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const handlePDF = async (html: any, css: any, pageWidth: any) => {
+const handlePDF = async (
+  html: any,
+  css: any,
+  pageWidth: any,
+  title = "戯曲エディタ"
+) => {
   const newHtmlContent = splitPagesAndReconstruct(html, css, pageWidth);
 
-  const printWindow = window.open("", "_blank"); // 新しいウィンドウを開く
+  const printWindow = window.open(title, "_blank"); // 新しいウィンドウを開く
 
   if (printWindow) {
     printWindow.document.write(`
       <html>
         <head>
-          <title>Print</title>
+          <title>${title}</title>
           <style>${css}</style>
         </head>
         <body>
@@ -23,6 +28,7 @@ const handlePDF = async (html: any, css: any, pageWidth: any) => {
     printWindow.document.close(); // ドキュメントの書き込みを終了
     printWindow.focus(); // 新しいウィンドウにフォーカスを移動
     printWindow.print(); // ブラウザの印刷ダイアログを開く
+    printWindow.close();
   } else {
     console.error("Cannot open a new window for printing");
   }
