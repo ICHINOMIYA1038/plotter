@@ -55,7 +55,7 @@ body {
   padding-right: 20px;
   padding-left: 60px;
 
-  > * {
+  >* {
     -webkit-writing-mode: vertical-rl;
     -ms-writing-mode: tb-rl;
     writing-mode: vertical-rl;
@@ -250,13 +250,13 @@ li.has-focus {
   box-shadow: none;
 }
 
-li > p.has-focus {
+li>p.has-focus {
   border-radius: 3px;
   border: dashed;
   box-shadow: none;
 }
 
-.serif {
+.serif div {
   display: flex;
 }
 
