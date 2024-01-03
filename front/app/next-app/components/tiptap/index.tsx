@@ -28,6 +28,7 @@ import {
 } from "../CharactersNode";
 import { scrollToLeftEndOfChild } from "../CustomScroll";
 import { Header } from "../Header";
+import HowToSlideShow from "../HowToSlideShow";
 
 const saveContentAsJSON = (editor: any) => {
   const content = editor.getJSON();
@@ -121,7 +122,6 @@ export default function TipTap({ setData, data, setContent }: any) {
       }),
     ],
     onSelectionUpdate(props) {
-      console.log("selection update");
       const { selection } = props.editor.state;
       const { from, to } = selection;
       let node = selection.$from.node(1);
@@ -160,6 +160,7 @@ export default function TipTap({ setData, data, setContent }: any) {
           {" "}
           {/* 新しいSettingSidebar */}
           <SettingSidebar editor={editor} />
+          <HowToSlideShow />
         </div>
         <div
           className="col-span-8 p-4 min-w-full max-w-full h-full mx-auto overflow-auto"
