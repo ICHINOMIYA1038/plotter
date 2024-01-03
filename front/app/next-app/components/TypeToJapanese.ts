@@ -25,7 +25,7 @@ export const typeToJapanese: any = {
   // 他のタイプに対する日本語も追加
 };
 
-export const typeToIcon = {
+export const typeToIcon: any = {
   characters: faPerson,
   paragraph: faParagraph,
   "heading-1": faHeading,
