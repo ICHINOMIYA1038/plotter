@@ -106,9 +106,7 @@ const CustomNodeComponent = ({ node, getPos, editor }: any) => {
         cursor="pointer"
       >
         <FaGripHorizontal size="16" />
-        <NodeViewContent className="serif h-full " style={{ whiteSpace: 'normal' }}> {/* Adjust margin-top to the height of the buttons */}
-
-        </NodeViewContent>
+        <NodeViewContent className="serif h-full " style={{ whiteSpace: 'normal' }} /> {/* Adjust margin-top to the height of the buttons */}
       </Box>
     </NodeViewWrapper>
   )

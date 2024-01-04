@@ -26,7 +26,6 @@ import {
   CharacterName,
   Characters,
 } from "../CharactersNode";
-import { scrollToLeftEndOfChild } from "../CustomScroll";
 import { Header } from "../Header";
 import HowToSlideShow from "../HowToSlideShow";
 import { DraggableParagraph } from "../DraggableParagraph";
@@ -59,8 +58,11 @@ export default function TipTap({ setData, data, setContent }: any) {
     }
   });
 
+
   const updateToc = () => {
     if (!editor || !editor.state) return;
+
+    console.log(editor?.getHTML())
 
     const newToc: any = [];
     const { doc } = editor.state;
@@ -78,15 +80,6 @@ export default function TipTap({ setData, data, setContent }: any) {
     setToc(newToc);
   };
 
-  function getTopLevelParent(node: any, doc: any) {
-    let parent = node;
-    doc.descendants((childNode: any, pos: any, parentNode: any) => {
-      if (childNode === node && parentNode && parentNode.type.name !== "doc") {
-        parent = parentNode;
-      }
-    });
-    return parent;
-  }
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -145,7 +138,7 @@ export default function TipTap({ setData, data, setContent }: any) {
 
       setCharacterList(getCharacterList(editor));
     },
-    content: initialContent,
+    content: content,
     onBlur: ({ editor }: any) => {
       setContent({
         content: editor.getHTML(),
@@ -277,5 +270,5 @@ export default function TipTap({ setData, data, setContent }: any) {
 }
 
 const content = `
-      <h1>嗚呼あああ</h1><h2>嗚呼あああ嗚呼</h2><div class="serif"><p class="speaker">話者会話内容あaaaaaae</p><p class="speechContent">h</p></div><h3>a嗚呼嗚呼</h3><div class="characters"><h5>登場人物</h5><div class="characterItem"><p class="characterName">人物名1人物詳細1aaaaaaaaaddddddddddd</p><p class="characterDetail"></p></div></div><h2><strong><em>あaa</em></strong></h2><h1>aaaaa</h1>
+
       `;
