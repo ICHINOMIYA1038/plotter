@@ -45,7 +45,7 @@ export default function HowToSlideShow() {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center" onClick={toggleSlideShow}>
           <div className="relative p-10" onClick={(e) => e.stopPropagation()}>
             <Image
-              src={`/img/howto/${howtoImages[currentSlide]}`}
+              src={`/editor/img/howto/${howtoImages[currentSlide]}`}
               alt="How to use"
               width={maxWidth}
               height={maxWidth} // この値はアスペクト比に基づいて調整することができます
