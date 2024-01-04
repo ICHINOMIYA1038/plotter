@@ -2,6 +2,9 @@ import { EditorContent, FloatingMenu, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Highlight from "@tiptap/extension-highlight";
+import Bold from "@tiptap/extension-bold";
+import Strike from "@tiptap/extension-strike";
+import Italic from "@tiptap/extension-italic";
 import TextAlign from "@tiptap/extension-text-align";
 import React, { useEffect, createContext, useRef, useState } from "react";
 
@@ -58,11 +61,10 @@ export default function TipTap({ setData, data, setContent }: any) {
     }
   });
 
-
   const updateToc = () => {
     if (!editor || !editor.state) return;
 
-    console.log(editor?.getHTML())
+    console.log(editor?.getHTML());
 
     const newToc: any = [];
     const { doc } = editor.state;
@@ -82,7 +84,9 @@ export default function TipTap({ setData, data, setContent }: any) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      Bold,
+      Strike,
+      Italic,
       Image.configure({
         inline: true,
         allowBase64: true,
