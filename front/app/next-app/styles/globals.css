@@ -95,6 +95,8 @@ body {
     /* h2 のフォントサイズを調整 */
     font-weight: bold;
     padding-top: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
     /* 太字のフォント */
   }
 
@@ -105,8 +107,8 @@ body {
     font-weight: bold;
     /* 太字のフォント */
     padding-top: 8rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 
   h4 {

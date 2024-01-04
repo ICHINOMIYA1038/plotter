@@ -21,7 +21,7 @@ function DraggableParagraphNode(props: any) {
         cursor="pointer"
       >
         <FaGripHorizontal size="16" />
-        <NodeViewContent className="content py-4" />
+        <NodeViewContent className="content py-4 h-full" style={{ whiteSpace: 'normal' }} />
       </Box>
     </NodeViewWrapper>
   );

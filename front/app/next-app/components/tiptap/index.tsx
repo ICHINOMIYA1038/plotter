@@ -6,7 +6,10 @@ import Bold from "@tiptap/extension-bold";
 import Strike from "@tiptap/extension-strike";
 import Italic from "@tiptap/extension-italic";
 import TextAlign from "@tiptap/extension-text-align";
+import Document from "@tiptap/extension-document"
+import Text from "@tiptap/extension-text"
 import React, { useEffect, createContext, useRef, useState } from "react";
+import History from "@tiptap/extension-history"
 
 import { Link } from "@tiptap/extension-link";
 import { Color } from "@tiptap/extension-color";
@@ -42,7 +45,7 @@ const saveContentAsJSON = (editor: any) => {
 // JSON形式での読み込み
 const loadContentFromJSON = () => {
   const content = localStorage.getItem("editor-json-content");
-  return content ? JSON.parse(content) : null;
+  return content ? JSON.parse(content) : JSON.parse(exampleJSON);
 };
 
 export const RefContext = createContext(null);
@@ -57,14 +60,12 @@ export default function TipTap({ setData, data, setContent }: any) {
     if (typeof window !== "undefined") {
       return loadContentFromJSON();
     } else {
-      return content;
+      return JSON.parse(exampleJSON);
     }
   });
 
   const updateToc = () => {
     if (!editor || !editor.state) return;
-
-    console.log(editor?.getHTML());
 
     const newToc: any = [];
     const { doc } = editor.state;
@@ -84,9 +85,11 @@ export default function TipTap({ setData, data, setContent }: any) {
 
   const editor = useEditor({
     extensions: [
+      Document,
       Bold,
       Strike,
       Italic,
+      Text,
       Image.configure({
         inline: true,
         allowBase64: true,
@@ -98,6 +101,7 @@ export default function TipTap({ setData, data, setContent }: any) {
         className: "has-focus",
         mode: "all",
       }),
+      History,
       Characters,
       CharacterItem,
       CharacterName,
@@ -142,7 +146,7 @@ export default function TipTap({ setData, data, setContent }: any) {
 
       setCharacterList(getCharacterList(editor));
     },
-    content: content,
+    content: initialContent,
     onBlur: ({ editor }: any) => {
       setContent({
         content: editor.getHTML(),
@@ -155,7 +159,7 @@ export default function TipTap({ setData, data, setContent }: any) {
   }
 
   return (
-    <div>
+    <div className="overflow-x-hidden overflow-y-scroll">
       <div className="grid grid-cols-12 h-screen w-screen">
         <div className="overflow-y-auto col-span-2">
           {" "}
@@ -173,13 +177,13 @@ export default function TipTap({ setData, data, setContent }: any) {
           </div>
           <EditorContent editor={editor} className="w-full h-85vh" />
         </div>
-        <div className="col-span-2 flex flex-col h-full ">
-          <div className="flex-1 overflow-y-scroll">
+        <div className="col-span-2 h-full">
+          <div className=" overflow-y-scroll h-45vh">
             {" "}
             {/* TOCのセクション */}
             {editor && <TOC editor={editor} />}
           </div>
-          <div className="flex-1 overflow-y-scroll">
+          <div className=" overflow-y-scroll h-45vh">
             {" "}
             {/* 右側のサイドバーのセクション */}
             <Sidebar node={selectionNode} editor={editor} />
@@ -273,6 +277,927 @@ export default function TipTap({ setData, data, setContent }: any) {
   );
 }
 
-const content = `
-
-      `;
+const exampleJSON = `{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "操作方法"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            },
+            {
+              "type": "textStyle",
+              "attrs": {
+                "color": "#f30707"
+              }
+            }
+          ],
+          "text": "これはサンプルです。画面上部のゴミ箱のマークを押すと、全て削除することができます。"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            },
+            {
+              "type": "textStyle",
+              "attrs": {
+                "color": "#ec1515"
+              }
+            }
+          ],
+          "text": "注意"
+        },
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            },
+            {
+              "type": "textStyle",
+              "attrs": {
+                "color": "#0e0101"
+              }
+            }
+          ],
+          "text": " このエディタはベータ版 開発中です。"
+        },
+        {
+          "type": "hardBreak",
+          "marks": [
+            {
+              "type": "textStyle",
+              "attrs": {
+                "color": "#0e0101"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            },
+            {
+              "type": "textStyle",
+              "attrs": {
+                "color": "#0e0101"
+              }
+            }
+          ],
+          "text": "執筆のデータはローカルストレージを利用して保存しています。"
+        },
+        {
+          "type": "hardBreak",
+          "marks": [
+            {
+              "type": "textStyle",
+              "attrs": {
+                "color": "#0e0101"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            },
+            {
+              "type": "textStyle",
+              "attrs": {
+                "color": "#0e0101"
+              }
+            }
+          ],
+          "text": "ブラウザの設定により、一定期間で削除される場合や、文字数の制限が異なる場合があります。"
+        },
+        {
+          "type": "hardBreak",
+          "marks": [
+            {
+              "type": "textStyle",
+              "attrs": {
+                "color": "#0e0101"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            },
+            {
+              "type": "textStyle",
+              "attrs": {
+                "color": "#0e0101"
+              }
+            },
+            {
+              "type": "highlight",
+              "attrs": {
+                "color": "#ffff0d"
+              }
+            }
+          ],
+          "text": "個人情報や機密情報はセキュリティの関係上、書き込まないでください。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "データの保存方法"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "現在はJSONファイルを介しての保存をお願いしています。左側のJSONに出力をしてJSONファイルを作成。ファイル入力から、そのデータを読み込んでください。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "ブロックの説明"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "ブロックごとにレイアウトが異なります。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "標準ブロック"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "標準ブロックは、汎用的なブロックです。補足の説明などに用います。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            }
+          ],
+          "text": "タイトルブロック"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "タイトル"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "タイトルブロックは、主に冒頭のタイトルに用います。"
+        },
+        {
+          "type": "hardBreak"
+        },
+        {
+          "type": "text",
+          "text": "目次に反映されます。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            }
+          ],
+          "text": "シーンブロック"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "第一章"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "シーンブロックは、シーンの区切りに使います。"
+        },
+        {
+          "type": "hardBreak"
+        },
+        {
+          "type": "text",
+          "text": "目次に反映されます。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "bold"
+            }
+          ],
+          "text": "セリフブロック"
+        }
+      ]
+    },
+    {
+      "type": "serif",
+      "content": [
+        {
+          "type": "speaker",
+          "content": [
+            {
+              "type": "text",
+              "text": "男1"
+            }
+          ]
+        },
+        {
+          "type": "speechContent",
+          "content": [
+            {
+              "type": "text",
+              "text": "こんにちは。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "セリフブロックは、話者と発言内容がセットになっています。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "作者ブロック"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 4
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "作：森ふみ夫"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "作者ブロックは、作者名に用いられます。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "登場人物ブロック"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "登場人物ブロックは、登場人物の名前と詳細がセットになっています。ここで記述された登場人物名は、セリフブロックの話者名で選択できるようになります。"
+        }
+      ]
+    },
+    {
+      "type": "characters",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "textAlign": "left",
+            "level": 5
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "登場人物"
+            }
+          ]
+        },
+        {
+          "type": "characterItem",
+          "content": [
+            {
+              "type": "characterName",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "ユキオ"
+                }
+              ]
+            },
+            {
+              "type": "characterDetail",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "明るく前向きな高校教師"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "characterItem",
+          "content": [
+            {
+              "type": "characterName",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "タカシ"
+                }
+              ]
+            },
+            {
+              "type": "characterDetail",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "進路に悩む男子高校生"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "ト書きブロック"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "ト書きブロックは、ト書きの作成に用いられます。"
+        },
+        {
+          "type": "hardBreak"
+        },
+        {
+          "type": "text",
+          "text": "ト書きでは人物の行動や場面の様子を描写します。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "ユキオは、公園のベンチに腰をかける。"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "具体例"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 4
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "いちのみや"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "骨壷"
+        }
+      ]
+    },
+    {
+      "type": "characters",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "textAlign": "left",
+            "level": 5
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "登場人物"
+            }
+          ]
+        },
+        {
+          "type": "characterItem",
+          "content": [
+            {
+              "type": "characterName",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "妻"
+                }
+              ]
+            },
+            {
+              "type": "characterDetail",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "息子の死から時間が止まったかのように、受け入れることのできない日々を過ごしている。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "characterItem",
+          "content": [
+            {
+              "type": "characterName",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "夫"
+                }
+              ]
+            },
+            {
+              "type": "characterDetail",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "妻の悲しむ姿を見て、なんとかしたいと思いつつも、コミニュケーションに悩んでいる。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "第一幕"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "夏・和室。"
+        },
+        {
+          "type": "hardBreak"
+        },
+        {
+          "type": "text",
+          "text": "蝉の声。"
+        },
+        {
+          "type": "hardBreak"
+        },
+        {
+          "type": "text",
+          "text": "妻、机の上の容器を眺めている。"
+        },
+        {
+          "type": "hardBreak"
+        },
+        {
+          "type": "text",
+          "text": "夫、そこに通りがかり、"
+        }
+      ]
+    },
+    {
+      "type": "serif",
+      "content": [
+        {
+          "type": "speaker",
+          "content": [
+            {
+              "type": "text",
+              "text": "夫"
+            }
+          ]
+        },
+        {
+          "type": "speechContent",
+          "content": [
+            {
+              "type": "text",
+              "text": "なにしてん"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "serif",
+      "content": [
+        {
+          "type": "speaker",
+          "content": [
+            {
+              "type": "text",
+              "text": "妻"
+            }
+          ]
+        },
+        {
+          "type": "speechContent",
+          "content": [
+            {
+              "type": "text",
+              "text": "なんでもええやん"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "serif",
+      "content": [
+        {
+          "type": "speaker",
+          "content": [
+            {
+              "type": "text",
+              "text": "夫"
+            }
+          ]
+        },
+        {
+          "type": "speechContent",
+          "content": [
+            {
+              "type": "text",
+              "text": "もう忘れえや"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "serif",
+      "content": [
+        {
+          "type": "speaker",
+          "content": [
+            {
+              "type": "text",
+              "text": "妻"
+            }
+          ]
+        },
+        {
+          "type": "speechContent",
+          "content": [
+            {
+              "type": "text",
+              "text": "いやや"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "serif",
+      "content": [
+        {
+          "type": "speaker"
+        },
+        {
+          "type": "speechContent"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "お願い"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "このエディタは現在開発中です。"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "開発・維持費のためにご支援いただけますと幸いです。"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "https://ofuse.me/gikyokutosyokan",
+                "target": "_blank",
+                "rel": "noopener noreferrer nofollow",
+                "class": null
+              }
+            }
+          ],
+          "text": "支援・メッセージはこちらから"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "問い合わせ"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "https://twitter.com/gekidankatakago",
+                "target": "_blank",
+                "rel": "noopener noreferrer nofollow",
+                "class": null
+              }
+            }
+          ],
+          "text": "x/twitter"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "メール：gekidankatakago@gmail.com"
+        }
+      ]
+    }
+  ]
+}`;
