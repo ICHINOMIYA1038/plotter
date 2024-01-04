@@ -87,7 +87,6 @@ const CustomNodeComponent = ({ node, getPos, editor }: any) => {
     const currentNode = editor.state.doc.nodeAt(pos);
     const prevNode = editor.state.doc.childBefore(pos).node;
     const node = editor.state.doc.nodeAt(pos - prevNode.nodeSize);
-    //console.log(node)
     swapNodes(editor, pos - prevNode.nodeSize, pos)
   };
 

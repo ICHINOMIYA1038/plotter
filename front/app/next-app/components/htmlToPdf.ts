@@ -177,8 +177,6 @@ function splitPagesAndReconstruct(
     const nodeWidth = tempDiv.offsetWidth;
     document.body.removeChild(tempDiv);
 
-    console.log(currentWidth);
-
     // 現在のページの横幅を確認
     if (currentWidth + nodeWidth > pageWidth) {
       // ページ分割ポイントに到達
@@ -193,8 +191,6 @@ function splitPagesAndReconstruct(
 
   // スタイル要素を削除
   document.head.removeChild(style);
-
-  console.log(currentPageContent);
 
   // 分割されたページを含むHTMLを返す
   return currentPageContent;

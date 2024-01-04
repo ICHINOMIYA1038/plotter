@@ -133,7 +133,6 @@ export const Toolbar = ({ editor }: { editor: Editor }) => {
                         <SketchPicker
                             color={highlightColor}
                             onChangeComplete={(color) => {
-                                console.log(color.hex)
                                 setHighlightColor(color.hex);
                                 editor
                                     .chain()

@@ -37,10 +37,7 @@ import HowToSlideShow from "../HowToSlideShow";
 import { DraggableParagraph } from "../DraggableParagraph";
 import { DraggableHeading } from "../DraggableHeading";
 
-const saveContentAsJSON = (editor: any) => {
-  const content = editor.getJSON();
-  localStorage.setItem("editor-json-content", JSON.stringify(content));
-};
+export const RefContext = createContext(null);
 
 // JSON形式での読み込み
 const loadContentFromJSON = () => {
@@ -48,14 +45,13 @@ const loadContentFromJSON = () => {
   return content ? JSON.parse(content) : JSON.parse(exampleJSON);
 };
 
-export const RefContext = createContext(null);
-
 export default function TipTap({ setData, data, setContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
   const [toc, setToc] = useState([]);
   const parentDivRef = useRef(null);
   const [characterList, setCharacterList] = useState([]);
   const [speakerinput, setSpeakerInput] = useState("");
+  const [flashMessage, setFlashMessage] = useState('');
   const [initialContent, setInitialContent] = useState(() => {
     if (typeof window !== "undefined") {
       return loadContentFromJSON();
@@ -63,6 +59,25 @@ export default function TipTap({ setData, data, setContent }: any) {
       return JSON.parse(exampleJSON);
     }
   });
+
+  const saveContentAsJSON = (editor: any) => {
+    try {
+      const content = editor.getJSON();
+      localStorage.setItem("editor-json-content", JSON.stringify(content));
+      return { success: true };  // 成功した場合は success: true を返す
+    } catch (error) {
+      console.error("保存中にエラーが発生しました:", error);
+      setFlashMessage(error as string);  // エラーメッセージを設定
+      setTimeout(() => setFlashMessage(''), 3000);
+      return { success: false, error: error };  // エラーが発生した場合は success: false とエラー情報を返す
+    }
+  };
+
+  // エラーメッセージをセットする関数
+  const showError = (message: any) => {
+    setFlashMessage(message);
+    setTimeout(() => setFlashMessage(''), 3000); // 3秒後にメッセージを消去
+  };
 
   const updateToc = () => {
     if (!editor || !editor.state) return;
@@ -175,6 +190,12 @@ export default function TipTap({ setData, data, setContent }: any) {
             <Header />
             <Toolbar editor={editor} />
           </div>
+          {flashMessage && (
+            <div className="flash-message absolute top-0 left-0 right-0 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+              <strong className="font-bold">エラー!</strong>
+              <span className="block sm:inline pl-6">{flashMessage}</span>
+            </div>
+          )}
           <EditorContent editor={editor} className="w-full h-85vh" />
         </div>
         <div className="col-span-2 h-full">
@@ -195,84 +216,6 @@ export default function TipTap({ setData, data, setContent }: any) {
         characterList={characterList}
         speakerinput={speakerinput}
       />
-      {false && (
-        <FloatingMenu
-          editor={editor!}
-          tippyOptions={{
-            offset: [0, 50],
-          }}
-        >
-          <div className="flex flex-col">
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() =>
-                editor?.chain().focus().setParagraph().unsetAllMarks().run()
-              }
-            >
-              標準
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() =>
-                editor?.chain().focus().toggleHeading({ level: 1 }).run()
-              }
-            >
-              タイトル
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() =>
-                editor?.chain().focus().toggleHeading({ level: 2 }).run()
-              }
-            >
-              シーン
-            </button>
-            <button className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg">
-              セリフ
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() =>
-                editor?.chain().focus().toggleHeading({ level: 3 }).run()
-              }
-            >
-              ト書き
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() =>
-                editor?.chain().focus().toggleHeading({ level: 4 }).run()
-              }
-            >
-              作者
-            </button>
-            <button
-              className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-              onClick={() => {
-                // エディタの現在の選択を取得
-                const { from } = editor?.state.selection!;
-
-                // カーソル位置を行の始まりに移動
-                editor
-                  ?.chain()
-                  .focus()
-                  .setTextSelection(from - 1)
-                  .run();
-
-                // '登場人物'と3つのリストアイテムを挿入
-                editor
-                  ?.chain()
-                  .insertContent(
-                    "<h5>登場人物</h5><ul><li>名前1</li><li>名前2</li><li>名前3</li></ul>"
-                  )
-                  .run();
-              }}
-            >
-              登場人物
-            </button>
-          </div>
-        </FloatingMenu>
-      )}
     </div>
   );
 }

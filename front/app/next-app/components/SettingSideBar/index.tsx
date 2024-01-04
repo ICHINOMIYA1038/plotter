@@ -47,6 +47,15 @@ export const SettingSidebar = ({ editor }: any) => {
   };
 
   const handleFileChange = (file: any) => {
+    const maxFileSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxFileSize) {
+      alert('ファイルサイズは5MB以下である必要があります。');
+      return;
+    }
+    if (file.type !== "application/json") {
+      alert('JSONファイル以外は対応していません。');
+      return;
+    }
     if (file && file.type === "application/json") {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -85,8 +94,6 @@ export const SettingSidebar = ({ editor }: any) => {
       setJsonContent(null);
     };
 
-    console.log(fileName);
-
     return (
       <div>
         <button
@@ -114,9 +121,8 @@ export const SettingSidebar = ({ editor }: any) => {
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               htmlFor="file-upload"
-              className={`${
-                isDragOver ? "border-blue-600" : "border-gray-300"
-              } flex flex-col items-center justify-center w-full h-32 bg-white rounded-lg border-2  border-dashed cursor-pointer hover:bg-gray-50`}
+              className={`${isDragOver ? "border-blue-600" : "border-gray-300"
+                } flex flex-col items-center justify-center w-full h-32 bg-white rounded-lg border-2  border-dashed cursor-pointer hover:bg-gray-50`}
             >
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <i className="fas fa-cloud-upload-alt fa-3x text-gray-300"></i>
