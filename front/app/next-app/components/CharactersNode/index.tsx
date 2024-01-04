@@ -23,7 +23,7 @@ export const Characters = Node.create({
 export const CharacterItem = Node.create({
     name: 'characterItem',
 
-    group: "block",
+    group: "characterItemGroup", // このグループは `Characters` ノード内でのみ有効
 
     content: 'characterName characterDetail',
 
@@ -43,7 +43,7 @@ export const CharacterItem = Node.create({
 export const CharacterName = Node.create({
     name: 'characterName',
 
-    group: "block",
+    group: "characterItemContent", // 'CharacterItem' ノード内でのみ有効
 
     content: 'inline*',
 
@@ -63,7 +63,7 @@ export const CharacterName = Node.create({
 export const CharacterDetail = Node.create({
     name: 'characterDetail',
 
-    group: "block",
+    group: "characterItemContent", // 'CharacterItem' ノード内でのみ有効
 
     content: 'inline*',
 

@@ -30,6 +30,7 @@ import { scrollToLeftEndOfChild } from "../CustomScroll";
 import { Header } from "../Header";
 import HowToSlideShow from "../HowToSlideShow";
 import { DraggableParagraph } from "../DraggableParagraph";
+import { DraggableHeading } from "../DraggableHeading";
 
 const saveContentAsJSON = (editor: any) => {
   const content = editor.getJSON();
@@ -105,6 +106,7 @@ export default function TipTap({ setData, data, setContent }: any) {
       CharacterName,
       CharacterDetail,
       DraggableParagraph,
+      DraggableHeading,
       TextStyle,
       Color,
       Serif,

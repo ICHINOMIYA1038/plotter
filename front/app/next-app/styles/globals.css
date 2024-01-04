@@ -258,7 +258,12 @@ li>p.has-focus {
 
 .serif div {
   display: flex;
+  user-select: none;
 }
+
+/* .serif {
+  display: flex;
+} */
 
 .speechContent {
   height: 85%;

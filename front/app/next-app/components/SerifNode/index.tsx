@@ -33,7 +33,8 @@ export const Speaker = Node.create({
 
   content: "inline*",
 
-  group: "block",
+  group: "serifPart",
+
 
   parseHTML() {
     return [
@@ -53,7 +54,7 @@ export const SpeechContent = Node.create({
 
   content: "inline*",
 
-  group: "block",
+  group: "serifPart",
 
   parseHTML() {
     return [
