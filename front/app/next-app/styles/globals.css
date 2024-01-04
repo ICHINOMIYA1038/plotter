@@ -175,6 +175,19 @@ body {
   @apply bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300;
 }
 
+/* 基本的なボタンスタイル */
+.btn-red {
+  @apply bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300;
+}
+
+.bubble-menu-btn {
+  @apply px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold text-left align-middle text-xs border border-gray-400 shadow-sm transition duration-300 ease-in-out transform hover:scale-105
+}
+
+.bubble-menu-btn-delete {
+  @apply px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold text-left align-middle text-xs border-2 border-red-600 shadow-sm transition duration-300 ease-in-out transform hover:scale-105
+}
+
 /* アクティブなボタンのスタイル */
 .btn-active {
   @apply bg-blue-700;
@@ -265,8 +278,8 @@ li>p.has-focus {
 } */
 
 .speechContent {
-  height: 85%;
-  padding-top: 5%;
+  height: 80%;
+  padding-top: 3%;
 }
 
 .serif.has-focus {
@@ -288,8 +301,8 @@ li>p.has-focus {
 }
 
 .speaker {
-  height: 15%;
-  padding-top: 5%;
+  height: 20%;
+  padding-top: 2%;
 }
 
 .characterItem {

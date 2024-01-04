@@ -2,7 +2,7 @@ import { Editor } from "@tiptap/react";
 import { useState } from "react";
 import { SketchPicker } from "react-color";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBold, faStrikethrough, faLink, faUndo, faRedo, faPalette, faTimes, faHighlighter, faFont } from "@fortawesome/free-solid-svg-icons";
+import { faBold, faStrikethrough, faLink, faUndo, faRedo, faPalette, faTimes, faHighlighter, faFont, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export const Toolbar = ({ editor }: { editor: Editor }) => {
     const [showTextColorPicker, setShowTextColorPicker] = useState(false);
@@ -18,6 +18,12 @@ export const Toolbar = ({ editor }: { editor: Editor }) => {
     const toggleHighlightColorPicker = () => {
         setShowHighlightColorPicker(!showHighlightColorPicker);
         if (showTextColorPicker) setShowTextColorPicker(false);
+    };
+
+    const clearAllContent = () => {
+        if (window.confirm("本当に全ての内容を削除しますか？")) {
+            editor.commands.clearContent();
+        }
     };
 
 
@@ -75,6 +81,15 @@ export const Toolbar = ({ editor }: { editor: Editor }) => {
                 >
                     <FontAwesomeIcon icon={faRedo} />
                 </button>
+
+
+                <button
+                    onClick={clearAllContent}
+                    className="btn-red"
+                >
+                    <FontAwesomeIcon icon={faTrash} /> {/* You can choose an appropriate icon */}
+                </button>
+
 
                 {/* Text Color Picker Trigger Button */}
                 <button

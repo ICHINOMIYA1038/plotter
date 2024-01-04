@@ -10,7 +10,8 @@ import { findNodePosition } from '../FindNodePosition';
 export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinput }: any) => {
 
     const [menu, setMenu] = useState("main"); // 'main', 'decoration', 'heading', 'pageBreak'
-    const [serifContentMenu, setSerifContentMenu] = useState("main"); // 'main', 'decoration', 'heading', 'pageBreak'
+    const [serifContentMenu, setSerifContentMenu] = useState("main");
+    const [speakerManu, setSpeakerMenu] = useState("main")
     const isTextSelected = () => {
         // テキストが選択されているかチェック
         return !editor.state.selection.empty;
@@ -134,28 +135,93 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
             };
 
 
-            return (<><div className='flex flex-col'>
-                {isSpeakerNodeSelected() && filteredCharacterList.map((character: any, index: any) => (
-                    <>
-                        {
-                            (character.name != "") &&
-                            <button key={index}
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                                onClick={() => updateSpeakerNode(character.name)}>
-                                {character.name}
-                            </button>
+            return (
+                <>
+                    < div className='flex flex-col'>
+                        {speakerManu == "main" && (
+                            <>
+                                {isSpeakerNodeSelected() && filteredCharacterList.map((character: any, index: any) => (
+                                    <>
+                                        {
+                                            (character.name != "") &&
+                                            <button key={index}
+                                                className="bubble-menu-btn"
+                                                onClick={() => updateSpeakerNode(character.name)}>
+                                                {character.name}
+                                            </button>
+                                        }
+                                    </>
+                                ))}
+                                <button
+                                    className="bubble-menu-btn"
+                                    onClick={() => { editor.chain().focus(); setSpeakerMenu("block") }}
+                                >
+                                    ブロック
+                                </button>
+                                <button
+                                    className="bubble-menu-btn"
+                                    onClick={() => {
+                                        editor.chain().focus().deleteNode("serif").run()
+                                    }}
+                                >
+                                    ブロック削除
+                                </button >
+                            </>
+                        )
                         }
-                    </>
-                ))}
-                <button
-                    className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
-                    onClick={() => {
-                        editor.chain().focus().deleteNode("serif").run()
-                    }}
-                >
-                    ブロック削除
-                </button >
-            </div ></>)
+                        {speakerManu == "block" &&
+                            <>
+                                <button
+                                    className="bubble-menu-btn"
+                                    onClick={() =>
+                                        changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "paragraph", editor.state.selection.$head.node(1))
+                                    }
+                                >
+                                    標準
+                                </button>
+                                <button
+                                    className="bubble-menu-btn"
+                                    onClick={() =>
+                                        changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "heading", editor.state.selection.$head.node(1), 1)
+                                    }
+                                >
+                                    タイトル
+                                </button>
+                                <button
+                                    className="bubble-menu-btn"
+                                    onClick={() =>
+                                        changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "heading", editor.state.selection.$head.node(1), 2)
+                                    }
+                                >
+                                    シーン
+                                </button>
+                                <button
+                                    className="bubble-menu-btn"
+                                    onClick={() =>
+                                        changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "heading", editor.state.selection.$head.node(1), 3)
+                                    }
+                                >
+                                    ト書き
+                                </button>
+                                <button
+                                    className="bubble-menu-btn"
+                                    onClick={() =>
+                                        changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "heading", editor.state.selection.$head.node(1), 4)
+                                    }
+                                >
+                                    作者
+                                </button>
+                                <button
+                                    className="bubble-menu-btn"
+                                    onClick={() => { editor.chain().focus(); setSpeakerMenu("main") }}
+                                >
+                                    戻る
+                                </button>
+                            </>
+
+                        }
+                    </div >
+                </>)
         }
 
         if (isSpaeachContentSelected()) {
@@ -164,13 +230,13 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                 {serifContentMenu === "main" &&
                     <>
                         <button
-                            className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                            className="bubble-menu-btn"
                             onClick={() => { editor.chain().focus(); setSerifContentMenu("block") }}
                         >
                             ブロック
                         </button>
                         <button
-                            className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-red-500 shadow-lg"
+                            className="bubble-menu-btn-delete"
                             onClick={() => {
                                 editor.chain().focus().deleteNode("serif").run()
 
@@ -184,7 +250,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                 {serifContentMenu === "block" &&
                     <>
                         <button
-                            className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                            className="bubble-menu-btn"
                             onClick={() =>
                                 changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "paragraph", editor.state.selection.$head.node(1))
                             }
@@ -192,7 +258,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                             標準
                         </button>
                         <button
-                            className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                            className="bubble-menu-btn"
                             onClick={() =>
                                 changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "heading", editor.state.selection.$head.node(1), 1)
                             }
@@ -200,7 +266,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                             タイトル
                         </button>
                         <button
-                            className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                            className="bubble-menu-btn"
                             onClick={() =>
                                 changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "heading", editor.state.selection.$head.node(1), 2)
                             }
@@ -208,7 +274,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                             シーン
                         </button>
                         <button
-                            className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                            className="bubble-menu-btn"
                             onClick={() =>
                                 changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "heading", editor.state.selection.$head.node(1), 3)
                             }
@@ -216,7 +282,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                             ト書き
                         </button>
                         <button
-                            className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                            className="bubble-menu-btn"
                             onClick={() =>
                                 changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$head.node(1)), "heading", editor.state.selection.$head.node(1), 4)
                             }
@@ -224,7 +290,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                             作者
                         </button>
                         <button
-                            className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                            className="bubble-menu-btn"
                             onClick={() => { editor.chain().focus(); setSerifContentMenu("main") }}
                         >
                             戻る
@@ -237,7 +303,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
         if (isCharactersNodeSelected()) {
             return (
                 <div className="flex flex-col">
-                    <button className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                    <button className="bubble-menu-btn"
                         onClick={() =>
                             editor.chain().focus().insertContentAt(editor.state.selection.$head.end(2), {
                                 type: "characterItem",
@@ -255,7 +321,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                         人物を追加
                     </button >
                     <button
-                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        className="bubble-menu-btn"
                         onClick={() => {
                             editor.chain().focus().deleteNode("characterItem").run()
                         }}
@@ -263,7 +329,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                         人物を削除
                     </button >
                     <button
-                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        className="bubble-menu-btn-delete"
                         onClick={() => {
                             editor.chain().focus().deleteNode("characters").run()
                         }}
@@ -277,7 +343,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
             return (
                 <div className="flex flex-col overflow-y-auto" style={{ maxHeight: '250px' }}>
                     <button
-                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        className="bubble-menu-btn"
                         onClick={() =>
                             editor.chain().focus().setParagraph().unsetAllMarks().run()
                         }
@@ -285,7 +351,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                         標準
                     </button>
                     <button
-                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        className="bubble-menu-btn"
                         onClick={() =>
                             editor.chain().focus().toggleHeading({ level: 1 }).run()
                         }
@@ -293,7 +359,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                         タイトル
                     </button>
                     <button
-                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        className="bubble-menu-btn"
                         onClick={() =>
                             editor.chain().focus().toggleHeading({ level: 2 }).run()
                         }
@@ -301,13 +367,13 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                         シーン
                     </button>
                     <button
-                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        className="bubble-menu-btn"
                         onClick={() => { changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$from.node(1)), "serif", editor.state.selection.$from.node(1)) }}
                     >
                         セリフ
                     </button>
                     <button
-                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        className="bubble-menu-btn"
                         onClick={() =>
                             editor.chain().focus().toggleHeading({ level: 3 }).run()
                         }
@@ -315,7 +381,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                         ト書き
                     </button>
                     <button
-                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        className="bubble-menu-btn"
                         onClick={() =>
                             editor.chain().focus().toggleHeading({ level: 4 }).run()
                         }
@@ -323,7 +389,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                         作者
                     </button>
                     <button
-                        className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                        className="bubble-menu-btn"
                         onClick={() => { insertCharactersNode(editor) }}>
                         登場人物
                     </button>
@@ -337,19 +403,19 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                     {menu === "main" && (
                         <div className="flex flex-col">
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() => { editor.chain().focus(); setMenu("decoration") }}
                             >
                                 装飾
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() => { editor.chain().focus(); setMenu("heading") }}
                             >
                                 ブロック
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-red-500 shadow-lg"
+                                className="bubble-menu-btn-delete"
                                 onClick={() => {
                                     editor.chain().focus().deleteNode("paragraph").run()
 
@@ -364,31 +430,32 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                     {menu === "decoration" && (
                         <div className="flex flex-col">
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
+
                                 onClick={() => editor.chain().focus().toggleBold().run()}
                             >
                                 太字
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() => editor.chain().focus().toggleItalic().run()}
                             >
                                 斜体
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() => editor.chain().focus().toggleUnderline().run()}
                             >
                                 下線
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() => editor.chain().focus().toggleStrike().run()}
                             >
                                 打ち消し線
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() => { editor.chain().focus(); setMenu("main") }}
                             >
                                 戻る
@@ -400,7 +467,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                     {menu === "heading" && (
                         <div className="flex flex-col">
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() =>
                                     editor.chain().focus().setParagraph().unsetAllMarks().run()
                                 }
@@ -408,7 +475,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                                 標準
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() =>
                                     editor.chain().focus().toggleHeading({ level: 1 }).run()
                                 }
@@ -416,7 +483,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                                 タイトル
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() =>
                                     editor.chain().focus().toggleHeading({ level: 2 }).run()
                                 }
@@ -424,13 +491,13 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                                 シーン
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() => { changeNodeType(editor, findNodePosition(editor.state.doc, editor.state.selection.$from.node(1)), "serif", editor.state.selection.$from.node(1)) }}
                             >
                                 セリフ
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() =>
                                     editor.chain().focus().toggleHeading({ level: 3 }).run()
                                 }
@@ -438,7 +505,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                                 ト書き
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() =>
                                     editor.chain().focus().toggleHeading({ level: 4 }).run()
                                 }
@@ -446,12 +513,12 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                                 作者
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() => { insertCharactersNode(editor) }}>
                                 登場人物
                             </button>
                             <button
-                                className="px-4 py-2 bg-gray-300 text-black font-semibold text-left align-middle text-base border-4 border-gray-500 shadow-lg"
+                                className="bubble-menu-btn"
                                 onClick={() => { editor.chain().focus(); setMenu("main") }}
                             >
                                 戻る
