@@ -23,6 +23,7 @@ export const Toolbar = ({ editor }: { editor: Editor }) => {
     const clearAllContent = () => {
         if (window.confirm("本当に全ての内容を削除しますか？")) {
             editor.commands.clearContent();
+            localStorage.setItem("editor-json-content", "");
         }
     };
 
