@@ -19,7 +19,8 @@ const EditorToJSON = (editor: Editor) => {
   // Blob をダウンロード可能なファイルとして提供
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "editor-content.json";
+  const savedName = localStorage.getItem("projectName");
+  link.download = `${savedName}.json`;
   document.body.appendChild(link); // リンクを DOM に追加
   link.click(); // リンクを自動クリック
   document.body.removeChild(link); // リンクを DOM から削除
@@ -107,7 +108,9 @@ export const EditorToTextFile = (editor: Editor) => {
 
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "script-content.txt";
+
+  const savedName = localStorage.getItem("projectName");
+  link.download = `${savedName}.txt`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

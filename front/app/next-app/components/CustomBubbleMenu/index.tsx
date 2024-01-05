@@ -159,7 +159,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                                     ブロック
                                 </button>
                                 <button
-                                    className="bubble-menu-btn"
+                                    className="bubble-menu-btn-delete"
                                     onClick={() => {
                                         editor.chain().focus().deleteNode("serif").run()
                                     }}

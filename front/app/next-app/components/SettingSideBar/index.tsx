@@ -128,7 +128,7 @@ export const SettingSidebar = ({ editor }: any) => {
                 <i className="fas fa-cloud-upload-alt fa-3x text-gray-300"></i>
                 <p className="mb-2 text-sm text-gray-500">
                   <span className="font-semibold">
-                    クリックしてアップロード
+                    クリックまたはドロップしてアップロード
                   </span>
                 </p>
                 <p className="text-xs text-gray-500">現在、JSONファイルのみ</p>
