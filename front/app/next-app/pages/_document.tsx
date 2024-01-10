@@ -1,16 +1,18 @@
-import { Html, Head, Main, NextScript } from 'next/document'
-import { Analytics } from '@vercel/analytics/react';
-
+import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="ja">
       <Head />
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8691137965825158"
+        crossOrigin="anonymous"
+      ></script>
       <body>
-        <Analytics />
         <Main />
         <NextScript />
       </body>
     </Html>
-  )
+  );
 }
