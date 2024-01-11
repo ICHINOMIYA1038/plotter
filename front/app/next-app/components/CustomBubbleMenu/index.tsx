@@ -418,6 +418,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                                 className="bubble-menu-btn-delete"
                                 onClick={() => {
                                     editor.chain().focus().deleteNode("paragraph").run()
+                                    editor.chain().focus().deleteNode("heading").run()
 
                                 }}
                             >
