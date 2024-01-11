@@ -180,7 +180,6 @@ export default function TipTap({ setData, data, setContent }: any) {
           {" "}
           {/* 新しいSettingSidebar */}
           <SettingSidebar editor={editor} />
-          <HowToSlideShow />
         </div>
         <div
           className="col-span-8 p-4 min-w-full max-w-full h-full mx-auto overflow-auto"
@@ -255,45 +254,7 @@ const exampleJSON = `{
               }
             }
           ],
-          "text": "これはサンプルです。画面上部のゴミ箱のマークを押すと、全て削除することができます。"
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "attrs": {
-        "textAlign": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "bold"
-            },
-            {
-              "type": "textStyle",
-              "attrs": {
-                "color": "#ec1515"
-              }
-            }
-          ],
-          "text": "注意"
-        },
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "bold"
-            },
-            {
-              "type": "textStyle",
-              "attrs": {
-                "color": "#0e0101"
-              }
-            }
-          ],
-          "text": " このエディタはベータ版 開発中です。"
+          "text": "画面上部のゴミ箱のマークを押すと、全て削除することができます。"
         },
         {
           "type": "hardBreak",
@@ -346,38 +307,6 @@ const exampleJSON = `{
             }
           ],
           "text": "ブラウザの設定により、一定期間で削除される場合や、文字数の制限が異なる場合があります。"
-        },
-        {
-          "type": "hardBreak",
-          "marks": [
-            {
-              "type": "textStyle",
-              "attrs": {
-                "color": "#0e0101"
-              }
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "bold"
-            },
-            {
-              "type": "textStyle",
-              "attrs": {
-                "color": "#0e0101"
-              }
-            },
-            {
-              "type": "highlight",
-              "attrs": {
-                "color": "#ffff0d"
-              }
-            }
-          ],
-          "text": "個人情報や機密情報はセキュリティの関係上、書き込まないでください。"
         }
       ]
     },
@@ -402,7 +331,7 @@ const exampleJSON = `{
       "content": [
         {
           "type": "text",
-          "text": "現在はJSONファイルを介しての保存をお願いしています。左側のJSONに出力をしてJSONファイルを作成。ファイル入力から、そのデータを読み込んでください。"
+          "text": "現在はJSONファイルを介しての保存をします。左側のJSONに出力をしてJSONファイルを作成。ファイル入力から、そのデータを読み込んでください。"
         }
       ]
     },
@@ -631,7 +560,7 @@ const exampleJSON = `{
       "content": [
         {
           "type": "text",
-          "text": "作：森ふみ夫"
+          "text": "作：山田"
         }
       ]
     },
@@ -798,19 +727,6 @@ const exampleJSON = `{
       "type": "heading",
       "attrs": {
         "textAlign": "left",
-        "level": 4
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "いちのみや"
-        }
-      ]
-    },
-    {
-      "type": "heading",
-      "attrs": {
-        "textAlign": "left",
         "level": 1
       },
       "content": [
@@ -819,6 +735,26 @@ const exampleJSON = `{
           "text": "骨壷"
         }
       ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 4
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "作：山田"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "textAlign": "left",
+        "level": 4
+      }
     },
     {
       "type": "characters",
@@ -1024,17 +960,6 @@ const exampleJSON = `{
       ]
     },
     {
-      "type": "serif",
-      "content": [
-        {
-          "type": "speaker"
-        },
-        {
-          "type": "speechContent"
-        }
-      ]
-    },
-    {
       "type": "heading",
       "attrs": {
         "textAlign": "left",
@@ -1044,89 +969,6 @@ const exampleJSON = `{
         {
           "type": "text",
           "text": "お願い"
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "attrs": {
-        "textAlign": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "このエディタは現在開発中です。"
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "attrs": {
-        "textAlign": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "開発・維持費のためにご支援いただけますと幸いです。"
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "attrs": {
-        "textAlign": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "https://ofuse.me/gikyokutosyokan",
-                "target": "_blank",
-                "rel": "noopener noreferrer nofollow",
-                "class": null
-              }
-            }
-          ],
-          "text": "支援・メッセージはこちらから"
-        }
-      ]
-    },
-    {
-      "type": "heading",
-      "attrs": {
-        "textAlign": "left",
-        "level": 1
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "問い合わせ"
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "attrs": {
-        "textAlign": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "https://twitter.com/gekidankatakago",
-                "target": "_blank",
-                "rel": "noopener noreferrer nofollow",
-                "class": null
-              }
-            }
-          ],
-          "text": "x/twitter"
         }
       ]
     },

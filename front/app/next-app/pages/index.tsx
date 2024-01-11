@@ -8,7 +8,6 @@ export default function Home() {
   const [isScreenLarge, setIsScreenLarge] = useState(false);
 
   useEffect(() => {
-    // クライアントサイドでのみ実行されるため、ここでwindowオブジェクトを安全に使用できる
     const checkScreenSize = () => {
       setIsScreenLarge(window.innerWidth > 800);
     };
