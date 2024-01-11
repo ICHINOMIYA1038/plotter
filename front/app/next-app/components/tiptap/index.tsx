@@ -958,6 +958,6 @@ const exampleJSON = `{
           ]
         }
       ]
-    },
+    }
   ]
 }`;
