@@ -959,30 +959,5 @@ const exampleJSON = `{
         }
       ]
     },
-    {
-      "type": "heading",
-      "attrs": {
-        "textAlign": "left",
-        "level": 1
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "お願い"
-        }
-      ]
-    },
-    {
-      "type": "paragraph",
-      "attrs": {
-        "textAlign": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "メール：gekidankatakago@gmail.com"
-        }
-      ]
-    }
   ]
 }`;
