@@ -109,7 +109,7 @@ export const EditorToTextFile = (editor: Editor) => {
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
 
-  const savedName = localStorage.getItem("projectName");
+  const savedName = localStorage.getItem("projectName") || "無題のプロジェクト";
   link.download = `${savedName}.txt`;
   document.body.appendChild(link);
   link.click();
