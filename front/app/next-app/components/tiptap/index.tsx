@@ -798,12 +798,12 @@ const exampleJSON = `{
       "type": "heading",
       "attrs": {
         "textAlign": "left",
-        "level": 4
+        "level": 1
       },
       "content": [
         {
           "type": "text",
-          "text": "いちのみや"
+          "text": "骨壷"
         }
       ]
     },
@@ -811,12 +811,12 @@ const exampleJSON = `{
       "type": "heading",
       "attrs": {
         "textAlign": "left",
-        "level": 1
+        "level": 4
       },
       "content": [
         {
           "type": "text",
-          "text": "骨壷"
+          "text": "森ふみ"
         }
       ]
     },
