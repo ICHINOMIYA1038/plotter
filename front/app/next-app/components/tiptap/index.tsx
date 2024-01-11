@@ -176,18 +176,19 @@ export default function TipTap({ setData, data, setContent }: any) {
   return (
     <div className="overflow-x-hidden overflow-y-scroll">
       <div className="grid grid-cols-12 h-screen w-screen">
-        <div className="overflow-y-auto col-span-2">
-          {" "}
+        <div className="overflow-y-auto col-span-2 hidden md:block">
           {/* 新しいSettingSidebar */}
           <SettingSidebar editor={editor} />
         </div>
         <div
-          className="col-span-8 p-4 min-w-full max-w-full h-full mx-auto overflow-auto"
+          className="col-span-12 md:col-span-8 p-4 min-w-full max-w-full h-full mx-auto overflow-auto"
           ref={parentDivRef}
         >
-          <div className="h-15vh xl:flex">
+          <div className="h-5vh xl:flex">
             <Header />
-            <Toolbar editor={editor} />
+            <div className="hidden md:block">
+              <Toolbar editor={editor} />
+            </div>
           </div>
           {flashMessage && (
             <div className="flash-message absolute top-0 left-0 right-0 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -197,14 +198,12 @@ export default function TipTap({ setData, data, setContent }: any) {
           )}
           <EditorContent editor={editor} className="w-full h-85vh" />
         </div>
-        <div className="col-span-2 h-full">
-          <div className=" overflow-y-scroll h-45vh">
-            {" "}
+        <div className="col-span-2 h-full hidden md:block">
+          <div className="overflow-y-scroll h-45vh">
             {/* TOCのセクション */}
             {editor && <TOC editor={editor} />}
           </div>
-          <div className=" overflow-y-scroll h-45vh">
-            {" "}
+          <div className="overflow-y-scroll h-45vh">
             {/* 右側のサイドバーのセクション */}
             <Sidebar node={selectionNode} editor={editor} />
           </div>

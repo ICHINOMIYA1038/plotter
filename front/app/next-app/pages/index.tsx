@@ -5,32 +5,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [content, setContent] = useState("");
   const [data, setData] = useState("");
-  const [isScreenLarge, setIsScreenLarge] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsScreenLarge(window.innerWidth > 800);
-    };
-
-    checkScreenSize();
-
-    const handleResize = () => {
-      checkScreenSize();
-    };
-
-    const handleWheel = (e: any) => {
-      if (e.deltaY === 0) return;
-      window.scrollBy({ left: e.deltaY, behavior: "smooth" });
-    };
-
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("wheel", handleWheel);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("wheel", handleWheel);
-    };
-  }, []);
+  const [isScreenLarge, setIsScreenLarge] = useState(true);
 
   return (
     <>
