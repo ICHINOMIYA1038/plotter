@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [content, setContent] = useState("");
-  const [data, setData] = useState("");
   const [isScreenLarge, setIsScreenLarge] = useState(false);
 
   useEffect(() => {
