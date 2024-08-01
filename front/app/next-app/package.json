@@ -13,6 +13,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@kuma-ui/core": "^1.5.5",
+    "@supabase/ssr": "^0.4.0",
+    "@supabase/supabase-js": "^2.45.0",
     "@tippyjs/react": "^4.2.6",
     "@tiptap/extension-bullet-list": "^2.1.13",
     "@tiptap/extension-color": "^2.1.13",

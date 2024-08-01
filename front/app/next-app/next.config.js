@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverActions: true,
+  },
   reactStrictMode: true,
   swcMinify: true,
   // 本番環境の場合のみ assetPrefix を設定

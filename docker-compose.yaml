@@ -9,4 +9,4 @@ services:
       - ./front/app:/usr/src/app
     command: sh -c 'npm install && yarn dev'
     ports:
-      - "8002:3000"
+      - "3000:3000"
