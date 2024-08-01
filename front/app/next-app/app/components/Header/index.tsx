@@ -6,7 +6,7 @@ export const Header = () => {
       <div className="text-2xl font-bold">戯曲エディタ β版</div>
       <div className="ml-4 text-xs">
         このアプリは開発中です。
-        <Link className="text-blue-600 cursor-pointer" href={"/Terms"}>
+        <Link className="text-blue-600 cursor-pointer" href={"/editor/terms"}>
           免責事項
         </Link>
         をご確認ください。
