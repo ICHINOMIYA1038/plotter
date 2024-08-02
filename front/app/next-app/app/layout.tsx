@@ -1,8 +1,6 @@
 // app/layout.tsx
 
 import "@/styles/globals.css";
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import * as gtag from "@/lib/gtag";
