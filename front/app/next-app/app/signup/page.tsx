@@ -1,20 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { login } from '../../utils/supabase/actions'
+import { signup } from '../../utils/supabase/actions'
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
 
     try {
-      await login(formData);
-      setNotification({ type: 'success', message: 'Login successful!' });
+      await signup(formData);
+      setNotification({ type: 'success', message: 'Signup successful!' });
     } catch (error) {
-      setNotification({ type: 'error', message: 'Login failed!' });
+      setNotification({ type: 'error', message: 'Signup failed!' });
     }
   };
 
@@ -29,8 +29,8 @@ export default function LoginPage() {
           {notification.message}
         </div>
       )}
-      <form onSubmit={handleLogin} className="bg-white p-6 rounded shadow-md">
-        <h2 className="text-2xl mb-4">Login</h2>
+      <form onSubmit={handleSignup} className="bg-white p-6 rounded shadow-md">
+        <h2 className="text-2xl mb-4">Sign Up</h2>
         <label htmlFor="email" className="block mb-2">
           Email:
         </label>
@@ -52,7 +52,7 @@ export default function LoginPage() {
           className="w-full p-2 mb-4 border border-gray-300 rounded"
         />
         <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">
-          Log in
+          Sign up
         </button>
       </form>
     </div>
