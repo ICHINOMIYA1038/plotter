@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { login } from '../../utils/supabase/actions'
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -30,9 +31,9 @@ export default function LoginPage() {
         </div>
       )}
       <form onSubmit={handleLogin} className="bg-white p-6 rounded shadow-md">
-        <h2 className="text-2xl mb-4">Login</h2>
+        <h2 className="text-2xl mb-4">ログイン</h2>
         <label htmlFor="email" className="block mb-2">
-          Email:
+          メールアドレス:
         </label>
         <input
           id="email"
@@ -42,7 +43,7 @@ export default function LoginPage() {
           className="w-full p-2 mb-4 border border-gray-300 rounded"
         />
         <label htmlFor="password" className="block mb-2">
-          Password:
+          パスワード:
         </label>
         <input
           id="password"
@@ -52,9 +53,14 @@ export default function LoginPage() {
           className="w-full p-2 mb-4 border border-gray-300 rounded"
         />
         <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">
-          Log in
+          ログイン
         </button>
       </form>
+      <div className="mt-4">
+        <Link href="/signup" className="text-blue-500 hover:underline">
+         新規登録はこちら
+        </Link>
+      </div>
     </div>
   );
 }

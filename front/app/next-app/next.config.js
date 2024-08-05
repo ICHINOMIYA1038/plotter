@@ -8,7 +8,7 @@ const nextConfig = {
   // 本番環境の場合のみ assetPrefix を設定
   webpack: (config, context) => {
     config.watchOptions = {
-      poll: 5000,
+      poll: 2000,
       aggregateTimeout: 300,
     };
     return config;
