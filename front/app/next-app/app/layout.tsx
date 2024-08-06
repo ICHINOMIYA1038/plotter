@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import * as gtag from "@/lib/gtag";
 import { Metadata } from "next";
+import { Header } from "./components/Header";
 
 export const metadata: Metadata = {
   title: "戯曲エディタ",
@@ -18,10 +19,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }:any) {      
+export default function RootLayout({ children }: any) {
   return (
     <html lang="ja">
-      <body>
+      <head>
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8691137965825158"
@@ -44,6 +45,9 @@ export default function RootLayout({ children }:any) {
              `,
           }}
         />
+      </head>
+      <body>
+        <Header />
         {children}
         <Analytics />
       </body>

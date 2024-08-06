@@ -32,7 +32,6 @@ import {
   CharacterName,
   Characters,
 } from "../CharactersNode";
-import { Header } from "../Header";
 import HowToSlideShow from "../HowToSlideShow";
 import { DraggableParagraph } from "../DraggableParagraph";
 import { DraggableHeading } from "../DraggableHeading";
@@ -187,7 +186,6 @@ export default function TipTap({ setData, data, setContent }: any) {
           ref={parentDivRef}
         >
           <div className="h-15vh xl:flex">
-            <Header />
             <Toolbar editor={editor} />
           </div>
           {flashMessage && (
