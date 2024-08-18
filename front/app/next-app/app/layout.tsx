@@ -6,6 +6,13 @@ import Script from "next/script";
 import * as gtag from "@/lib/gtag";
 import { Metadata } from "next";
 import { Header } from "./components/Header";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 
 export const metadata: Metadata = {
   title: "戯曲エディタ",
@@ -47,9 +54,11 @@ export default function RootLayout({ children }: any) {
         />
       </head>
       <body>
-        <Header />
-        {children}
-        <Analytics />
+        <RecoilRoot>
+          <Header />
+            {children}
+          <Analytics />
+        </RecoilRoot>
       </body>
     </html>
   );

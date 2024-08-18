@@ -16,11 +16,11 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    throw new Error('Login failed');
+    throw new Error('ログインに失敗しました。');
   }
 
-  revalidatePath('/');
-  redirect('/');
+  revalidatePath('/', 'layout')
+  redirect('/login');
 }
 
 export async function signup(formData: FormData) {
@@ -34,9 +34,9 @@ export async function signup(formData: FormData) {
   const { error } = await supabase.auth.signUp(data);
 
   if (error) {
-    throw new Error('Signup failed');
+    throw new Error('新規登録に失敗しました。');
   }
 
-  revalidatePath('/');
-  redirect('/');
+  revalidatePath('/', 'layout')
+  redirect('/login');
 }
