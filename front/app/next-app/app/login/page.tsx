@@ -3,9 +3,16 @@
 import { useState } from 'react';
 import { login } from '../../utils/supabase/actions'
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client';
+import { useAtom } from 'jotai';
+import { userAtom } from '@/atoms/userAtom';
 
 export default function LoginPage() {
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const router = useRouter();
+  const [, setUser] = useAtom(userAtom);
+
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -13,7 +20,14 @@ export default function LoginPage() {
 
     try {
       await login(formData);
-      setNotification({ type: 'success', message: 'Login successful!' });
+      // Update user state on client side
+      const supabase = createClient();
+      const { data } = await supabase.auth.getUser();
+      if (data?.user) {
+        setUser(data.user);
+      }
+      
+      router.push("/"); // Refresh the page to reflect changes
     } catch (error) {
       setNotification({ type: 'error', message: 'Login failed!' });
     }
