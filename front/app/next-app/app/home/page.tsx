@@ -1,41 +1,48 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useAtom } from 'jotai';
+import { fetchProjects, createProject } from '@/utils/db/projects';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { projectsAtom, Project } from '@/atoms/projectAtom';
-import { fetchProjects } from '@/utils/db/projects';
 
-export default function HomePage() {
+const Home = () => {
   const [projects, setProjects] = useAtom(projectsAtom);
+  const router = useRouter();
 
   useEffect(() => {
-    async function loadProjects() {
-      console.log('Loading projects...'); // 追加
-      try {
-        const fetchedProjects = await fetchProjects();
-        setProjects(fetchedProjects);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    loadProjects();
-  }, [setProjects]);
+    const fetchData = async () => {
+      const data = await fetchProjects();
+      setProjects(data);
+    };
+    fetchData();
+  }, []);
+
+  const handleCreateProject = async () => {
+    const newProject = await createProject('New Project', 'Project description');
+    setProjects([newProject, ...projects]); // 作成したプロジェクトをリストの先頭に追加
+    router.push(`/projects/${newProject.oid}`); // 作成したプロジェクトの詳細ページに遷移
+  };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">最近作成したプロジェクト</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {projects.map((project: Project) => (
-          <div
-            key={project.id}
-            className="bg-white p-4 rounded shadow-md hover:shadow-lg transition-shadow duration-300"
-          >
-            <h2 className="text-xl font-semibold mb-2">{project.name}</h2>
-            <p className="text-gray-600 mb-4">{project.description}</p>
-            <p className="text-gray-400 text-sm">作成日: {new Date(project.createdAt).toLocaleDateString()}</p>
-          </div>
-        ))}
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+      <button
+        onClick={handleCreateProject}
+        className="bg-gray-200 text-gray-800 rounded p-4 shadow flex items-center justify-center"
+      >
+        新規プロジェクト
+      </button>
+      {projects.map((project) => (
+        <button
+          key={project.oid}
+          onClick={() => router.push(`/projects/${project.oid}`)}
+          className="bg-gray-200 text-gray-800 rounded p-4 shadow"
+        >
+          {project.name}
+        </button>
+      ))}
     </div>
   );
-}
+};
+
+export default Home;
