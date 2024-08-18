@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getProjectByOid } from '@/utils/db/projects';
-import Tiptap from "@/app/components/tiptap";
+import Editor from "@/app/components/Editor";
 
 export default function ProjectDetailPage({ params }: { params: { oid: string } }) {
   const [project, setProject] = useState<any>(null);
@@ -21,7 +21,7 @@ export default function ProjectDetailPage({ params }: { params: { oid: string } 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold">{project.name}</h1>
-      <Tiptap setContent={setContent}/>
+      <Editor setContent={setContent}/>
     </div>
   );
 }
