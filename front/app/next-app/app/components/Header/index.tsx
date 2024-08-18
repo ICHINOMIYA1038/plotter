@@ -1,57 +1,26 @@
+// components/Header.tsx
 'use client';
-
 import Link from 'next/link';
+import { useAtom } from 'jotai';
+import { userAtom } from '@/atoms/userAtom';
+
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { userState } from '@/atoms/userAtom';
 import { createClient } from '@/utils/supabase/client';
+import { User } from '@supabase/supabase-js';
 
 export const Header = () => {
-  const [user, setUser] = useRecoilState(userState);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useAtom<User | null>(userAtom);
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const supabase = createClient();
-        const { data, error } = await supabase.auth.getUser();
-        
-        if (error) {
-          console.error('Error fetching user:', error);
-        }
-
-        console.log('Fetched user data:', data);
-
-        if (data?.user) {
-          setUser(data.user);
-        }
-      } catch (err) {
-        console.error('Unexpected error:', err);
-      } finally {
-        setLoading(false);
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.getUser();
+      if (data?.user) {
+        setUser(data.user);
       }
     };
     fetchUser();
-  }, [setUser]);
-
-  if (loading) {
-    return (
-      <header className="bg-gray-800 text-white p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <Link href="/">
-            <a className="text-2xl font-bold">戯曲エディタ</a>
-          </Link>
-          <nav>
-            <ul className="flex space-x-4">
-              <li>
-                <span>読み込み中...</span>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-    );
-  }
+  }, []);
 
   return (
     <header className="bg-gray-800 text-white p-4">
@@ -73,6 +42,7 @@ export const Header = () => {
                       const { error } = await supabase.auth.signOut();
                       if (!error) {
                         setUser(null);
+                        location.reload();
                       }
                     }}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"

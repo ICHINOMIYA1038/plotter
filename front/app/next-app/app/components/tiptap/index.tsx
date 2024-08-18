@@ -8,7 +8,7 @@ import Italic from "@tiptap/extension-italic";
 import TextAlign from "@tiptap/extension-text-align";
 import Document from "@tiptap/extension-document"
 import Text from "@tiptap/extension-text"
-import React, { useEffect, createContext, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import History from "@tiptap/extension-history"
 
 import { Link } from "@tiptap/extension-link";
@@ -36,7 +36,6 @@ import HowToSlideShow from "../HowToSlideShow";
 import { DraggableParagraph } from "../DraggableParagraph";
 import { DraggableHeading } from "../DraggableHeading";
 
-export const RefContext = createContext(null);
 
 // JSON形式での読み込み
 const loadContentFromJSON = () => {

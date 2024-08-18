@@ -1,20 +1,15 @@
 // app/layout.tsx
 
+'use client';
+
 import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import * as gtag from "@/lib/gtag";
 import { Metadata } from "next";
 import { Header } from "./components/Header";
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "戯曲エディタ",
   description: "戯曲エディタは、演劇の脚本を書くことに特化した縦書きのテキストエディタ。演劇の脚本以外でも利用可能",
   keywords: ["戯曲", "演劇", "脚本", "エディタ"],
@@ -54,11 +49,9 @@ export default function RootLayout({ children }: any) {
         />
       </head>
       <body>
-        <RecoilRoot>
           <Header />
             {children}
           <Analytics />
-        </RecoilRoot>
       </body>
     </html>
   );

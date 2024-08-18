@@ -1,8 +1,5 @@
 // atoms/userAtom.ts
 import { User } from '@supabase/supabase-js';
-import { atom } from 'recoil';
+import { atom } from 'jotai';
 
-export const userState = atom<User | null>({
-  key: 'userState',
-  default: null,
-});
+export const userAtom = atom<User | null>(null);
