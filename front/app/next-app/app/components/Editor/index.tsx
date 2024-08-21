@@ -1,3 +1,5 @@
+'use client';
+
 import { EditorContent, useEditor } from "@tiptap/react";
 import Image from "@tiptap/extension-image";
 import Highlight from "@tiptap/extension-highlight";
@@ -7,7 +9,7 @@ import Italic from "@tiptap/extension-italic";
 import TextAlign from "@tiptap/extension-text-align";
 import Document from "@tiptap/extension-document"
 import Text from "@tiptap/extension-text"
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import History from "@tiptap/extension-history"
 
 import { Link } from "@tiptap/extension-link";
@@ -34,28 +36,68 @@ import {
 import HowToSlideShow from "../HowToSlideShow";
 import { DraggableParagraph } from "../DraggableParagraph";
 import { DraggableHeading } from "../DraggableHeading";
+import AWS from "aws-sdk";
 
+// S3からJSONデータを取得する関数
+const fetchJSONFromS3 = async () => {
+  const s3 = new AWS.S3({
+    region: 'ap-northeast-1',
+    accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY,
+    secretAccessKey: process.env.NEXT_PUBLIC_S3_SECRET_ACCESS_KEY,
+  });
 
-// JSON形式での読み込み
-const loadContentFromJSON = () => {
-  const content = localStorage.getItem("editor-json-content");
-  return content ? JSON.parse(content) : JSON.parse(exampleJSON);
+  const params = {
+    Bucket: 'plotter-production-private',
+    Key: 'example.json',
+  };
+
+  try {
+    const data = await s3.getObject(params).promise();
+
+    if (data.Body) {
+      // data.Body が Buffer であることを前提に処理します
+      const content = data.Body.toString('utf-8');
+      return JSON.parse(content);
+    } else {
+      console.error("S3からのレスポンスにBodyが含まれていません。");
+      return null;
+    }
+  } catch (error) {
+    console.error("S3からデータを取得中にエラーが発生しました:", error);
+    return null;
+  }
 };
 
-export default function Editor({ setData, data, setContent }: any) {
+// S3にJSONデータを保存する関数
+const saveJSONToS3 = async (content: any) => {
+  const s3 = new AWS.S3({
+    region: 'ap-northeast-1',
+    accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY,
+    secretAccessKey: process.env.NEXT_PUBLIC_S3_SECRET_ACCESS_KEY,
+  });
+
+  const params = {
+    Bucket: 'plotter-production-private',
+    Key: 'example.json',
+    Body: JSON.stringify(content),
+    ContentType: 'application/json',
+  };
+
+  try {
+    await s3.putObject(params).promise();
+    console.log("データがS3に保存されました");
+  } catch (error) {
+    console.error("S3にデータを保存中にエラーが発生しました:", error);
+  }
+};
+
+export default function Editor({ setData, data, initialContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
   const [toc, setToc] = useState([]);
   const parentDivRef = useRef(null);
   const [characterList, setCharacterList] = useState([]);
   const [speakerinput, setSpeakerInput] = useState("");
   const [flashMessage, setFlashMessage] = useState('');
-  const [initialContent, setInitialContent] = useState(() => {
-    if (typeof window !== "undefined") {
-      return loadContentFromJSON();
-    } else {
-      return JSON.parse(exampleJSON);
-    }
-  });
 
   const saveContentAsJSON = (editor: any) => {
     try {
@@ -154,14 +196,14 @@ export default function Editor({ setData, data, setContent }: any) {
     },
     content: initialContent,
     onBlur: ({ editor }: any) => {
-      setContent({
+      saveJSONToS3 ({
         content: editor.getHTML(),
       });
     },
   });
 
   if (!editor) {
-    return null;
+    return <div>Loading...</div>;
   }
 
   return (
