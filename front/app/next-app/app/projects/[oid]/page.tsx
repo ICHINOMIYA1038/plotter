@@ -82,5 +82,5 @@ function ClientSideEditor({ oid }: { oid: any }) {
     return <div>Loading editor content...</div>;
   }
 
-  return <Editor initialContent={content || {}} />;
+  return <Editor oid={oid} initialContent={content || {}} />;
 }

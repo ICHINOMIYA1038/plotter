@@ -417,6 +417,7 @@ export const CustomBubbleMenu = ({ editor, editorRef, characterList, speakerinpu
                             <button
                                 className="bubble-menu-btn-delete"
                                 onClick={() => {
+                                    console.log("削除")
                                     editor.chain().focus().deleteNode("paragraph").run()
                                     editor.chain().focus().deleteNode("heading").run()
 

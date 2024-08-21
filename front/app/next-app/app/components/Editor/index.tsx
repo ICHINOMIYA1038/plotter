@@ -68,30 +68,32 @@ const fetchJSONFromS3 = async () => {
   }
 };
 
-// S3にJSONデータを保存する関数
-const saveJSONToS3 = async (content: any) => {
-  const s3 = new AWS.S3({
-    region: 'ap-northeast-1',
-    accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY,
-    secretAccessKey: process.env.NEXT_PUBLIC_S3_SECRET_ACCESS_KEY,
-  });
-
-  const params = {
-    Bucket: 'plotter-production-private',
-    Key: 'example.json',
-    Body: content,
-    ContentType: 'application/json',
-  };
+// utils/saveJSONToS3.ts
+export async function saveJSONToS3({ oid, content }: { oid: string; content: string }) {
+  if (!oid || !content) {
+    throw new Error('Both oid and content are required');
+  }
 
   try {
-    await s3.putObject(params).promise();
-    console.log("データがS3に保存されました");
-  } catch (error) {
-    console.error("S3にデータを保存中にエラーが発生しました:", error);
-  }
-};
+    const response = await fetch('/api/s3', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ oid, content }),
+    });
 
-export default function Editor({ setData, data, initialContent }: any) {
+    const textResponse = await response.text(); // Read the response as text
+    if(textResponse=="Data saved successfully"){
+      console.log("保存に成功しました")
+    }
+  } catch (error) {
+    console.error('Error saving data to S3:', error);
+    throw error;
+  }
+}
+
+export default function Editor({ setData, oid, initialContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
   const [toc, setToc] = useState([]);
   const parentDivRef = useRef(null);
@@ -195,10 +197,16 @@ export default function Editor({ setData, data, initialContent }: any) {
       setCharacterList(getCharacterList(editor));
     },
     content: initialContent,
-    onBlur: ({ editor }: any) => {
-      saveJSONToS3 ({
-        content: editor.getHTML(),
-      });
+    onBlur: async ({ editor }: any) => {
+      try {
+        await saveJSONToS3({
+          oid, // Pass the oid here
+          content: editor.getHTML(),
+        });
+        console.log("Content saved to S3 successfully");
+      } catch (error) {
+        console.error("Error saving content to S3:", error);
+      }
     },
   });
 

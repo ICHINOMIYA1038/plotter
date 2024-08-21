@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server'; // Supabase client
 import AWS from 'aws-sdk';
-import { User } from '@supabase/supabase-js';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -85,5 +84,41 @@ export async function GET(req: Request) {
       console.error('Error fetching S3 object:', err);
       return new NextResponse('Error fetching file', { status: 500 });
     }
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    // Parse JSON from the request body
+    const { oid, content } = await req.json();
+
+    if (!oid || !content) {
+      return new NextResponse('OID and content are required', { status: 400 });
+    }
+
+    // Create an S3 instance
+    const s3 = new AWS.S3({
+      region: 'ap-northeast-1',
+      accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY,
+      secretAccessKey: process.env.NEXT_PUBLIC_S3_SECRET_ACCESS_KEY,
+    });
+
+    // Define S3 parameters with dynamic key using oid
+    const params = {
+      Bucket: 'plotter-production-private',
+      Key: `${oid}/data.json`,  // Use oid as part of the key
+      Body: JSON.stringify(content),
+      ContentType: 'application/json',
+    };
+
+    // Save JSON data to S3
+    await s3.putObject(params).promise();
+    console.log("Data has been saved to S3");
+
+    // Return a success response
+    return new NextResponse('Data saved successfully', { status: 200 });
+  } catch (error) {
+    console.error("Error saving data to S3:", error);
+    return new NextResponse('Error saving data', { status: 500 });
   }
 }
