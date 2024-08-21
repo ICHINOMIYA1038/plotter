@@ -79,7 +79,7 @@ const saveJSONToS3 = async (content: any) => {
   const params = {
     Bucket: 'plotter-production-private',
     Key: 'example.json',
-    Body: JSON.stringify(content),
+    Body: content,
     ContentType: 'application/json',
   };
 
