@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { getProjectByOid } from '@/utils/db/projects';
 import { createClient } from '@/utils/supabase/client';
-
-const Editor = dynamic(() => import('@/app/components/Editor'), { ssr: false });
-
+import Editor from '@/app/components/Editor';
 interface ProjectDetailPageProps {
   params: { oid: string };
 }
@@ -82,5 +80,5 @@ function ClientSideEditor({ oid }: { oid: any }) {
     return <div>Loading editor content...</div>;
   }
 
-  return <Editor oid={oid} initialContent={content || {}} />;
+  return <Editor oid={oid}  initialContent={content || {}}/>;
 }

@@ -19,7 +19,7 @@ export async function login(formData: FormData) {
     throw new Error('ログインに失敗しました。');
   }
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/home', 'layout')
   redirect('/home');
 }
 
@@ -37,6 +37,6 @@ export async function signup(formData: FormData) {
     throw new Error('新規登録に失敗しました。');
   }
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/signup', 'layout')
   redirect('/signup');
 }

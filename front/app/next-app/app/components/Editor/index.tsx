@@ -1,5 +1,3 @@
-'use client';
-
 import { EditorContent, useEditor } from "@tiptap/react";
 import Image from "@tiptap/extension-image";
 import Highlight from "@tiptap/extension-highlight";
@@ -9,7 +7,7 @@ import Italic from "@tiptap/extension-italic";
 import TextAlign from "@tiptap/extension-text-align";
 import Document from "@tiptap/extension-document"
 import Text from "@tiptap/extension-text"
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import History from "@tiptap/extension-history"
 
 import { Link } from "@tiptap/extension-link";
@@ -36,37 +34,6 @@ import {
 import HowToSlideShow from "../HowToSlideShow";
 import { DraggableParagraph } from "../DraggableParagraph";
 import { DraggableHeading } from "../DraggableHeading";
-import AWS from "aws-sdk";
-
-// S3からJSONデータを取得する関数
-const fetchJSONFromS3 = async () => {
-  const s3 = new AWS.S3({
-    region: 'ap-northeast-1',
-    accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY,
-    secretAccessKey: process.env.NEXT_PUBLIC_S3_SECRET_ACCESS_KEY,
-  });
-
-  const params = {
-    Bucket: 'plotter-production-private',
-    Key: 'example.json',
-  };
-
-  try {
-    const data = await s3.getObject(params).promise();
-
-    if (data.Body) {
-      // data.Body が Buffer であることを前提に処理します
-      const content = data.Body.toString('utf-8');
-      return JSON.parse(content);
-    } else {
-      console.error("S3からのレスポンスにBodyが含まれていません。");
-      return null;
-    }
-  } catch (error) {
-    console.error("S3からデータを取得中にエラーが発生しました:", error);
-    return null;
-  }
-};
 
 // utils/saveJSONToS3.ts
 export async function saveJSONToS3({ oid, content }: { oid: string; content: string }) {
@@ -93,13 +60,14 @@ export async function saveJSONToS3({ oid, content }: { oid: string; content: str
   }
 }
 
-export default function Editor({ setData, oid, initialContent }: any) {
+export default function Editor({ oid, initialContent }: any) {
   const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
   const [toc, setToc] = useState([]);
   const parentDivRef = useRef(null);
   const [characterList, setCharacterList] = useState([]);
   const [speakerinput, setSpeakerInput] = useState("");
   const [flashMessage, setFlashMessage] = useState('');
+  const [dummy, setDummy] = useState([]);
 
   const saveContentAsJSON = (editor: any) => {
     try {
@@ -190,14 +158,11 @@ export default function Editor({ setData, oid, initialContent }: any) {
         setSelectionNode(null);
       }
     },
-    onUpdate: ({ editor }: any) => {
+    onUpdate: async ({ editor }: any) => {
       updateToc();
       saveContentAsJSON(editor);
 
       setCharacterList(getCharacterList(editor));
-    },
-    content: initialContent,
-    onBlur: async ({ editor }: any) => {
       try {
         await saveJSONToS3({
           oid, // Pass the oid here
@@ -207,6 +172,11 @@ export default function Editor({ setData, oid, initialContent }: any) {
       } catch (error) {
         console.error("Error saving content to S3:", error);
       }
+    },
+    content: initialContent,
+    onBlur: ({ editor }: any) => {
+      // なぜかonBluerの中身が存在しないとバブルメニューが動かないので、ダミーの関数を入れている。
+      setDummy(editor.getHTML())
     },
   });
 
