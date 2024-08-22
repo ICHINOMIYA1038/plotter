@@ -67,7 +67,7 @@ export default function Editor({ oid, initialContent }: any) {
   const [characterList, setCharacterList] = useState([]);
   const [speakerinput, setSpeakerInput] = useState("");
   const [flashMessage, setFlashMessage] = useState('');
-  const [dummy, setDummy] = useState([]);
+  const [dummy, setDummy] = useState<any>([]);
 
   const saveContentAsJSON = (editor: any) => {
     try {
@@ -176,7 +176,9 @@ export default function Editor({ oid, initialContent }: any) {
     content: initialContent,
     onBlur: ({ editor }: any) => {
       // なぜかonBluerの中身が存在しないとバブルメニューが動かないので、ダミーの関数を入れている。
-      setDummy(editor.getHTML())
+      setDummy({
+        content: editor.getHTML(),
+      });
     },
   });
 

@@ -38,6 +38,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
 function ClientSideEditor({ oid }: { oid: any }) {
   const [content, setContent] = useState<any>(null);
+  const [dummy, setDummy] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -80,5 +81,5 @@ function ClientSideEditor({ oid }: { oid: any }) {
     return <div>Loading editor content...</div>;
   }
 
-  return <Editor oid={oid}  initialContent={content || {}}/>;
+  return <Editor oid={oid} initialContent={content || {}}/>;
 }
