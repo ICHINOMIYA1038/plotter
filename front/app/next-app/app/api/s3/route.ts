@@ -46,8 +46,8 @@ export async function GET(req: Request) {
     secretAccessKey: process.env.NEXT_PUBLIC_S3_SECRET_ACCESS_KEY,
   });
 
-  const params = {
-    Bucket: 'plotter-production-private',
+  const params:any = {
+    Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
     Key: `${project.oid}/data.json`, // Assuming the object is stored with project oid as a key
   };
 
@@ -58,8 +58,8 @@ export async function GET(req: Request) {
   } catch (err:any) {
     if (err.code === 'NoSuchKey') {
       // Object not found, create it with default content
-      const defaultParams = {
-        Bucket: 'plotter-production-private',
+      const defaultParams:any = {
+        Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
         Key: 'example.json',
       };
 
@@ -67,8 +67,8 @@ export async function GET(req: Request) {
         const defaultData = await s3.getObject(defaultParams).promise();
         const defaultContent: any = defaultData.Body?.toString('utf-8');
         
-        const createParams = {
-          Bucket: 'plotter-production-private',
+        const createParams:any = {
+          Bucket:process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
           Key: `${project.oid}/data.json`,
           Body: defaultContent,
           ContentType: 'application/json',
@@ -104,8 +104,8 @@ export async function POST(req: Request) {
     });
 
     // Define S3 parameters with dynamic key using oid
-    const params = {
-      Bucket: 'plotter-production-private',
+    const params:any = {
+      Bucket:process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
       Key: `${oid}/data.json`,  // Use oid as part of the key
       Body: JSON.stringify(content),
       ContentType: 'application/json',
