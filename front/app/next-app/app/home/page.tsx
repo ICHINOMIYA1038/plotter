@@ -1,7 +1,7 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { fetchProjects, createProject } from '@/utils/db/projects';
+import { fetchUserProjects, createProject } from '@/utils/db/projects';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { projectsAtom, Project } from '@/atoms/projectAtom';
@@ -12,7 +12,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchProjects();
+      const data = await fetchUserProjects();
       setProjects(data);
     };
     fetchData();

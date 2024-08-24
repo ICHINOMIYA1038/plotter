@@ -16,7 +16,8 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    throw new Error('ログインに失敗しました。');
+    console.error(error)
+    throw new Error('ログインに失敗しました。${error}');
   }
 
   revalidatePath('/home', 'layout')
@@ -34,6 +35,7 @@ export async function signup(formData: FormData) {
   const { error } = await supabase.auth.signUp(data);
 
   if (error) {
+    console.error(error)
     throw new Error('新規登録に失敗しました。');
   }
 

@@ -5,7 +5,7 @@ export async function fetchProjects() {
     const { data, error } = await supabase
       .from('projects')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('createdat', { ascending: false });
   
     if (error) {
       throw new Error('プロジェクトの取得に失敗しました。');
@@ -40,9 +40,18 @@ export async function fetchProjects() {
   export async function createProject(name: string, description: string) {
     const supabase = createClient();
     
+    const { data: userData, error: authError } = await supabase.auth.getUser();
+  
+    if (authError || !userData?.user) {
+      throw new Error('ユーザーが認証されていません');
+    }
+  
+    // Declare user_id outside the if-else block
+    const user_id = userData.user.id;
+  
     const { data, error } = await supabase
       .from('projects')
-      .insert([{ name, description }])
+      .insert([{ name, description, user_id }])
       .select();
   
     if (error) {
@@ -52,7 +61,7 @@ export async function fetchProjects() {
   
     return data[0];
   }
-
+  
   export async function fetchProjectById(id: string) {
     const supabase = createClient();
     const { data, error } = await supabase

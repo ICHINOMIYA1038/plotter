@@ -1,11 +1,11 @@
 import { atom } from 'jotai';
 
 export interface Project {
-    id: string;
     oid: string;
+    user_id: string;
     name: string;
     description: string;
-    createdAt: string; 
+    createdat: string; 
   }
   
   export const projectsAtom = atom<Project[]>([]);
