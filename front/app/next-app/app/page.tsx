@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [content, setContent] = useState("");
   const [isScreenLarge, setIsScreenLarge] = useState(false);
-
+  
   useEffect(() => {
     // クライアントサイドでのみ実行されるため、ここでwindowオブジェクトを安全に使用できる
     const checkScreenSize = () => {

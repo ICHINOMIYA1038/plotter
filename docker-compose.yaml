@@ -7,6 +7,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./front/app:/usr/src/app
-    command: sh -c 'npm install && yarn dev'
+    command: sh -c 'npm install && npm run build && npm run start'
     ports:
-      - "8002:3000"
+      - "3000:3000"

@@ -1,14 +1,15 @@
 // app/layout.tsx
 
+'use client';
+
 import "@/styles/globals.css";
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import * as gtag from "@/lib/gtag";
 import { Metadata } from "next";
+import { Header } from "./components/Header";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "戯曲エディタ",
   description: "戯曲エディタは、演劇の脚本を書くことに特化した縦書きのテキストエディタ。演劇の脚本以外でも利用可能",
   keywords: ["戯曲", "演劇", "脚本", "エディタ"],
@@ -20,10 +21,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }:any) {      
+export default function RootLayout({ children }: any) {
   return (
     <html lang="ja">
-      <body>
+      <head>
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8691137965825158"
@@ -46,8 +47,11 @@ export default function RootLayout({ children }:any) {
              `,
           }}
         />
-        {children}
-        <Analytics />
+      </head>
+      <body>
+          <Header />
+            {children}
+          <Analytics />
       </body>
     </html>
   );

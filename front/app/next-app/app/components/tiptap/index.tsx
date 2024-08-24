@@ -1,5 +1,4 @@
-import { EditorContent, FloatingMenu, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { EditorContent, useEditor } from "@tiptap/react";
 import Image from "@tiptap/extension-image";
 import Highlight from "@tiptap/extension-highlight";
 import Bold from "@tiptap/extension-bold";
@@ -8,7 +7,7 @@ import Italic from "@tiptap/extension-italic";
 import TextAlign from "@tiptap/extension-text-align";
 import Document from "@tiptap/extension-document"
 import Text from "@tiptap/extension-text"
-import React, { useEffect, createContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import History from "@tiptap/extension-history"
 
 import { Link } from "@tiptap/extension-link";
@@ -32,12 +31,10 @@ import {
   CharacterName,
   Characters,
 } from "../CharactersNode";
-import { Header } from "../Header";
 import HowToSlideShow from "../HowToSlideShow";
 import { DraggableParagraph } from "../DraggableParagraph";
 import { DraggableHeading } from "../DraggableHeading";
 
-export const RefContext = createContext(null);
 
 // JSON形式での読み込み
 const loadContentFromJSON = () => {
@@ -71,12 +68,6 @@ export default function TipTap({ setData, data, setContent }: any) {
       setTimeout(() => setFlashMessage(''), 3000);
       return { success: false, error: error };  // エラーが発生した場合は success: false とエラー情報を返す
     }
-  };
-
-  // エラーメッセージをセットする関数
-  const showError = (message: any) => {
-    setFlashMessage(message);
-    setTimeout(() => setFlashMessage(''), 3000); // 3秒後にメッセージを消去
   };
 
   const updateToc = () => {
@@ -187,7 +178,6 @@ export default function TipTap({ setData, data, setContent }: any) {
           ref={parentDivRef}
         >
           <div className="h-15vh xl:flex">
-            <Header />
             <Toolbar editor={editor} />
           </div>
           {flashMessage && (
@@ -201,12 +191,10 @@ export default function TipTap({ setData, data, setContent }: any) {
         <div className="col-span-2 h-full">
           <div className=" overflow-y-scroll h-45vh">
             {" "}
-            {/* TOCのセクション */}
             {editor && <TOC editor={editor} />}
           </div>
           <div className=" overflow-y-scroll h-45vh">
             {" "}
-            {/* 右側のサイドバーのセクション */}
             <Sidebar node={selectionNode} editor={editor} />
           </div>
         </div>
