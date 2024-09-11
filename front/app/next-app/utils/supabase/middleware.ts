@@ -33,11 +33,17 @@ export async function updateSession(request: NextRequest) {
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
-
+    error,
+  } = await supabase.auth.getUser();
+  
+  if (error) {
+    console.error('Error fetching user:', error);
+  }
+  console.log('User data:', user);
+  
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith('/') &&
+    request.nextUrl.pathname != '/' &&
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/signup') && 
     !request.nextUrl.pathname.startsWith('/auth') && 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signup } from '../../utils/supabase/actions'
+import { signup } from '../../utils/supabase/actions';
 import Link from 'next/link';
 
 export default function SignupPage() {
@@ -12,10 +12,14 @@ export default function SignupPage() {
     const formData = new FormData(event.target as HTMLFormElement);
 
     try {
-      await signup(formData);
-      setNotification({ type: 'success', message: 'Signup successful!' });
-    } catch (error) {
-      setNotification({ type: 'error', message: 'Signup failed!' });
+      const {error:errorMessage,success:successMessage} = await signup(formData);
+      if(successMessage){
+        setNotification({ type: 'success', message: successMessage });
+      }else{
+        setNotification({ type: 'error', message: errorMessage! });
+      }
+    } catch (error: any) {
+      setNotification({ type: 'error', message: '新規登録に失敗しました。時間をあけてお試しください' });
     }
   };
 

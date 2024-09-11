@@ -26,8 +26,6 @@ export default function LoginPage() {
       if (data?.user) {
         setUser(data.user);
       }
-      
-      router.push("/"); // Refresh the page to reflect changes
     } catch (error) {
       setNotification({ type: 'error', message: 'Login failed!' });
     }
