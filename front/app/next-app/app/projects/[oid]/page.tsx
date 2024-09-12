@@ -3,8 +3,13 @@
 import { useEffect, useState } from 'react';
 import { getProjectByOid, updateProject } from '@/utils/db/projects'; // プロジェクト名の更新関数をインポート
 import { createClient } from '@/utils/supabase/client';
-import Editor from '@/app/components/Editor';
+import EditorMain from '@/app/components/EditorMain';
 import { AiOutlineEdit } from 'react-icons/ai'; // 編集アイコンを追加
+import Sidebar from '@/app/components/Sidebar';
+import { TOC } from '@/app/components/Toc';
+import { useAtom } from 'jotai';
+import { editorAtom } from '@/atoms/editorAtom';
+import { selectionNodeAtom } from '@/atoms/selectionNodeAtom';
 
 interface ProjectDetailPageProps {
   params: { oid: string };
@@ -31,7 +36,11 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   return (
     <div className="p-4">
       <EditableProjectName project={project} setProject={setProject} />
-      <ClientSideEditor project={project} />
+      <div className="flex h-screen">
+        <div className="flex-1 h-full overflow-auto">
+          <ClientSideEditor project={project} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -103,6 +112,8 @@ function ClientSideEditor({ project }: any) {
   const [content, setContent] = useState<any>(null);
   const [dummy, setDummy] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [editor, setEditor] = useAtom(editorAtom);
+  const [selectionNode, setSelectionNode] = useAtom(selectionNodeAtom);
 
   useEffect(() => {
     const fetchJSONFromS3 = async () => {
@@ -144,5 +155,10 @@ function ClientSideEditor({ project }: any) {
     return <div>読み込み中・・・</div>;
   }
 
-  return <Editor project={project} initialContent={content || {}} />;
+  return(<>
+  <TOC editor={editor}/>
+  <Sidebar editor={editor} node={selectionNode}/>
+  <EditorMain project={project} initialContent={content || {}} />
+  </>)
+  ;
 }

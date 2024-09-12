@@ -2,8 +2,30 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 
+
 export const TOC = ({ editor }: any) => {
   const [headings, setHeadings] = useState([]);
+  const [toc, setToc] = useState([]);
+
+
+const updateToc = () => {
+  if (!editor || !editor.state) return;
+
+  const newToc: any = [];
+  const { doc } = editor.state;
+
+  doc.descendants((node:any, pos:any) => {
+    if (node.type.name === "heading") {
+      const level = node.attrs.level;
+      const id = `heading-${pos}`;
+      const text = node.textContent;
+
+      newToc.push({ id, level, text });
+    }
+  });
+
+  setToc(newToc);
+};
 
   useEffect(() => {
     if (!editor) return;
@@ -27,6 +49,7 @@ export const TOC = ({ editor }: any) => {
     };
 
     updateHeadings();
+    updateToc();
     editor.on("update", updateHeadings);
 
     return () => {
