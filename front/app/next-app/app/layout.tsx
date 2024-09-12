@@ -1,5 +1,3 @@
-// app/layout.tsx
-
 'use client';
 
 import "@/styles/globals.css";
@@ -7,7 +5,9 @@ import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import * as gtag from "@/lib/gtag";
 import { Metadata } from "next";
-import { Header } from "./components/Header";
+import { useAtom } from 'jotai';
+import { sidebarAtom } from '@/atoms/sidebarAtom';
+import NewSidebar from "./components/NewSidebar";
 
 const metadata: Metadata = {
   title: "戯曲エディタ",
@@ -22,6 +22,8 @@ const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: any) {
+  const [isOpen] = useAtom(sidebarAtom); // サイドバーの開閉状態をJotaiから取得
+
   return (
     <html lang="ja">
       <head>
@@ -49,9 +51,16 @@ export default function RootLayout({ children }: any) {
         />
       </head>
       <body>
-          <Header />
+        <div className="flex">
+          {/* サイドバー */}
+          <NewSidebar />
+
+          {/* メインコンテンツ */}
+          <div className={`flex-1 transition-all duration-300`}>
             {children}
-          <Analytics />
+          </div>
+        </div>
+        <Analytics />
       </body>
     </html>
   );

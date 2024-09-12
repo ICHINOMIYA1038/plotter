@@ -21,7 +21,6 @@ import HardBreak from "@tiptap/extension-hard-break";
 import Sidebar from "../Sidebar";
 import { TOC } from "../Toc";
 import { Toolbar } from "../Toolbar";
-import { SettingSidebar } from "../SettingSideBar";
 import { CustomKeyBoardShortcuts } from "../CustomKeyBoardShortcuts";
 import { CustomBubbleMenu } from "../CustomBubbleMenu";
 import { getCharacterList } from "../getCharacterList";
@@ -34,6 +33,7 @@ import {
 import HowToSlideShow from "../HowToSlideShow";
 import { DraggableParagraph } from "../DraggableParagraph";
 import { DraggableHeading } from "../DraggableHeading";
+import NewSidebar from "../NewSidebar";
 
 // utils/saveJSONToS3.ts
 export async function saveJSONToS3({ oid, content }: { oid: string; content: string }) {
@@ -59,26 +59,26 @@ export async function saveJSONToS3({ oid, content }: { oid: string; content: str
     throw error;
   }
 }
-
-export default function Editor({ oid, initialContent }: any) {
-  const [selectionNode, setSelectionNode] = useState<any>(null); // 選択中のノードを一時的に保持するための状態
+export default function Editor({ project, initialContent }: any) {
+  const [selectionNode, setSelectionNode] = useState<any>(null);
   const [toc, setToc] = useState([]);
   const parentDivRef = useRef(null);
   const [characterList, setCharacterList] = useState([]);
   const [speakerinput, setSpeakerInput] = useState("");
   const [flashMessage, setFlashMessage] = useState('');
   const [dummy, setDummy] = useState<any>([]);
+  const oid = project.oid
 
   const saveContentAsJSON = (editor: any) => {
     try {
       const content = editor.getJSON();
       localStorage.setItem("editor-json-content", JSON.stringify(content));
-      return { success: true };  // 成功した場合は success: true を返す
+      return { success: true };
     } catch (error) {
       console.error("保存中にエラーが発生しました:", error);
-      setFlashMessage(error as string);  // エラーメッセージを設定
+      setFlashMessage(error as string);
       setTimeout(() => setFlashMessage(''), 3000);
-      return { success: false, error: error };  // エラーが発生した場合は success: false とエラー情報を返す
+      return { success: false, error: error };
     }
   };
 
@@ -91,7 +91,7 @@ export default function Editor({ oid, initialContent }: any) {
     doc.descendants((node, pos) => {
       if (node.type.name === "heading") {
         const level = node.attrs.level;
-        const id = `heading-${pos}`; // 一意のIDを生成
+        const id = `heading-${pos}`;
         const text = node.textContent;
 
         newToc.push({ id, level, text });
@@ -149,7 +149,6 @@ export default function Editor({ oid, initialContent }: any) {
       const { from, to } = selection;
       let node = selection.$from.node(1);
       if (node) {
-        // 最上位の親ノードを取得
         setSelectionNode(node);
         if (selection.$anchor.parent.type.name === "speaker") {
           setSpeakerInput(selection.$anchor.parent.textContent);
@@ -165,7 +164,7 @@ export default function Editor({ oid, initialContent }: any) {
       setCharacterList(getCharacterList(editor));
       try {
         await saveJSONToS3({
-          oid, // Pass the oid here
+          oid,
           content: editor.getHTML(),
         });
         console.log("Content saved to S3 successfully");
@@ -175,7 +174,6 @@ export default function Editor({ oid, initialContent }: any) {
     },
     content: initialContent,
     onBlur: ({ editor }: any) => {
-      // なぜかonBluerの中身が存在しないとバブルメニューが動かないので、ダミーの関数を入れている。
       setDummy({
         content: editor.getHTML(),
       });
@@ -188,15 +186,10 @@ export default function Editor({ oid, initialContent }: any) {
 
   return (
     <div className="overflow-x-hidden overflow-y-scroll">
-      <div className="grid grid-cols-12 h-screen w-screen">
-        <div className="overflow-y-auto col-span-2">
-          {" "}
-          {/* 新しいSettingSidebar */}
-          <SettingSidebar editor={editor} />
-          <HowToSlideShow />
-        </div>
+      <div className="flex h-screen w-screen">
+        {/* Editor Section */}
         <div
-          className="col-span-8 p-4 min-w-full max-w-full h-full mx-auto overflow-auto"
+          className="flex-1 p-4 min-w-0 max-w-full h-full mx-auto overflow-auto"
           ref={parentDivRef}
         >
           <div className="h-15vh xl:flex">
@@ -210,13 +203,13 @@ export default function Editor({ oid, initialContent }: any) {
           )}
           <EditorContent editor={editor} className="w-full h-85vh" />
         </div>
-        <div className="col-span-2 h-full">
-          <div className=" overflow-y-scroll h-45vh">
-            {" "}
+        
+        {/* Sidebar Section */}
+        <div className="w-72 flex-shrink-0 h-full">
+          <div className="overflow-y-scroll h-45vh">
             {editor && <TOC editor={editor} />}
           </div>
-          <div className=" overflow-y-scroll h-45vh">
-            {" "}
+          <div className="overflow-y-scroll h-45vh">
             <Sidebar node={selectionNode} editor={editor} />
           </div>
         </div>

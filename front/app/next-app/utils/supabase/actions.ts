@@ -88,7 +88,11 @@ export async function signup(formData: FormData) {
 
     // hasUserMetaDataがあるということはメール認証が必要
   if (isEmailExist && !isEmailConfirmed) {
-    return {error: "確認用のメールを再送しました。"}
+    const { data: signUpData, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    return {success: "確認用のメールを再送しました。"}
   }
 
   // hasUserMetaDataがないということはすでに登録されたデータ
